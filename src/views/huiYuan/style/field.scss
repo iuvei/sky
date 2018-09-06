@@ -1,0 +1,15 @@
+.a_btn {
+  margin-top: poTorem(60px);
+  text-align: center;
+  button {
+    width: poTorem(300px);
+    height: poTorem(40px);
+    font-size: poTorem(16px);
+    line-height: poTorem(16px);
+    color: #fff;
+    background-color: #ff7c34;
+    border-radius: poTorem(5px);
+    outline: none;
+    border: none;
+  }
+}

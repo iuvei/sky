@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>首页加载中</title>
+  <meta name="HandheldFriendly" content="true">
+  <meta name="browsermode" content="application">
+  <meta name="x5-page-mode" content="app">
+  <meta http-equiv="X-UA_Compatible" content="IE=edge,chrome=1">
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover,minimal-ui" name="viewport"
+  />
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="telephone=no" name="format-detection" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="x5-orientation" content="portrait">
+  <meta name="full-screen" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="../assets/manifest.json">
+
+  <link rel="apple-touch-icon" href="../assets/logo.png">
+  <link rel="apple-touch-startup-image" href="../assets/logo.png">
+  <meta rel="apple-moble-web-app-title" content="给梦想一个机会">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+  <!-- 引入自适应类库，不建议在main.js里引入 -->
+  <script src="/assets/shipeiqi.js"></script>
+  <!-- <script src="http://cdn.bootcss.com/vue/2.2.6/vue.min.js"></script>
+  <script src="http://cdn.bootcss.com/vue-router/2.4.0/vue-router.min.js"></script>
+  <script src="http://cdn.bootcss.com/vuex/3.0.1/vuex.min.js"></script>
+  <script src="http://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script> -->
+
+  <!-- <script src="http://cdn.bootcss.com/eruda/1.4.2/eruda.min.js"></script>
+  <script>eruda.init();</script> -->
+
+</head>
+
+<body>
+
+  <div id="loading" style="width:100vw;height:100vh; background:#fff;z-index: 10001;position: fixed;top:0;left:0;">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCIgY2xhc3M9Imxkcy1ibGFuayIgc3R5bGU9ImJhY2tncm91bmQ6MCAwIj48Zz48Zz48ZyB0cmFuc2Zvcm09InJvdGF0ZSgxNTYgNTAgNTApIj48YW5pbWF0ZVRyYW5zZm9ybSBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iIHR5cGU9InJvdGF0ZSIgdmFsdWVzPSIzNjAgNTAgNTA7MCA1MCA1MCIgZHVyPSIxLjUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+PHBhdGggZD0iTTQ0LjcxIDEwLjk1YTI3LjY4IDI3LjY4IDAgMCAxIDMyLjA3IDMuMTVsNC44NCA0LjI4LTYuNDEtMS4yNGMtOC4xLTEuNjktMTYuODgtLjExLTI0LjU0IDQuMjhTMzcuMjggMzIuNjcgMzQuNyA0MC41NWwtMi4wMyA2LjE5LTEuMjQtNi40MmEyNy42OCAyNy42OCAwIDAgMSAxMy4yOC0yOS4zN3oiPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImZpbGwiIGNhbGNNb2RlPSJsaW5lYXIiIHZhbHVlcz0iI2YzNjEwMDsjZmE5MDJmOyNmZmI4NTY7I2ZmZDU1ZDsjZjM2MTAwIiBrZXlUaW1lcz0iMDswLjI1OzAuNTswLjc1OzEiIGR1cj0iMS41IiBiZWdpbj0iLTEuMTI1cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48L3BhdGg+PHBhdGggZD0iTTMyLjMzIDYxLjI1bDYuMiAyLjE0LTQuMjgtNC44NGMtNS41Mi02LjE5LTguNTYtMTQuNTEtOC41Ni0yMy40czMuMDQtMTcuMjIgOC41Ni0yMy40MWw0LjI3LTQuODQtNi4xOSAyLjE0YTI3LjYxIDI3LjYxIDAgMCAwLTE4Ljc5IDI2LjIyYzAgMTEuNTkgNy41NCAyMi4xNyAxOC44IDI2eiI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iZmlsbCIgY2FsY01vZGU9ImxpbmVhciIgdmFsdWVzPSIjZjM2MTAwOyNmYTkwMmY7I2ZmYjg1NjsjZmZkNTVkOyNmMzYxMDAiIGtleVRpbWVzPSIwOzAuMjU7MC41OzAuNzU7MSIgZHVyPSIxLjUiIGJlZ2luPSItMC43NXMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+PC9wYXRoPjxwYXRoIGQ9Ik0zMi42NyA3Ny44YzYuNTMgMCAxMy4wNS0yLjM3IDE4LjIzLTYuODdsNC44NC00LjI4LTYuNDEgMS4yNGMtOC4xIDEuNy0xNi44OC4xMi0yNC41NC00LjI3LTcuNjUtNC40LTEzLjM5LTExLjI2LTE1Ljk4LTE5LjEzbC0yLjAyLTYuMi0xLjI0IDYuNDJBMjcuNjggMjcuNjggMCAwIDAgMzIuNjcgNzcuOHoiPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImZpbGwiIGNhbGNNb2RlPSJsaW5lYXIiIHZhbHVlcz0iI2YzNjEwMDsjZmE5MDJmOyNmZmI4NTY7I2ZmZDU1ZDsjZjM2MTAwIiBrZXlUaW1lcz0iMDswLjI1OzAuNTswLjc1OzEiIGR1cj0iMS41IiBiZWdpbj0iLTAuMzc1cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48L3BhdGg+PHBhdGggZD0iTTY4LjU3IDU5LjY4bC0xLjI0LTYuNDItMi4wMyA2LjJjLTIuNTggNy44Ny04LjMyIDE0LjYyLTE1Ljk3IDE5LjEyLTcuNjYgNC40LTE2LjQzIDUuOTctMjQuNTQgNC4yOGwtNi40MS0xLjI0IDQuODQgNC4yOGEyNy44NSAyNy44NSAwIDAgMCAxOC4yMyA2Ljg2IDI3LjY4IDI3LjY4IDAgMCAwIDI3LjEyLTMzLjA4eiI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iZmlsbCIgY2FsY01vZGU9ImxpbmVhciIgdmFsdWVzPSIjZjM2MTAwOyNmYTkwMmY7I2ZmYjg1NjsjZmZkNTVkOyNmMzYxMDAiIGtleVRpbWVzPSIwOzAuMjU7MC41OzAuNzU7MSIgZHVyPSIxLjUiIGJlZ2luPSItMS4xMjVzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvcGF0aD48cGF0aCBkPSJNNjcuNjcgMzguNzVsLTYuMi0yLjE0IDQuMjggNC44NGM1LjUyIDYuMTkgOC41NiAxNC41MSA4LjU2IDIzLjRzLTMuMDQgMTcuMjItOC41NiAyMy40MWwtNC4yNyA0Ljg0IDYuMTktMi4xNGEyNy42MSAyNy42MSAwIDAgMCAxOC43OS0yNi4yMmMwLTExLjU5LTcuNTQtMjIuMTctMTguOC0yNnoiPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImZpbGwiIGNhbGNNb2RlPSJsaW5lYXIiIHZhbHVlcz0iI2YzNjEwMDsjZmE5MDJmOyNmZmI4NTY7I2ZmZDU1ZDsjZjM2MTAwIiBrZXlUaW1lcz0iMDswLjI1OzAuNTswLjc1OzEiIGR1cj0iMS41IiBiZWdpbj0iLTAuNzVzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvcGF0aD48cGF0aCBkPSJNODEuMTcgMjUuOTJhMjcuNjggMjcuNjggMCAwIDAtMzIuMDcgMy4xNWwtNC44NCA0LjI3IDYuNDItMS4yM2M4LjEtMS43IDE2Ljg4LS4xMiAyNC41MyA0LjI3IDcuNjUgNC40IDEzLjM5IDExLjI2IDE1Ljk4IDE5LjEzbDIuMDIgNi4yIDEuMjQtNi40MmEyNy42OCAyNy42OCAwIDAgMC0xMy4yOC0yOS4zN3oiPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImZpbGwiIGNhbGNNb2RlPSJsaW5lYXIiIHZhbHVlcz0iI2YzNjEwMDsjZmE5MDJmOyNmZmI4NTY7I2ZmZDU1ZDsjZjM2MTAwIiBrZXlUaW1lcz0iMDswLjI1OzAuNTswLjc1OzEiIGR1cj0iMS41IiBiZWdpbj0iLTAuMzc1cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48L3BhdGg+PC9nPjwvZz48L2c+PC9zdmc+"
+      alt="" style="width:150px;height:150px;display: block;margin:6rem auto;">
+  </div>
+  <div id="app">
+  </div>
+
+  <!-- <script src="https://cdn.bootcss.com/exif-js/2.3.0/exif.min.js"></script> -->
+  <audio id="my_audio">
+    <source src="/img/audio/click.mp3" type="audio/mpeg"></source>
+  </audio>
+</body>
+
+</html>

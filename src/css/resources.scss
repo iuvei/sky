@@ -1,0 +1,61 @@
+/**
+*公共方法
+*/
+@mixin left {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+@mixin start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin around {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@function poTorem($px) {
+  @return $px / 16px * 1rem;
+}
+
+@mixin public {
+  box-sizing: border-box;
+  height: poTorem(35px);
+  line-height: poTorem(35px);
+  text-align: center;
+  color: #333;
+  font-size: poTorem(14px);
+  display: inline-block;
+  width: poTorem(65px);
+  margin: 0;
+  border-collapse: collapse;
+}
