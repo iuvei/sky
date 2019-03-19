@@ -1,54 +1,69 @@
 <template>
   <div class="head_model">
-    <div class="bg" v-show="show" @click="show = !show"></div>
-    <transition enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
-      <div class="shadow" v-show="show">
+    <div class="bg"
+         v-show="show"
+         @click="show = !show"></div>
+    <transition enter-active-class="animated slideInDown"
+                leave-active-class="animated slideOutUp">
+      <div class="shadow"
+           v-show="show">
         <div>
-          <span class="item" v-for="(item, index) in playItems" :key="index" :class="{actives: title == item.name}" @click="switchs(item)">
+          <span class="item"
+                v-for="(item, index) in playItems"
+                :key="index"
+                :class="{actives: title == item.name}"
+                @click="switchs(item)">
             {{item.name}}
           </span>
         </div>
-       
+
       </div>
     </transition>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from "vuex";
 export default {
-  name: 'switchPlay',
-  props: ['modal_show'],
+  name: "switchPlay",
+  props: ["modal_show"],
   data() {
     return {
       show: false
-    }
+    };
   },
   computed: {
     ...mapState({
-      curPlayItem: state => state.betting.curPlayItem,
+      curPlayItem: state => state.betting.curPlayItem || {},
       title: state => state.betting.switch,
       betData: state => state.betting.betData
     }),
     playItems() {
-      let configs = this.$store.state.betting.playConfigs
-      return configs && Array.isArray(configs) ? configs : []
+      const configs = this.$store.state.betting.playConfigs;
+      return configs && Array.isArray(configs) ? configs : [];
     }
   },
   watch: {
-    title(name){
-      this.bus.$emit('changeTitle', name)
+    title(name) {
+      this.bus.$emit("changeTitle", name);
     },
     modal_show(val) {
-      this.show = !!val
+      this.show = !!val;
+    },
+    show(val) {
+      if (!val) this.$emit("showGamePlay");
     },
     // 初始化玩法
-    playItems(playItems){
-      let curPlayItem = playItems[0] || {}
+    playItems(playItems) {
+      let curPlayItem = playItems[0] || {};
       // this.playSwitch(curPlayItem.name)
-      curPlayItem = curPlayItem.submenu && curPlayItem.submenu[0] && curPlayItem.submenu[0].playlist || []
-      curPlayItem = curPlayItem[0] || {}
-      this.updateField({curPlayItem})
+      curPlayItem =
+        (curPlayItem.submenu &&
+          curPlayItem.submenu[0] &&
+          curPlayItem.submenu[0].playlist) ||
+        [];
+      curPlayItem = curPlayItem[0] || {};
+      this.updateField({ curPlayItem });
       // this.description(
       //   `<b>范例</b>：${curPlayItem.play_fanli}<br><br><b>玩法说明</b>：${
       //     curPlayItem.play_shuoming
@@ -56,9 +71,9 @@ export default {
       // );
     },
     // 当前玩法变化
-    curPlayItem(curPlayItem){
-      this.bus.$emit('changeTitle', curPlayItem.playname)
-      this.playSwitch(curPlayItem.playname)
+    curPlayItem(curPlayItem) {
+      this.bus.$emit("changeTitle", curPlayItem.playname);
+      this.playSwitch(curPlayItem.playname);
       this.description(
         `<b>范例</b>：${curPlayItem.play_fanli}<br><br><b>玩法说明</b>：${
           curPlayItem.play_shuoming
@@ -66,23 +81,17 @@ export default {
       );
     }
   },
-  mounted(){
-   
-  },
-  activated() {
-    
-  },
-  deactivated() {
-    
-  },
+  mounted() {},
+  activated() {},
+  deactivated() {},
   methods: {
-    ...mapActions(['playSwitch', 'description', 'updateField']),
+    ...mapActions(["playSwitch", "description", "updateField"]),
     // 切换双面玩法或者官方玩法
-    switchs({name, submenu}) {
-      this.show = !this.show
-      let curPlayItem = submenu[0] && submenu[0].playlist || []
-      curPlayItem = curPlayItem[0] || {}
-      this.updateField({curPlayItem, ncSelected: {}})
+    switchs({ submenu }) {
+      this.show = !this.show;
+      let curPlayItem = (submenu[0] && submenu[0].playlist) || [];
+      curPlayItem = curPlayItem[0] || {};
+      this.updateField({ curPlayItem, ncSelected: {} });
       // this.description(
       //   `<b>范例</b>：${curPlayItem.play_fanli}<br><br><b>玩法说明</b>：${
       //     curPlayItem.play_shuoming
@@ -90,7 +99,7 @@ export default {
       // );
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

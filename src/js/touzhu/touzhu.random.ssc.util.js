@@ -5,6 +5,7 @@ import {
   getRenderTypeByPlayID
 } from '~/js/touzhu/touzhu.ssc.calc'
 import danshiUtil from '~/js/touzhu/danshi.util'
+import getDwdArr from './util'
 const zhushuFunc = new Calc_Zhushu_Obj()
 
 const sscUtil = {
@@ -19,18 +20,6 @@ const sscUtil = {
   sichong: [], // 四重号
   erchong: [], // 二重号
   danhao: [], // 单号
-
-  getDwdArr(arr) {
-    // 所有的定位胆都需要单独计算一个位置参数
-    // 只要当前行有值，就取当前行的2次方数，和即为位置数组
-    let c = 0
-    arr.forEach((x, i) => {
-      if (x.length) {
-        c += Math.pow(2, i)
-      }
-    })
-    return [c.toString()].concat(arr)
-  },
   getDataSource(randomDataSouce, betData) {
     const playids = [128, 129, 130, 131, 41]
     if (danshiUtil.isSingleMode(betData.js_tag, betData.playid)) {
@@ -95,7 +84,7 @@ const sscUtil = {
     const zhushu = this.calcBetNumber(betData.playid, towDimValuesArr)
     return {
       type: 1,
-      peilv: randomDataSouce.peilv,
+      peilv: betData.peilv,
       peilvType: RenderTypes.SSC, // 0 为单赔率,1为多赔率
       peilvTypeStr: RenderTypes.SSC.toString(),
       formatValueStr: '',
@@ -167,7 +156,7 @@ const sscUtil = {
       formatShowStr,
       // 定位胆专用取值
       dwdValuesArr:
-        peilvType === RenderTypes.DWD ? this.getDwdArr(towDimValuesArr) : [],
+        peilvType === RenderTypes.DWD ? getDwdArr(towDimValuesArr) : [],
       wanfa: betData.wanfa, // 玩法
       zhushu: _zhushu, // 注数
       gameid: betData.gameid,
@@ -187,7 +176,7 @@ const sscUtil = {
     if ([129, 131].includes(playid)) {
       return zhushuFunc[func](oneDimValuesArr)
     } else if ([41, 128].includes(playid)) {
-      towDimValuesArr = this.getDwdArr(towDimValuesArr).filter(x => x.length)
+      towDimValuesArr = getDwdArr(towDimValuesArr).filter(x => x.length)
       return zhushuFunc[func](towDimValuesArr)
     } else {
       return zhushuFunc[func](oneDimValuesArr)

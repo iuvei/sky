@@ -1,4 +1,4 @@
-export const decodeEvent = (str, key = '0') => {
+const decodeEvent = (str, key = '0') => {
   const valArr = str.split(''),
     keyArr = key.split('') // 固定‘0’
   if (valArr.length % 2 !== 0) {
@@ -11,10 +11,11 @@ export const decodeEvent = (str, key = '0') => {
   }
   for (let i = 0; i < resArr.length; i++) {
     for (let j = keyArr.length - 1; j >= 0; j--) {
-      console.log(resArr[i])
+      // console.log(resArr[i])
       resArr[i] = resArr[i] ^ keyArr[j].charCodeAt()
     }
   }
   const final = resArr.map(item => String.fromCharCode(item))
-  return decodeURIComponent(escape(final.join('')))
+  return final.join('')
 }
+export default decodeEvent

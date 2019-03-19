@@ -1,9 +1,11 @@
 <template>
-  <div id="app">
+  <div id="app"
+       :class="{'chat-room-router':isChatRouter}">
     <!-- 加载进度页面 -->
     <!-- 路由页面 -->
     <div class="page_content">
-      <div class="routes" ref="routes">
+      <div class="routes"
+           ref="routes">
         <transition :name="transitionName">
           <keep-alive>
             <router-view class="child-view"></router-view>
@@ -12,54 +14,95 @@
       </div>
     </div>
     <!-- 底部下载  -->
-    <yd-flexbox class="download-pannel" v-show="showDownLoadApp && this.$route.name === 'shouYe'">
+    <yd-flexbox class="download-pannel"
+                v-show="showDownLoadApp && this.$route.name === 'shouYe'">
       <yd-flexbox-item>
-        <yd-icon @click.native="showDownLoadApp=false" name="error" size="1.2rem" color="#ffffff" style="vertical-align: -.123rem;"></yd-icon>
-        <yd-icon name="phone3" size="1.2rem" color="#ffffff" style="vertical-align: -.123rem;"></yd-icon>
+        <yd-icon @click.native="showDownLoadApp=false"
+                 name="error"
+                 size="1.2rem"
+                 color="#ffffff"
+                 style="vertical-align: -.123rem;"></yd-icon>
+        <yd-icon name="phone3"
+                 size="1.2rem"
+                 color="#ffffff"
+                 style="vertical-align: -.123rem;"></yd-icon>
         <em class="content-down"> 下载手机APP </em>
       </yd-flexbox-item>
       <div class="download-action">
         <a :href="sysLink">
-          <yd-button type="danger" class="down-btn">
+          <yd-button type="danger"
+                     class="down-btn"
+                     :bgcolor="isfestival? '#ff6143': '#ff7c34'"
+                     color="#fff">
             立即下载
-            <yd-icon name="play" size="1.2rem" color="#ffffff" style="vertical-align: -.123rem;"></yd-icon>
+            <yd-icon name="play"
+                     size="1.2rem"
+                     color="#ffffff"
+                     style="vertical-align: -.123rem;"></yd-icon>
           </yd-button>
         </a>
       </div>
     </yd-flexbox>
 
     <!-- 底部导航 -->
-    <yd-tabbar class="footer" active-class="bottom_tab" activeColor="#666" v-show="navBarIsShow">
-      <yd-tabbar-item title="首页" link="/home" active>
-        <span slot="icon" class="iconfont" :class="[pathName == 'shouYe' ? 'navbar_home_active' : 'navbar_home']"></span>
+    <yd-tabbar :class="[{'footer_pig':isfestival},'footer']"
+    active-class="bottom_tab"
+    active-color="#979797"
+    v-show="navBarIsShow">
+      <yd-tabbar-item title="首页"
+                      link="/home"
+                      active>
+        <span slot="icon"
+              class="iconfont"
+              :class="[pathName == 'shouYe' ? 'navbar_home_active' : 'navbar_home',{'navbar_home_pig': isfestival}]"></span>
       </yd-tabbar-item>
-      <yd-tabbar-item title="开奖" link="/lottery">
-        <span slot="icon" class="iconfont" :class="[pathName == 'kaiJiang' ? 'navbar_kaijiang_active' : 'navbar_kaijiang']"></span>
+      <yd-tabbar-item title="开奖"
+                      link="/lottery">
+        <span slot="icon"
+              class="iconfont"
+              :class="[pathName == 'kaiJiang' ? 'navbar_kaijiang_active' : 'navbar_kaijiang',{'navbar_kaijiang_pig': isfestival}]"></span>
       </yd-tabbar-item>
-      <div class="add_button" @click="popupVisible=!popupVisible">
-        <div class="quick">
-          <div slot="icon" :class="['iconfont2', {active:popupVisible}] "></div>
+      <div class="add_button"
+           @click="popupVisible=!popupVisible">
+        <div :class="[{quick_pig: isfestival},{active: popupVisible},'quick']">
+          <div slot="icon"
+               :class="['iconfont2', {active:popupVisible},{'iconfont2_pig': isfestival}] "></div>
         </div>
       </div>
-      <yd-tabbar-item title="走势" link="/trend">
-        <span slot="icon" class="iconfont" :class="[pathName == 'zouShi' ? 'navbar_trend_active' : 'navbar_trend']"></span>
+      <yd-tabbar-item title="走势"
+                      link="/trend">
+        <span slot="icon"
+              class="iconfont"
+              :class="[pathName == 'zouShi' ? 'navbar_trend_active' : 'navbar_trend',{'navbar_trend_pig': isfestival}]"></span>
       </yd-tabbar-item>
-      <yd-tabbar-item title="我的" link="/member">
-        <span slot="icon" class="iconfont" :class="[pathName == 'huiYuan' ? 'navbar_my_active' : 'navbar_my']"></span>
+      <yd-tabbar-item title="我的"
+                      link="/member">
+        <span slot="icon"
+              class="iconfont"
+              :class="[pathName == 'huiYuan' ? 'navbar_my_active' : 'navbar_my',{'navbar_my_pig': isfestival}]"></span>
       </yd-tabbar-item>
     </yd-tabbar>
     <!-- 306 -->
-    <mt-popup class="popupBox" v-model="popupVisible" position="bottom">
+    <mt-popup class="popupBox"
+              v-model="popupVisible"
+              position="bottom">
       <span class="quick_top">快捷方式</span>
       <div class="box">
 
         <yd-slider v-if="popupVisible">
-          <yd-slider-item v-for="page in pages" :key="page">
-            <div v-for="el in addQuicks.slice((page-1)*pageSize,page*pageSize)" :key="el.addgn" class="add_box" @click="feature_ck(el.path)">
-              <div class="quick_icon" :style="`background-image:url(${el.src})`"></div>
+          <yd-slider-item v-for="page in pages"
+                          :key="page">
+            <div v-for="el in addQuicks.slice((page-1)*pageSize,page*pageSize)"
+                 :key="el.addgn"
+                 class="add_box"
+                 @click="feature_ck(el.path)">
+              <div class="quick_icon"
+                   :style="`background-image:url(${el.src})`"></div>
               <span class="add_icon">{{el.text}}</span>
             </div>
-            <div v-if="page==pages" class="add_box" @click="feature_ck('/quick')">
+            <div v-if="page==pages"
+                 class="add_box"
+                 @click="feature_ck('/quick')">
               <div class="add_img"></div>
               <span class="add_icon">添加</span>
             </div>
@@ -68,17 +111,24 @@
       </div>
     </mt-popup>
     <!-- 系统通知弹窗 -->
-    <yd-popup v-model="sysState" position="center" width="80%" v-if="sysState">
+    <yd-popup v-model="sysState"
+              position="center"
+              width="80%"
+              v-if="sysState">
       <div class="sys_message">
         <p>系统提示</p>
-        <p class="sys_content" v-html="sysContent"></p>
+        <p class="sys_content"
+           v-html="sysContent"></p>
         <p>
           <button @click="$store.commit('SET_SYSSTATE', false)">我知道了</button>
           <button @click="$store.commit('SET_SYSSTATE', false)">不再提示</button>
         </p>
       </div>
     </yd-popup>
-    <img v-if="false" class="first_guide" src="./img/shouye/first_guide.png" @click="closeGuideImg">
+    <img v-if="false"
+         class="first_guide"
+         src="./img/shouye/first_guide.png"
+         @click="closeGuideImg">
   </div>
 </template>
 <script>
@@ -90,17 +140,16 @@ import zouShi from "./views/zouShi";
 import kaiJiang from "./views/kaiJiang";
 import loader from "./views/public/loader";
 import { mapActions, mapState } from "vuex";
-import { Popup } from "vue-ydui/dist/lib.rem/popup";
 
 // 兼容 dom.closest
 if (window.Element && !Element.prototype.closest) {
   Element.prototype.closest = function(s) {
-    var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-      i,
-      el = this;
+    const matches = (this.document || this.ownerDocument).querySelectorAll(s);
+    let el = this,
+      i;
     do {
       i = matches.length;
-      while (--i >= 0 && matches.item(i) !== el) {}
+      // while (--i >= 0 && matches.item(i) !== el) {}
     } while (i < 0 && (el = el.parentElement));
     return el;
   };
@@ -120,6 +169,7 @@ export default {
       pathName: "shouYe",
       touchIndex: true,
       active: "首页",
+
       navBarIsShow: true,
       nextBtnIsShow: false,
       show1: false,
@@ -131,10 +181,11 @@ export default {
   },
   mixins: [decodeFunc],
   computed: {
+    ...mapState("chat", ["isChatRouter"]),
     ...mapState("quick", {
       addQuicks(state) {
-        let addQuicks = Object.assign([], state.addQuicks);
-        let flag = addQuicks.some((el, index) => {
+        const addQuicks = Object.assign([], state.addQuicks);
+        const flag = addQuicks.some((el, index) => {
           if (el.addgn === "gnl-10") {
             addQuicks[index].path = this.sysinfo.service_url;
             return true;
@@ -145,9 +196,10 @@ export default {
       }
     }),
     pages() {
-      let pages = Math.ceil((this.addQuicks.length + 1) / this.pageSize);
+      const pages = Math.ceil((this.addQuicks.length + 1) / this.pageSize);
       return pages;
     },
+    ...mapState(['isfestival']),
     ...mapState({
       sysinfo: state => state.sysinfo,
       sysState: state => state.sysState,
@@ -157,11 +209,16 @@ export default {
       isLogin: state => state.userinfo.isLogin
     }),
     sysLink() {
-      let userAgent = navigator.userAgent;
+      const userAgent = navigator.userAgent;
       if (userAgent.indexOf("Android") != -1) {
-        return this.$store.state.sysinfo.android_link || this.$store.state.sysinfo.android_h5;
+        return (
+          this.$store.state.sysinfo.android_link ||
+          this.$store.state.sysinfo.android_h5
+        );
       } else {
-        return this.$store.state.sysinfo.ios_link || this.$store.state.sysinfo.ios_h5;
+        return (
+          this.$store.state.sysinfo.ios_link || this.$store.state.sysinfo.ios_h5
+        );
       }
     }
   },
@@ -175,28 +232,33 @@ export default {
   },
   mounted() {
     this.scrollStop();
-
     const doc = window.document,
       body = doc.body;
-    let canFullScreen =
+    const canFullScreen =
       doc.requestFullscreen ||
       doc.webkitFullscreenEnabled ||
       doc.fullscreenEnable;
     if (canFullScreen) {
       body.webkitRequestFullScreen && body.webkitRequestFullScreen();
     }
-    if (body.requestFullscreen) {
-      body.requestFullscreen();
-    }
-    setTimeout(function() {
+    // if (body.requestFullscreen) {
+    //   try {
+    //     body.requestFullscreen();
+    //   } catch (e) {
+    //     // console.error(e);
+    //   }
+    // }
+    setTimeout(() => {
       window.scrollTo(0, 1);
     }, 100);
+    console.log(this.isLogin, "this.isLogin");
+    // this.
   },
   watch: {
     $route: "path"
   },
-  created: function() {
-    if (location.href.includes("/home?vip=")) {
+  created() {
+    if (location.href.includes("?vip=")) {
       const vipCode = location.search.split("=")[1];
       window.localStorage.setItem("VipCode", vipCode);
       this.$router.replace({
@@ -209,10 +271,10 @@ export default {
       this.userAutoLogin();
       this.$router.replace("/home");
     }
-    let myAudio = document.getElementById("my_audio");
+    const myAudio = document.getElementById("my_audio");
     document.addEventListener(
       "touchstart",
-      e => {
+      () => {
         if (this.touchSound) {
           myAudio.play();
         }
@@ -232,10 +294,10 @@ export default {
         ac: "getNoticeAppForOffline"
       }).then(res => {
         if (res && Array.isArray(res) && res.length) {
-          let a = res == 0 ? 0 : res[0].content;
-          var temp = document.createElement("div");
+          // const a = res == 0 ? 0 : res[0].content;
+          let temp = document.createElement("div");
           temp.innerHTML = this.decodeEvent(res[0].content);
-          var output = temp.innerText || temp.textContent;
+          const output = temp.innerText || temp.textContent;
           temp = null;
           this.$store.commit("SET_SYSCONTENT", output);
         }
@@ -249,9 +311,9 @@ export default {
         sessionkey: this.$store.state.userinfo.accountInfo.sessionkey
       }).then(res => {
         if (res && Array.isArray(res) && res.length) {
-          var temp = document.createElement("div");
+          let temp = document.createElement("div");
           temp.innerHTML = this.decodeEvent(res[0].content);
-          var output = temp.innerText || temp.textContent;
+          const output = temp.innerText || temp.textContent;
           temp = null;
           this.$store.commit("SET_SYSCONTENT", output);
         }
@@ -271,14 +333,14 @@ export default {
     /**
      * 打开model
      */
-    closeModel: function() {
+    closeModel() {
       this.show = true;
     },
 
     /**
      * 关闭model
      */
-    showModel: function() {
+    showModel() {
       this.show = !this.show;
     },
 
@@ -304,29 +366,29 @@ export default {
         }
       }
     },
-    /**判断滚动条是否停止 */
+    /** 判断滚动条是否停止 */
     scrollStop() {
       /**
        * Created by sky on 2017/4/6 0006.
        */
-      var startx, starty;
-      //获得角度
+      let startx, starty;
+      // 获得角度
       function getAngle(angx, angy) {
-        return Math.atan2(angy, angx) * 180 / Math.PI;
+        return (Math.atan2(angy, angx) * 180) / Math.PI;
       }
 
-      //根据起点终点返回方向 1向上 2向下 3向左 4向右 0未滑动
+      // 根据起点终点返回方向 1向上 2向下 3向左 4向右 0未滑动
       function getDirection(startx, starty, endx, endy) {
-        var angx = endx - startx;
-        var angy = endy - starty;
-        var result = 0;
+        const angx = endx - startx;
+        const angy = endy - starty;
+        let result = 0;
 
-        //如果滑动距离太短
+        // 如果滑动距离太短
         if (Math.abs(angx) < 2 && Math.abs(angy) < 2) {
           return result;
         }
 
-        var angle = getAngle(angx, angy);
+        const angle = getAngle(angx, angy);
         if (angle >= -135 && angle <= -45) {
           result = 1;
         } else if (angle > 45 && angle < 135) {
@@ -342,30 +404,30 @@ export default {
 
         return result;
       }
-      //手指接触屏幕
+      // 手指接触屏幕
       document.addEventListener(
         "touchstart",
         this._preventDefault,
         // { passive: false },
-        function(e) {
+        e => {
           console.log("touchstart");
           startx = e.touches[0].pageX;
           starty = e.touches[0].pageY;
         },
         false
       );
-      //手指离开屏幕
-      let _this = this;
+      // 手指离开屏幕
+      const _this = this;
       document.addEventListener(
         "touchend",
         this._preventDefault,
         // { passive: false },
-        function(e) {
+        e => {
           console.log("touchend");
-          var endx, endy;
-          endx = e.changedTouches[0].pageX;
-          endy = e.changedTouches[0].pageY;
-          var direction = getDirection(startx, starty, endx, endy);
+          // let endx, endy;
+          const endx = e.changedTouches[0].pageX;
+          const endy = e.changedTouches[0].pageY;
+          const direction = getDirection(startx, starty, endx, endy);
           switch (direction) {
             case 0:
               // _this.touchIndex = true;
@@ -425,7 +487,7 @@ export default {
     //     false
     //   );
     // },
-    /**@description 路由加载方法 */
+    /** @description 路由加载方法 */
     path(to, from) {
       // 加入判断首页引导图是否需要消失
       if (from.name == "shouYe" && this.guideIsshow) {
@@ -455,10 +517,10 @@ export default {
         if (to.name === "shouYe") {
           document.title = this.sysinfo.web_title;
           this.transitionName = "slide-right";
-          if (this.isLogin) this.flushPrice();
+          if (this.isLogin) this.flushPrice({ click: 1 });
         }
         if (to.name === "huiYuan") {
-          if (this.isLogin) this.flushPrice();
+          if (this.isLogin) this.flushPrice({ click: 1 });
         }
       } else {
         this.transitionName = "";
@@ -468,14 +530,14 @@ export default {
       document.documentElement.scrollTop = 0;
       this.pathName = to.name;
 
-      let arrList = ["shouYe", "zouShi", "kaiJiang", "huiYuan"];
+      const arrList = ["shouYe", "zouShi", "kaiJiang", "huiYuan"];
       this.disableToLogin(to, from);
       this.navBarIsShow = arrList.includes(to.name);
     },
-    /**用户自动登录 */
+    /** 用户自动登录 */
     userAutoLogin() {
-      /**前端控制是否登录超时 10分钟 */
-      let isAutoLogin =
+      /** 前端控制是否登录超时 10分钟 */
+      const isAutoLogin =
         new Date().getTime() - localStorage.getItem("expire") < 1800000;
       console.log("是否自动登录", isAutoLogin);
       if (localStorage.getItem("autoToken") && isAutoLogin) {
@@ -486,11 +548,11 @@ export default {
       } else {
         // this.$dialog.alert({mes: '登录超时，请重新登录'})
         this.getOfflineSysMes();
-        //localStorage.clear();
+        // localStorage.clear();
       }
     },
-    //登陆后到首页，点击返回不允许跳回登陆页
-    disableToLogin(to, from) {
+    // 登陆后到首页，点击返回不允许跳回登陆页
+    disableToLogin(to) {
       if (to.name === "login" && this.$store.state.userinfo.isLogin) {
         this.$router.replace("/home");
       }
@@ -554,7 +616,7 @@ export default {
     font-size: 0.75rem;
   }
   .down-btn {
-    background-color: #f57606;
+    background-color: $mainColor;
     font-size: 1.2rem;
     display: flex;
     align-items: center;
@@ -570,9 +632,20 @@ export default {
   justify-content: space-between;
   width: 100%;
   height: poTorem(57px) !important;
-  background: #f3f3f3 !important;
-  //   position: fixed;
-  z-index: 10000 !important;
+  background: #f3f3f3;
+  z-index: 1000 !important;
+  &.footer_pig {
+    background: url(~img/theme/footer.png);
+    background-size: cover;
+    footer {
+      background-color: transparent!important;
+    }
+    .bottom_tab {
+      span {
+        color: #fc4337;
+      }
+    }
+  }
   .iconfont {
     font-size: poTorem(29px);
     width: poTorem(29px);
@@ -593,21 +666,8 @@ export default {
   .navbar_home_active {
     background: url(./img/shouye/home.png);
   }
-
-  .navbar_buy {
-    background: url(./img/shouye/buy.png);
-  }
-  .navbar_buy_active {
-    background: url(./img/shouye/buy2.png);
-  }
-
-  .navbar_quick {
-    background: url(./img/shouye/quick.png);
-    background-size: contain !important;
-  }
-  .navbar_quick_active {
-    background: url(./img/shouye/quick2.png);
-    background-size: contain !important;
+  .navbar_home_pig {
+    background: url(~img/theme/home2.png);
   }
   // 插件
   .add_button {
@@ -630,6 +690,15 @@ export default {
       align-items: center;
       background: #fff;
       z-index: 10000 !important;
+      &.quick_pig {
+        border: none;
+        background: url(~img/theme/quick.png) no-repeat;
+        background-size: contain;
+      }
+      &.active {
+        transition:all linear 0.3s;
+        transform: rotate(180deg);
+      }
       .img {
         width: poTorem(16px);
         height: poTorem(16px);
@@ -645,11 +714,11 @@ export default {
       }
       // 旋转45
       .iconfont2.active {
-        transition: 0.1s;
+        transition:all linear 0.3s;
         transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
-        -moz-transform: rotate(45deg);
+      }
+      .iconfont2_pig {
+        background: transparent;
       }
     }
   }
@@ -660,17 +729,26 @@ export default {
   .navbar_kaijiang_active {
     background: url(./img/shouye/kaijiang2.png);
   }
+  .navbar_kaijiang_pig {
+    background: url(./img/theme/kaijiang.png);
+  }
   .navbar_my {
     background: url(./img/shouye/my.png);
   }
   .navbar_my_active {
     background: url(./img/shouye/my2.png);
   }
+  .navbar_my_pig {
+    background: url(./img/theme/my.png);
+  }
   .navbar_trend {
     background: url(./img/shouye/trend.png);
   }
   .navbar_trend_active {
     background: url(./img/shouye/trend2.png);
+  }
+  .navbar_trend_pig {
+    background: url(./img/theme/trend.png);
   }
   .yd-tabbar-icon {
     width: poTorem(29px);
@@ -758,7 +836,7 @@ export default {
     text-align: center;
     &:first-child {
       padding-left: poTorem(20px);
-      color: #ff7c34;
+      color: $mainColor;
       text-align: left;
     }
 
@@ -778,7 +856,7 @@ export default {
     }
   }
   .sys_content {
-    height: 20rem;
+    height: 18rem;
     overflow: scroll;
     padding: poTorem(20px);
     font-size: poTorem(18px);
@@ -789,7 +867,7 @@ export default {
   }
 }
 .yd-popup-center {
-	top: 40%!important;
+  top: 38% !important;
   background-color: #fff;
 }
 .yd-tab-nav-scoll {
@@ -814,13 +892,26 @@ export default {
 .routes {
   height: 100%;
 }
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1);
+  overflow: hidden;
+}
+
 .slide-left-enter,
 .slide-right-leave-active {
-  transform: translate(100%, 0);
+  opacity: 0;
+  transform: translate(2em, 0) translateZ(0);
 }
+
 .slide-left-leave-active,
 .slide-right-enter {
-  transform: translate(-100%, 0);
+  opacity: 0;
+  transform: translate(-2em, 0) translateZ(0);
 }
 </style>
 

@@ -94,6 +94,15 @@ export default [
         },
         component: resolve =>
           require(['~/views/daili/components/addNewDomain.vue'], resolve)
+      },
+      {
+        path: 'agencyBettingDetail',
+        name: 'dailigoucaixiangqing',
+        meta: {
+          requireAuth: true
+        },
+        component: resolve =>
+          require(['~/views/daili/components/block/agencyBettingDetail.vue'], resolve)
       }
     ]
   }

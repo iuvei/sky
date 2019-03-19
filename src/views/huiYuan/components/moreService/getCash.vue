@@ -1,7 +1,9 @@
 <template>
   <div class="getCash_main_body">
-    <publicHead :title="funcName" :type="6"></publicHead>
-    <div class="getCash_main_content other-block">
+    <publicHead :title="funcName"
+                :type="6"></publicHead>
+    <div class="getCash_main_content other-block"
+         v-if="!needRetry">
       <div class="people_info">
         <yd-cell-group>
           <yd-cell-item>
@@ -42,31 +44,48 @@
       </div>
       <div class="bank_info">
         <yd-cell-group>
-          <yd-cell-item type="label" arrow>
+          <yd-cell-item type="label"
+                        arrow>
             <span slot="left">收款银行：</span>
-            <select slot="right" v-model="choosedBank" @change="changeVal">
-              <option :value="item.id" v-for="(item, index) in allData.banklist" :key="index">{{item.bank_typename}}</option>
+            <select slot="right"
+                    v-model="choosedBank"
+                    @change="changeVal">
+              <option :value="item.id"
+                      v-for="(item, index) in allData.banklist"
+                      :key="index">{{item.bank_typename}}</option>
             </select>
           </yd-cell-item>
           <yd-cell-item>
             <span slot="left">收款账号：</span>
-            <input slot="right" type="text" placeholder="请输入收款账号" v-model="bankCard" readonly>
+            <input slot="right"
+                   type="text"
+                   placeholder="请输入收款账号"
+                   v-model="bankCard"
+                   readonly>
           </yd-cell-item>
           <yd-cell-item>
             <span slot="left">提款金额：</span>
-            <input slot="right" type="number" :placeholder="`最小提款金额为${allData.min_take}元`" v-model="cashNum">
+            <input slot="right"
+                   type="number"
+                   :placeholder="`最小提款金额为${allData.min_take}元`"
+                   v-model="cashNum">
           </yd-cell-item>
           <yd-cell-item class="deal_pw">
             <span slot="left">交易密码：</span>
-            <autofocusInput slot="left" ref="pwIpt"></autofocusInput>
+            <autofocusInput slot="left"
+                            ref="pwIpt"></autofocusInput>
           </yd-cell-item>
         </yd-cell-group>
       </div>
       <p class="service_charge">提款手续费：
         <span class="detail">{{totalCast}}元 （行政费：{{allData.xz_take}}元 + 手续费：{{allData.get_take}}元+ 扣除：{{allData.youhui}}元)</span>
       </p>
-      <p class="confirmBtn" @click="popWinShowFunc">确认</p>
-      <yd-popup v-model="popWinShow" position="center" width="80%" class="getCash_pop_win">
+      <p class="confirmBtn"
+         @click="popWinShowFunc">确认</p>
+      <yd-popup v-model="popWinShow"
+                position="center"
+                width="80%"
+                class="getCash_pop_win">
         <p class="title">提示</p>
         <p class="need_reduce">此次提款需要扣除手续费：
           <span class="deduct">{{totalCast}}</span>元
@@ -79,30 +98,35 @@
         </p>
       </yd-popup>
     </div>
+    <bad-network @newRequest="retry"
+                 v-if="needRetry"></bad-network>
   </div>
 </template>
 <script>
-import publicHead from './publicHead'
-import autofocusInput from './autofocusInput'
-import { validate } from '~/js/user/gsfunc'
-import { randomFormtoken } from '~/js/user/gsfunc'
-import { mapActions, mapState } from 'vuex'
-window.randomFormtoken = randomFormtoken
+import publicHead from "./publicHead";
+import autofocusInput from "./autofocusInput";
+import { validate, randomFormtoken } from "~/js/user/gsfunc";
+// import { randomFormtoken } from "~/js/user/gsfunc";
+import { mapActions, mapState } from "vuex";
+import badNetwork from "./badNetwork/badNetwork";
+window.randomFormtoken = randomFormtoken;
 export default {
   components: {
     publicHead,
-    autofocusInput
+    autofocusInput,
+    badNetwork
   },
   data() {
     return {
-      funcName: '提款',
-      allData: '',
-      bankCard: '',
-      choosedBank: '',
-      cashNum: '',
+      funcName: "提款",
+      allData: "",
+      bankCard: "",
+      choosedBank: "",
+      cashNum: "",
       popWinShow: false,
-      tk_pass: 0
-    }
+      tk_pass: 0,
+      needRetry: false
+    };
   },
   computed: {
     totalCast() {
@@ -110,7 +134,7 @@ export default {
         this.allData.xz_take * 1 +
         this.allData.get_take * 1 +
         this.allData.youhui * 1
-      )
+      );
     },
     ...mapState({
       bank_typename: state => state.userinfo.accountInfo.bank_typename
@@ -118,101 +142,117 @@ export default {
   },
   mixins: [validate],
   async activated() {
-    // if (!this.bank_typename) {
-    //   this.$router.push("/moreService/bindingBankcard");
-    //   return;
-    // }
-    await this.togetTkPriceWhere()
-    this.cashNum = ''
+    this.cashNum = "";
   },
-
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.togetTkPriceWhere()
+    })
+  },
   methods: {
-    ...mapActions('recharge', ['getTkPriceWhere', 'getTkPrice']),
+    ...mapActions("recharge", ["getTkPriceWhere", "getTkPrice"]),
+    retry() {
+      this.togetTkPriceWhere();
+    },
     togetTkPriceWhere() {
-      this.getTkPriceWhere().then(res => {
-        if (!res) {
-          this.$router.replace({
-            path: '/moreService/bindingBankcard',
-            query: { rent: true }
-          })
-          return
-        }
-        this.allData = res
-        this.choosedBank = res.bink_id
-        this.bankCard = res.banklist.find(v => v.id == res.bink_id).card
-        this.$dialog.loading.close()
-      })
+      this.$dialog.loading.open(" ");
+      this.getTkPriceWhere()
+        .then(res => {
+          console.log(res)
+          if(res.msg===20004) { // 业主关闭提款功能
+            this.$router.go(-1)
+            return
+          }
+          this.needRetry = false;
+          if (!res) {
+            this.$router.replace({
+              path: "/moreService/bindingBankcard",
+              query: { rent: true }
+            });
+            return;
+          }
+          this.allData = res;
+          this.choosedBank = res.bink_id ? res.bink_id : res.banklist[0].id;
+          this.bankCard = res.banklist.find(v => v.id == this.choosedBank).card;
+          this.$dialog.loading.close();
+        })
+        .catch(error => {
+          console.log(error);
+          if (error) {
+            this.needRetry = true;
+          }
+        });
     },
     changeVal(n) {
-      this.bankCard = this.allData.banklist[n.target.selectedIndex].card
+      this.bankCard = this.allData.banklist[n.target.selectedIndex].card;
     },
     popWinShowFunc() {
-      let err = this.checkRequest()
+      const err = this.checkRequest();
       if (err) {
-        return this.$dialog.toast({ mes: err.message })
+        return this.$dialog.toast({ mes: err.message });
       }
       // if (this.allData.price_rq * 1 > this.allData.tz_count * 1) {
       //   this.$dialog.toast({ mes: '当前投注量未完成，不可提现' })
       //   return
-      // } else 
+      // } else
       if (this.totalCast * 1 > this.cashNum * 1) {
-        this.$dialog.toast({ mes: '提现金额不可小于手续费' })
-        return
+        this.$dialog.toast({ mes: "提现金额不可小于手续费" });
+        return;
       }
-      this.popWinShow = true
+      this.popWinShow = true;
     },
     checkRequest() {
       this.tk_pass =
         this.$refs.pwIpt.first +
         this.$refs.pwIpt.second +
         this.$refs.pwIpt.third +
-        this.$refs.pwIpt.forth
+        this.$refs.pwIpt.forth;
       // console.log(`{{value}}<=${this.allData.max_take}`);
-      let rule = [
+      const rule = [
         {
-          name: 'cashNum',
+          name: "cashNum",
           validator: true,
-          message: '请输入提款金额'
+          message: "请输入提款金额"
         },
         {
-          name: 'cashNum',
+          name: "cashNum",
           validator: `{{value}}<=${this.allData.max_take}`,
           message: `最大提款金额为${this.allData.max_take}元`
         },
         {
-          name: 'cashNum',
+          name: "cashNum",
           validator: /^[0-9]*[1-9][0-9]*$/,
-          message: '提款金额必须为整数'
+          message: "提款金额必须为整数"
         },
-        { name: 'choosedBank', validator: true, message: '请选择银行卡' },
+        { name: "choosedBank", validator: true, message: "请选择银行卡" },
         {
-          name: 'tk_pass',
+          name: "tk_pass",
           validator: /^[0-9]{4}$/,
-          message: '请输入纯数字交易密码'
+          message: "请输入纯数字交易密码"
         }
-      ]
-      return this.MixinValidate(rule)
+      ];
+      return this.MixinValidate(rule);
     },
     async submitData() {
-      let request = {
+      const request = {
         bankid: this.choosedBank,
         price: this.cashNum,
         tk_pass: this.tk_pass,
         form_unique_token: randomFormtoken()
-      }
+      };
       this.getTkPrice(request)
-        .then(res => {
+        .then(() => {
           // this.$router.replace("/moreService/drawingsRecord");
           this.$router.replace({
-            name: 'success',
+            name: "success",
             params: {
               price: this.cashNum
             }
-          })
+          });
         })
         .finally(() => {
-          this.popWinShow = false
-        })
+          this.popWinShow = false;
+        });
     }
   }
   // beforeRouteEnter(t, f, n) {
@@ -220,7 +260,7 @@ export default {
 
   //   });
   // },
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -290,7 +330,7 @@ select {
     .confirmBtn {
       width: poTorem(300px);
       height: poTorem(36px);
-      background-color: #ff7c34;
+      background-color: $mainColor;
       line-height: poTorem(36px);
       font-size: poTorem(18px);
       color: #fff;

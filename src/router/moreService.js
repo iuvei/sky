@@ -6,7 +6,7 @@ export default {
     requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
   },
   component: resolve =>
-        require(['~/views/huiYuan/components/moreService/index.vue'], resolve),
+    require(['~/views/huiYuan/components/moreService/index.vue'], resolve),
   children: [
     ...agent,
     {
@@ -17,9 +17,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/getCashSuccess'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/getCashSuccess'
+        ], resolve)
     },
     {
       path: 'Nrecharge',
@@ -29,15 +29,16 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/recharge.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/recharge.vue'
+        ], resolve)
     },
     {
       path: 'youxi/:pt_id',
       name: 'youxi',
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        testIdentifie: true
       },
       component: resolve => require(['~/views/youXi'], resolve)
     },
@@ -48,9 +49,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/rechargeStep.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/rechargeStep.vue'
+        ], resolve)
     },
     {
       path: 'rechargeEnd',
@@ -59,9 +60,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/recharge/rechargeEnd.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/recharge/rechargeEnd.vue'
+        ], resolve)
     },
     {
       path: 'NgetCash',
@@ -71,12 +72,12 @@ export default {
         testIdentifie: true,
         realName: true
       },
-      component: () =>
-                import('~/views/huiYuan/components/moreService/getCash.vue')
-            // component: resolve =>
-            //   require([
-            //     '~/views/huiYuan/components/moreService/getCash.vue'
-            //   ], resolve)
+      // component: () =>
+        // import('~/views/huiYuan/components/moreService/getCash.vue')
+      component: resolve =>
+        require([
+          '~/views/huiYuan/components/moreService/getCash.vue'
+        ], resolve)
     },
     {
       path: 'betRecords',
@@ -85,17 +86,17 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/betRecord.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/betRecord.vue'
+        ], resolve)
     },
     {
       path: 'downloadApp',
       name: 'xiazai',
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/downloadApp.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/downloadApp.vue'
+        ], resolve)
     },
     {
       path: 'betRecordDetails',
@@ -105,7 +106,7 @@ export default {
         requireAuth: true
       },
       component: () =>
-                import('~/views/huiYuan/components/moreService/betRecordDetails')
+        import('~/views/huiYuan/components/moreService/betRecordDetails')
     },
     {
       path: 'drawingsList',
@@ -116,7 +117,7 @@ export default {
         testIdentifie: true
       },
       component: () =>
-                import('~/views/huiYuan/components/moreService/drawingsList')
+        import('~/views/huiYuan/components/moreService/drawingsList')
     },
     {
       path: 'prizeRecord',
@@ -125,9 +126,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/prizeRecord.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/prizeRecord.vue'
+        ], resolve)
     },
     {
       path: 'prizeRecordDetails',
@@ -136,9 +137,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/prizeRecordDetails.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/prizeRecordDetails.vue'
+        ], resolve)
     },
     {
       path: 'personalInfo',
@@ -148,9 +149,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/personalInfo.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/personalInfo.vue'
+        ], resolve)
     },
     {
       path: 'growinginfo',
@@ -160,9 +161,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/growinginfo.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/growinginfo.vue'
+        ], resolve)
     },
     {
       path: 'personalgrade',
@@ -172,9 +173,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/personalgrade.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/personalgrade.vue'
+        ], resolve)
     },
     {
       path: 'personaltask',
@@ -184,9 +185,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/personaltask.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/personaltask.vue'
+        ], resolve)
     },
     {
       path: 'accountInfo',
@@ -196,9 +197,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/accountInfo.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/accountInfo.vue'
+        ], resolve)
     },
     {
       path: 'drawingsRecord',
@@ -208,9 +209,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/drawingsRecord.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/drawingsRecord.vue'
+        ], resolve)
     },
     {
       path: 'rechargeRecord',
@@ -220,9 +221,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/rechargeRecord.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/rechargeRecord.vue'
+        ], resolve)
     },
     {
       path: 'rechargeDetails',
@@ -232,9 +233,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/rechargeDetails.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/rechargeDetails.vue'
+        ], resolve)
     },
     {
       path: 'welfareTask',
@@ -244,9 +245,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/welfareTask.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/welfareTask.vue'
+        ], resolve)
     },
     {
       path: 'signIn',
@@ -256,9 +257,7 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/signIn.vue'
-                ], resolve)
+        require(['~/views/huiYuan/components/moreService/signIn.vue'], resolve)
     },
     {
       path: 'offer',
@@ -278,9 +277,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/activities.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/activities.vue'
+        ], resolve)
     },
     {
       path: 'signInRecord',
@@ -289,9 +288,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/gettingRecord.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/gettingRecord.vue'
+        ], resolve)
     },
     {
       path: 'securityCenter',
@@ -301,9 +300,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/securityCenter.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/securityCenter.vue'
+        ], resolve)
     },
     {
       path: 'correctLoginPW',
@@ -312,9 +311,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/correctLoginPW.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/correctLoginPW.vue'
+        ], resolve)
     },
     {
       path: 'correctRealName',
@@ -323,9 +322,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/correctRealName.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/correctRealName.vue'
+        ], resolve)
     },
     {
       path: 'correctDealPW',
@@ -334,9 +333,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/correctDealPW.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/correctDealPW.vue'
+        ], resolve)
     },
     {
       path: 'bindingEmail',
@@ -345,9 +344,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/bindingEmail.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/bindingEmail.vue'
+        ], resolve)
     },
     {
       path: 'bindingCellphone',
@@ -356,9 +355,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/bindingCellphone.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/bindingCellphone.vue'
+        ], resolve)
     },
     {
       path: 'bindingWechat',
@@ -367,9 +366,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/bindingWechat.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/bindingWechat.vue'
+        ], resolve)
     },
     {
       path: 'bindingQQ',
@@ -378,9 +377,9 @@ export default {
         requireAuth: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/bindingQQ.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/bindingQQ.vue'
+        ], resolve)
     },
     {
       path: 'correctQuestion',
@@ -390,9 +389,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/correctQuestion.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/correctQuestion.vue'
+        ], resolve)
     },
     {
       path: 'bankcardManage',
@@ -402,9 +401,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/bankcardManage.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/bankcardManage.vue'
+        ], resolve)
     },
     {
       path: 'bindingBankcard',
@@ -414,9 +413,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/bindingBankcard.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/bindingBankcard.vue'
+        ], resolve)
     },
     {
       path: 'todayProfit',
@@ -426,9 +425,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/todayProfit.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/todayProfit.vue'
+        ], resolve)
     },
     {
       path: 'personalMessage',
@@ -438,9 +437,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/personalMessage.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/personalMessage.vue'
+        ], resolve)
     },
     {
       path: 'personalMessageInfo',
@@ -450,20 +449,20 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/personalMessageInfo.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/personalMessageInfo.vue'
+        ], resolve)
     },
     {
       path: 'moreSetting',
       name: 'gengduoshezhi',
-            // meta: {
-            //   requireAuth: true
-            // },
+      // meta: {
+      //   requireAuth: true
+      // },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/moreSetting.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/moreSetting.vue'
+        ], resolve)
     },
     {
       path: 'adviceFeedbacks',
@@ -473,9 +472,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/adviceFeedbacks.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/adviceFeedbacks.vue'
+        ], resolve)
     },
     {
       path: 'adviceFeedback',
@@ -485,9 +484,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/adviceFeedback.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/adviceFeedback.vue'
+        ], resolve)
     },
     {
       path: 'adviceFeedlist',
@@ -497,9 +496,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/adviceFeedlist.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/adviceFeedlist.vue'
+        ], resolve)
     },
     {
       path: 'recommand',
@@ -516,14 +515,12 @@ export default {
     {
       path: 'aboutUs',
       name: 'guanyuwomen',
-            // meta: {
-            //   requireAuth: true,
-            //   testIdentifie: true
-            // },
+      // meta: {
+      //   requireAuth: true,
+      //   testIdentifie: true
+      // },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/aboutUs.vue'
-                ], resolve)
+        require(['~/views/huiYuan/components/moreService/aboutUs.vue'], resolve)
     },
     {
       path: 'cashTransaction',
@@ -533,9 +530,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require([
-                  '~/views/huiYuan/components/moreService/cashTransaction.vue'
-                ], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/cashTransaction.vue'
+        ], resolve)
     },
     {
       path: 'agencyCenter',
@@ -544,8 +541,7 @@ export default {
         requireAuth: true,
         testIdentifie: true
       },
-      component: resolve =>
-                require(['~/views/daili/agencyCenter.vue'], resolve)
+      component: resolve => require(['~/views/daili/agencyCenter.vue'], resolve)
     },
     {
       path: 'backwater',
@@ -555,7 +551,9 @@ export default {
         testIdentifie: true
       },
       component: resolve =>
-                require(['~/views/huiYuan/components/moreService/backwater.vue'], resolve)
+        require([
+          '~/views/huiYuan/components/moreService/backwater.vue'
+        ], resolve)
     }
   ]
 }

@@ -4,12 +4,17 @@
     <heads></heads>
     <div class="other-block">
       <!-- 背景图片 -->
-      <div class="background">
-        <img src="../../img/personal_center/service_center.png" alt="" class="customer_service" @click="openbigwin">
-        <div v-show="!isLogin" style="width:100%;display: inline-block;">
+      <div :class="[{'background_pig': isfestival},'background']">
+        <img src="../../img/personal_center/service_center.png"
+             alt=""
+             class="customer_service"
+             @click="openbigwin">
+        <div v-show="!isLogin"
+             style="width:100%;display: inline-block;">
           <div class="no_login">
             <div class="pull_center">
-              <img src="../../img/head_icon.png" alt="">
+              <img src="../../img/head_icon.png"
+                   alt="">
             </div>
             <div class="Please-log">
               <span @click="$router.push('login')">登录</span>
@@ -20,20 +25,24 @@
         </div>
         <!-- 已登录状态 -->
         <div v-if="isLogin">
-          <div class="username" @click="toPersonalInfo">
-            <img :src="head_icon" alt="">
+          <div :class="[{'username_pig':isfestival},'username']"
+               @click="toPersonalInfo">
+            <img :src="head_icon"
+                 alt="">
             <div>
               <p style="padding-bottom: 0.625rem">
                 <span style="vertical-align:-webkit-baseline-middle">{{username}}</span>
               </p>
             </div>
           </div>
-          <div class="user_money_change">
+          <div :class="[{'user_money_change_pig': isfestival},'user_money_change']">
             <div>
               <p>{{user_price}}</p>
               <p>
                 <span>余额</span>
-                <img src="../../img/personal_center/refresh.png" alt="" @click="refreshBalance">
+                <img src="../../img/personal_center/refresh.png"
+                     alt=""
+                     @click="refreshBalance">
               </p>
             </div>
             <div>
@@ -42,8 +51,10 @@
 
             </div>
             <div>
-              <router-link to="/moreService/signIn" class="sign_in">
-                <p><img src="../../img/personal_center/sign_in.png" alt=""></p>
+              <router-link to="/moreService/signIn"
+                           class="sign_in">
+                <p><img src="../../img/personal_center/sign_in.png"
+                       alt=""></p>
                 <p>签到</p>
               </router-link>
             </div>
@@ -60,49 +71,48 @@
   </div>
 </template>
 <script>
-import config from '~/config'
-import { mapGetters, mapActions, mapState } from 'vuex'
-import heads from './components/heads'
-import theWallet from './components/theWallet'
-import multivariate from './components/multivariate'
-import moreFunc from './components/moreFunc'
+import { mapActions, mapState } from "vuex";
+import heads from "./components/heads";
+import theWallet from "./components/theWallet";
+import multivariate from "./components/multivariate";
+import moreFunc from "./components/moreFunc";
 export default {
-  name: 'member',
+  name: "member",
   data() {
     return {
       show: false
-    }
+    };
   },
   mounted() {},
   methods: {
-    ...mapActions(['flushPrice']),
-    openbigwin() {
-      console.log(this.sysinfo)
-      window.location.href = this.sysinfo.service_url
+    ...mapActions(["flushPrice", "getServiceUrl"]),
+    async openbigwin() {
+      const url = await this.getServiceUrl();
+      window.location.href = url;
     },
-    path: function() {
-      this.$router.push('/moreService/downloadApp')
+    path() {
+      this.$router.push("/moreService/downloadApp");
     },
     toPersonalInfo() {
-      this.$router.push('/moreService/personalInfo')
+      this.$router.push("/moreService/personalInfo");
     },
     async refreshBalance() {
-      let expireTime = new Date().getTime() - localStorage.getItem('refresh')
+      const expireTime = new Date().getTime() - localStorage.getItem("refresh");
       if (expireTime > 5000) {
-        localStorage.setItem('refresh', new Date().getTime())
-        this.$dialog.loading.open('正在刷新')
-        let res = await this.flushPrice()
+        localStorage.setItem("refresh", new Date().getTime());
+        this.$dialog.loading.open("正在刷新");
+        const res = await this.flushPrice({ click: 1 });
         if (res) {
-          this.$dialog.loading.open('刷新成功')
+          this.$dialog.loading.open("刷新成功");
         }
         setTimeout(() => {
-          this.$dialog.loading.close()
-        }, 500)
+          this.$dialog.loading.close();
+        }, 500);
       } else {
-        this.$dialog.loading.open('刷新成功')
+        this.$dialog.loading.open("刷新成功");
         setTimeout(() => {
-          this.$dialog.loading.close()
-        }, 500)
+          this.$dialog.loading.close();
+        }, 500);
       }
     }
   },
@@ -121,28 +131,33 @@ export default {
       sysinfo: store => store.sysinfo
       // head_icon: store => store.userinfo.accountInfo.head_icon,
     }),
+    ...mapState(['isfestival']),
     head_icon() {
-      let iconUrl = this.$store.state.userinfo.accountInfo.head_icon
-      if (iconUrl !== '') {
-        return iconUrl
+      const iconUrl = this.$store.state.userinfo.accountInfo.head_icon;
+      if (iconUrl !== "") {
+        return iconUrl;
       } else {
-        let defaultIcon = require('../../img/head_icon.png')
-        return defaultIcon
+        const defaultIcon = require("../../img/head_icon.png");
+        return defaultIcon;
       }
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
-@function poTorem($px) {
-  @return $px / 16px * 1rem;
-}
+@import "../../css/resources.scss";
+// @function poTorem($px) {
+//   @return $px / 16px * 1rem;
+// }
 .huiyuan_center {
   overflow: hidden;
   background-color: #f3f3f3;
   .background {
-    background-color: #ff7c34;
+    background-color: $mainColor;
     position: relative;
+    &.background_pig {
+      background-color: $festivalColor;
+    }
     .customer_service {
       position: absolute;
       top: poTorem(10px);
@@ -190,7 +205,10 @@ export default {
       width: 100%;
       height: poTorem(80px);
       overflow: hidden;
-      background-color: #ff7c34;
+      background-color: $mainColor;
+      &.username_pig {
+        background-color: #ff6143;
+      }
       img {
         border-radius: 50%;
         width: poTorem(58px);
@@ -226,6 +244,9 @@ export default {
       align-content: end;
       padding: poTorem(10px);
       background: #f9752d;
+      &.user_money_change_pig {
+        background: #f96143;
+      }
       div {
         width: 33%;
         .sign_in {
@@ -270,7 +291,7 @@ export default {
     p {
       width: poTorem(65px);
       height: poTorem(70px);
-      color: #ff7c34;
+      color: $mainColor;
       font-size: poTorem(10px);
       line-height: poTorem(110px);
       text-align: center;

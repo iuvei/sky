@@ -3,17 +3,24 @@
     <heads :routes="routes"></heads>
     <div class="other-block">
       <div class="one-block">
-        <div v-show="showPanel" class="count-down">
-          <second-time ref="countDown" :time="countDown" :callback="timer_callback"></second-time>
+        <div v-show="showPanel"
+             class="count-down">
+          <second-time ref="countDown"
+                       :time="countDown"
+                       :callback="timer_callback"></second-time>
         </div>
-        <canvas id="canvas" :width="canvasWidth" :height="canvasHeight" :style="{width:cssWidth+'px',height:cssHeight+'px'}"></canvas>
+        <canvas id="canvas"
+                :width="canvasWidth"
+                :height="canvasHeight"
+                :style="{width:cssWidth+'px',height:cssHeight+'px'}"></canvas>
       </div>
       <history @ladder="ladderReady"></history>
       <betting></betting>
 
     </div>
     <!-- 购物车 -->
-    <shop :quotation="closeIsShow" @clearAll='transmit'></shop>
+    <shop :quotation="closeIsShow"
+          @clearAll='transmit'></shop>
 
   </div>
 </template>
@@ -55,10 +62,10 @@ export default {
     }),
     cssWidth() {
       // console.error(window.devicePixelRatio)
-      return this.canvasWidth / window.devicePixelRatio * 1.5;
+      return (this.canvasWidth / window.devicePixelRatio) * 1.5;
     },
     cssHeight() {
-      return this.canvasHeight / window.devicePixelRatio * 1.5;
+      return (this.canvasHeight / window.devicePixelRatio) * 1.5;
     }
   },
   watch: {
@@ -83,7 +90,7 @@ export default {
     this.ladderInit();
   },
   methods: {
-    ladderReady(balls, leftTime) {
+    ladderReady(balls) {
       // console.error("ladderReady", balls, leftTime);
       this.showPanel = true;
       this.$refs.countDown.run();
@@ -104,8 +111,8 @@ export default {
     },
     ladderInit() {
       const clientWidth = document.body.clientWidth - 30;
-      this.canvasWidth = clientWidth / 300 * canvasWidth;
-      this.canvasHeight = clientWidth / 300 * canvasHeight;
+      this.canvasWidth = (clientWidth / 300) * canvasWidth;
+      this.canvasHeight = (clientWidth / 300) * canvasHeight;
       this.$nextTick(() => {
         if (!this.ladder) this.ladder = new ladder("canvas");
         this.ladder.drawBg();

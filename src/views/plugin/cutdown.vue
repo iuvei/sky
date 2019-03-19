@@ -1,49 +1,79 @@
 <template>
-  <div class="content" :tag="tag" :datas="datas" :indexs="indexs">
+  <div class="content"
+       :tag="tag"
+       :datas="datas"
+       :indexs="indexs">
     <div class="content_top">
       <span>{{data.game_name}}</span>
-      <span v-for="(item,index) in data.prev" :key="index" v-if="index == 0">
+      <span v-for="(item,index) in data.prev"
+            :key="index"
+            v-if="index == 0">
         第{{item.qishu}}期
       </span>
     </div>
     <div class="content_middle">
       <!--ssc -->
-      <span v-if="data.js_tag=='ssc'" v-for="(item,index) in balls" :key="index" :class="[{active: item == ''},classFun(data.js_tag)]">
+      <span v-if="data.js_tag=='ssc'"
+            v-for="(item,index) in balls"
+            :key="index"
+            :class="[{active: item == ''},classFun(data.js_tag)]">
         {{item == '' ? '正在开奖...' : item }}
       </span>
       <!-- k3 -->
-      <span v-if="data.js_tag=='k3'" v-for="(item,index) in balls" :key="index" :class="[{active: item == ''},classFun(data.js_tag),`kt${item}`]">
+      <span v-if="data.js_tag=='k3'"
+            v-for="(item,index) in balls"
+            :key="index"
+            :class="[{active: item == ''},classFun(data.js_tag),`kt${item}`]">
         {{item == '' ? '正在开奖...' : '' }}
       </span>
       <!-- pk10 -->
-      <span v-if="data.js_tag=='pk10'" v-for="(item,index) in balls" :style="{background: item != '' && (
+      <span v-if="data.js_tag=='pk10'"
+            v-for="(item,index) in balls"
+            :style="{background: item != '' && (
         colorArry[parseInt(Math.random()*10-1)]
-        )}" :key="index" :class="[{active: item == ''},classFun(data.js_tag)]">
+        )}"
+            :key="index"
+            :class="[{active: item == ''},classFun(data.js_tag)]">
         {{item == '' ? '正在开奖...' : item }}
       </span>
       <!-- 6hc -->
-      <span v-if="data.js_tag=='lhc'" :style="{background:`${ballToColor(parseInt(item))}`}" v-for="(item,index) in balls" :key="index" :class="[{active: item == ''},classFun(data.js_tag)]">
+      <span v-if="data.js_tag=='lhc'"
+            :style="{background:`${ballToColor(parseInt(item))}`}"
+            v-for="(item,index) in balls"
+            :key="index"
+            :class="[{active: item == ''},classFun(data.js_tag)]">
         <i v-if="index == 5 && item != ''">+</i>
         {{item == '' ? '正在开奖...' : item }}
       </span>
       <!-- pcdd -->
-      <span v-if="data.js_tag=='pcdd'" v-for="(item,index) in balls" :key="index" :class="[{active: item == ''},classFun(data.js_tag)]">
+      <span v-if="data.js_tag=='pcdd'"
+            v-for="(item,index) in balls"
+            :key="index"
+            :class="[{active: item == ''},classFun(data.js_tag)]">
         <i v-if="index == 2 && item != ''">=</i>
         <i v-if="index == 0 && item != ''">+</i>
         <i v-if="index == 1 && item != ''">+</i>
         {{item == '' ? '正在开奖...' : item }}
       </span>
       <!-- 11xuan5 -->
-      <span v-if="data.js_tag=='11x5'" v-for="(item,index) in balls" :key="index" :class="[{active: item == ''},classFun(data.js_tag)]">
+      <span v-if="data.js_tag=='11x5'"
+            v-for="(item,index) in balls"
+            :key="index"
+            :class="[{active: item == ''},classFun(data.js_tag)]">
         {{item == '' ? '正在开奖...' : item }}
       </span>
       <!-- 3d -->
-      <span v-if="data.js_tag=='3d'" v-for="(item,index) in balls" :key="index" :class="[{active: item == ''},classFun(data.js_tag)]">
+      <span v-if="data.js_tag=='3d'"
+            v-for="(item,index) in balls"
+            :key="index"
+            :class="[{active: item == ''},classFun(data.js_tag)]">
         {{item == '' ? '正在开奖...' : item }}
       </span>
     </div>
     <div class="content_bottom">
-      <span v-for="(item,index) in data.next" :key="index" v-if="index == 0">
+      <span v-for="(item,index) in data.next"
+            :key="index"
+            v-if="index == 0">
         距离第{{item.qishu}}期截止还有:
       </span>
       <span>{{content}}</span>
@@ -52,6 +82,28 @@
 </template>
 <script>
 import { BallToColor2 } from "../../js/xglhc.data.2017";
+function secondsFormat(s) {
+  const day = Math.floor(s / (24 * 3600)); // Math.floor()向下取整
+  let hour = Math.floor((s - day * 24 * 3600) / 3600);
+  let minute = Math.floor((s - day * 24 * 3600 - hour * 3600) / 60);
+  let second = s - day * 24 * 3600 - hour * 3600 - minute * 60;
+  if (day > 0 || hour > 0) {
+    hour = Math.floor(s / 3600);
+    minute = Math.floor((s - hour * 3600) / 60);
+    second = s - hour * 3600 - minute * 60;
+    hour = hour < 10 ? "0" + hour : hour;
+    minute = minute < 10 ? "0" + minute : minute;
+    second = second < 10 ? "0" + second : second;
+    return hour + ":" + minute + ":" + second;
+  }
+  if (day <= 0 && hour <= 0) {
+    minute = Math.floor(s / 60);
+    second = s - minute * 60;
+    minute = minute < 10 ? "0" + minute : minute;
+    second = second < 10 ? "0" + second : second;
+    return "00:" + minute + ":" + second;
+  }
+}
 export default {
   props: {
     tag: String,
@@ -101,28 +153,6 @@ export default {
       let times = timestamp;
       this.timer = setInterval(() => {
         if (times > 0) {
-          function secondsFormat(s) {
-            let day = Math.floor(s / (24 * 3600)); // Math.floor()向下取整
-            let hour = Math.floor((s - day * 24 * 3600) / 3600);
-            let minute = Math.floor((s - day * 24 * 3600 - hour * 3600) / 60);
-            let second = s - day * 24 * 3600 - hour * 3600 - minute * 60;
-            if (day > 0 || hour > 0) {
-              hour = Math.floor(s / 3600);
-              minute = Math.floor((s - hour * 3600) / 60);
-              second = s - hour * 3600 - minute * 60;
-              hour = hour < 10 ? "0" + hour : hour;
-              minute = minute < 10 ? "0" + minute : minute;
-              second = second < 10 ? "0" + second : second;
-              return hour + ":" + minute + ":" + second;
-            }
-            if (0 >= day && 0 >= hour) {
-              minute = Math.floor(s / 60);
-              second = s - minute * 60;
-              minute = minute < 10 ? "0" + minute : minute;
-              second = second < 10 ? "0" + second : second;
-              return "00:" + minute + ":" + second;
-            }
-          }
           this.content = secondsFormat(times);
         } else {
           clearInterval(this.timer);

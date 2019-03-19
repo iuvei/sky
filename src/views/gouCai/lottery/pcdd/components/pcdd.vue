@@ -22,26 +22,30 @@
             &nbsp;+&nbsp;
             <li>{{balls[1]}}</li>&nbsp;+&nbsp;
             <li>{{balls[2]}}</li>&nbsp;=&nbsp;
-            <li class="sum" v-bind:style="{ backgroundColor: getBallColor(Number(balls[3])) }">{{Number(balls[3])}}</li>
+            <li class="sum"
+                v-bind:style="{ backgroundColor: getBallColor(Number(balls[3])) }">{{Number(balls[3])}}</li>
           </ul>
           <ul v-else>
             <li>{{randomBalls[0]}}</li>
             &nbsp;+&nbsp;
             <li>{{randomBalls[1]}}</li>&nbsp;+&nbsp;
             <li>{{randomBalls[2]}}</li>&nbsp;=&nbsp;
-            <li class="sum" v-bind:style="{ backgroundColor: getBallColor(Number(randomBalls[3])) }">{{Number(randomBalls[3])}}</li>
+            <li class="sum"
+                v-bind:style="{ backgroundColor: getBallColor(Number(randomBalls[3])) }">{{Number(randomBalls[3])}}</li>
           </ul>
           <!-- <p v-show="this.balls.length==1">正在开奖</p> -->
           <span @click="openHistory">
             <i>历史开奖</i>
-            <i class="icon" :class="{'slidedown':this.isOpen}"></i>
+            <i class="icon"
+               :class="{'slidedown':this.isOpen}"></i>
           </span>
         </div>
       </div>
       <div class="heads_bottom">
         <!-- 历史开奖 -->
         <yd-accordion>
-          <yd-accordion-item ref="accordion" :auto="false">
+          <yd-accordion-item ref="accordion"
+                             :auto="false">
             <div class="history">
               <ul>
                 <li class="title">
@@ -51,15 +55,19 @@
                   <span>大小</span>
                   <span>单双</span>
                 </li>
-                <li v-for="(item, index) in kjBalls" v-if="index <= 7" :key="index">
+                <li v-for="(item, index) in kjBalls"
+                    v-if="index <= 7"
+                    :key="index">
                   <span>{{item.qishu.toString().slice(-4)}}</span>
                   <span class="kaijiang">{{item.balls | openRewards}}</span>
                   <span>{{inWave(item.balls[3])}}</span>
                   <span>
-                    <div class="shape" :class="{'red':Number(item.balls[3]) > 13,'green':Number(item.balls[3]) <= 13}">{{item.balls[3] | bigOrSmall}}</div>
+                    <div class="shape"
+                         :class="{'red':Number(item.balls[3]) > 13,'green':Number(item.balls[3]) <= 13}">{{item.balls[3] | bigOrSmall}}</div>
                   </span>
                   <span>
-                    <div class="shape" :class="{'red':Number(item.balls[3]) % 2 != 0,'green':Number(item.balls[3]) % 2 == 0}">{{item.balls[3] | singleOrDouble}}</div>
+                    <div class="shape"
+                         :class="{'red':Number(item.balls[3]) % 2 != 0,'green':Number(item.balls[3]) % 2 == 0}">{{item.balls[3] | singleOrDouble}}</div>
                   </span>
                 </li>
               </ul>
@@ -73,25 +81,36 @@
             <i>{{nextQishu}}</i>期{{closeIsShow?'截止时间':'已封盘'}}:
           </div>
           <div class="haoma">
-            <app-count-down ref="openless" v-model="openless_leftTime" :time="openless" timetype="second" done-text="正在开奖" format="{%h}:{%m}:{%s}" :callback="_openCallback"></app-count-down>
+            <app-count-down ref="openless"
+                            v-model="openless_leftTime"
+                            :time="openless"
+                            timetype="second"
+                            done-text="正在开奖"
+                            format="{%h}:{%m}:{%s}"
+                            :callback="_openCallback"></app-count-down>
           </div>
-          <div class="haoma" v-html="renderStr" @click="userBalanceClick"></div>
+          <div class="haoma"
+               v-html="renderStr"
+               @click="userBalanceClick"></div>
         </div>
       </div>
     </div>
     <!-- 投注部分 -->
-    <betting :routeList="routeLists" ref='chooseBall'></betting>
+    <betting :routeList="routeLists"
+             ref='chooseBall'></betting>
     <!-- 购物车 -->
-    <shop :quotation="closeIsShow" ref='touzhuBtn' @clearAll='transmit'></shop>
+    <shop :quotation="closeIsShow"
+          ref='touzhuBtn'
+          @clearAll='transmit'></shop>
   </div>
 </template>
 <script>
-import { resetRouteParams } from '~/js/util'
-import betting from '../components/betting'
-import shop from '../../shop'
-import { mapActions, mapState } from 'vuex'
-import { BallToColorpcdd } from '~/js/pcddcolor'
-import countDownMixin from '../../countDownMixin'
+import { resetRouteParams } from "~/js/util";
+import betting from "../components/betting";
+import shop from "../../shop";
+import { mapActions, mapState } from "vuex";
+import { BallToColorpcdd } from "~/js/pcddcolor";
+import countDownMixin from "../../countDownMixin";
 export default {
   data() {
     return {
@@ -101,11 +120,11 @@ export default {
       kjBalls: [],
       closeIsShow: true,
       isOpen: false,
-      val: '',
+      val: "",
       redWave: [3, 6, 9, 12, 15, 18, 21, 24],
       greenWave: [1, 4, 7, 10, 16, 19, 22, 25],
       buleWave: [2, 5, 8, 11, 17, 20, 23, 26]
-    }
+    };
   },
   components: {
     betting,
@@ -121,116 +140,117 @@ export default {
     // 大小
     bigOrSmall(num) {
       if (!isNaN(num)) {
-        return Number(num) > 13 ? '大' : '小'
+        return Number(num) > 13 ? "大" : "小";
       } else {
-        return '-'
+        return "-";
       }
     },
     // 单双
     singleOrDouble(num) {
       if (!isNaN(num)) {
-        return Number(num) % 2 == 0 ? '双' : '单'
+        return Number(num) % 2 == 0 ? "双" : "单";
       } else {
-        return '-'
+        return "-";
       }
     },
     openRewards(arr) {
       if (arr && arr.length === 4) {
-        return `${arr[0]} + ${arr[1]} + ${arr[2]} = ${Number(arr[3])}`
+        return `${arr[0]} + ${arr[1]} + ${arr[2]} = ${Number(arr[3])}`;
       } else {
         // let arr1 = this.randomBalls
         // return `${arr1[0]} + ${arr1[1]} + ${arr1[2]} = ${Number(arr1[3])}`;
-        return '正在开奖'
+        return "正在开奖";
       }
     }
   },
   async activated() {
-    this.routeLists = this.$route.params
-    resetRouteParams(this, 'pcdd')
-    let name_tag =
-      this.$route.params.name_tag || this.$store.state.betting.name_tag
-    if(name_tag) {
-      this.getOpened(name_tag)
-      this.getHistory(name_tag)
+    this.routeLists = this.$route.params;
+    resetRouteParams(this, "pcdd");
+    const name_tag =
+      this.$route.params.name_tag || this.$store.state.betting.name_tag;
+    if (name_tag) {
+      this.getOpened(name_tag);
+      this.getHistory(name_tag);
     }
     // name_tag &&
     //   (await this.getOpened(name_tag)) &&
     //   (await this.getHistory(name_tag))
-    clearInterval(this.resTimer)
+    clearInterval(this.resTimer);
     this.randomBallTimer = setInterval(() => {
-      this.ballFromBet()
-    }, 500)
+      this.ballFromBet();
+    }, 500);
   },
   deactivated() {
     // clearInterval(this.$refs.stopless.timer);
-    clearInterval(this.$refs.openless.timer)
-    clearInterval(this.resTimer)
-    clearInterval(this.randomBallTimer)
+    clearInterval(this.$refs.openless.timer);
+    clearInterval(this.resTimer);
+    clearInterval(this.randomBallTimer);
   },
   watch: {
-    '$route.params'(newVal, oldVal) {
+    "$route.params"(newVal, oldVal) {
       if (
         newVal &&
-        newVal.js_tag === 'pcdd' &&
+        newVal.js_tag === "pcdd" &&
         (oldVal && oldVal.js_tag == newVal.js_tag)
       ) {
         // clearInterval(this.$refs.stopless.timer);
-        clearInterval(this.$refs.openless.timer)
-        clearInterval(this.resTimer)
+        clearInterval(this.$refs.openless.timer);
+        clearInterval(this.resTimer);
 
-        this.routeLists = newVal
-        this.setBetCurent(newVal)
-        resetRouteParams(this, 'pcdd')
-        this.getOpened(newVal.name_tag)
-        this.getHistory(newVal.name_tag)
-        this.setBetData({})
-        this.clearCart()
+        this.routeLists = newVal;
+        this.setBetCurent(newVal);
+        resetRouteParams(this, "pcdd");
+        this.getOpened(newVal.name_tag);
+        this.getHistory(newVal.name_tag);
+        this.setBetData({});
+        this.clearCart();
       }
     }
   },
   methods: {
     getBallColor(num) {
-      return BallToColorpcdd(num)
+      return BallToColorpcdd(num);
     },
     // 色波
     inWave(num) {
       if (!isNaN(num)) {
-        let _num = Number(num)
+        const _num = Number(num);
         if (this.redWave.includes(_num)) {
-          return '红'
+          return "红";
         } else if (this.buleWave.includes(_num)) {
-          return '蓝'
+          return "蓝";
         } else if (this.greenWave.includes(_num)) {
-          return '绿'
+          return "绿";
         } else {
-          return '无'
+          return "无";
         }
       }
     },
     transmit() {
       const bettingItem = this.$children.find(x =>
-        x.$vnode.tag.includes('pcdd_betting')
-      )
-      bettingItem && bettingItem.clearBalls && bettingItem.clearBalls()
-      this.bus.$emit('clearBalls')
+        x.$vnode.tag.includes("pcdd_betting")
+      );
+      bettingItem && bettingItem.clearBalls && bettingItem.clearBalls();
+      this.bus.$emit("clearBalls");
     },
     openHistory() {
-      this.isOpen = !this.isOpen
+      this.isOpen = !this.isOpen;
       if (this.isOpen) {
-        this.$refs.accordion.openItem()
+        this.$refs.accordion.openItem();
       } else {
-        this.$refs.accordion.closeItem()
+        this.$refs.accordion.closeItem();
       }
     },
-    ...mapActions(['setBetCurent', 'setBetData', 'clearCart'])
+    ...mapActions(["setBetCurent", "setBetData", "clearCart"])
   },
   mixins: [countDownMixin]
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../../css/resources.scss";
 .pcdandan {
   width: 100%;
+  height: calc(100vh - 3rem);
   background: #fff;
   display: flex;
   flex-direction: column;

@@ -2,7 +2,10 @@
   <div class="kaijiang">
     <heads></heads>
     <div class="other-block">
-      <lotteryList v-for="(item,index) in data" :key="index" :tag='item.tag' :datas="item">
+      <lotteryList v-for="(item,index) in data"
+                   :key="index"
+                   :tag='item.tag'
+                   :datas="item">
       </lotteryList>
     </div>
 
@@ -105,7 +108,6 @@ export default {
           game_name: "幸运飞艇",
           js_tag: "pk10",
           gameid: 47,
-          js_tag: "pk10",
           prev: [
             {
               balls: "07+02+08+06+04+09+05+01+10+03",
@@ -133,7 +135,7 @@ export default {
   },
   methods: {
     async getKjCpLog_get() {
-      let games = await api.getGameList();
+      const games = await api.getGameList();
       this.$ajax("request", {
         ac: "getKjCpLog",
         tag: "",
@@ -141,10 +143,11 @@ export default {
       }).then(res => {
         if (games) {
           res.forEach(item => {
-            let game = games.find(x => x.game_id === item.gameid);
+            const game = games.find(x => x.game_id === item.gameid);
             if (game) {
               item.enable = game.enable;
-              item.speed = game.speed
+              item.speed = game.speed,
+              item.yearid = game.yearid || 0
             }
           });
         }

@@ -5,27 +5,47 @@
       <span slot="right" class="title-right"> </span>
     </AppHeader> -->
     <!-- <FootballHeader title='足球'></FootballHeader> -->
-    <AppHeader :title="title" :clickTitle="()=>{this.modelTitel = true}" :clickCategory='clickCategory'>
-      <span slot="right" class="title-right">{{chooseTimeText}}</span>
+    <AppHeader :title="title"
+               :clickTitle="()=>{this.modelTitel = true}"
+               :clickCategory='clickCategory'>
+      <span slot="right"
+            class="title-right">{{chooseTimeText}}</span>
     </AppHeader>
-    <AppModel :show="modelTitel" @close="modelTitel=false">
-      <div class="shadow" slot>
-        <span v-for="(item, index) in sportTypeMap" :key="index" :class="{active: index==activeTitle}" @click="switchs(index,item)">{{item.name}}</span>
+    <AppModel :show="modelTitel"
+              @close="modelTitel=false">
+      <div class="shadow"
+           slot>
+        <span v-for="(item, index) in sportTypeMap"
+              :key="index"
+              :class="{active: index==activeTitle}"
+              @click="switchs(index,item)">{{item.name}}</span>
       </div>
     </AppModel>
-    
+
     <!-- <AppMenu :data='items'></AppMenu> -->
-    <yd-tab v-model="tab" :prevent-default="false" :item-click="itemClick">
-      <yd-tab-panel v-for="(item,key) in items" :label="item.label" :key="key" class="cent">
-        <div class="empty" v-show="!showData">
-          <img src="../../../img/bet_record/noRecords.png" alt="">
+    <yd-tab v-model="tab"
+            :prevent-default="false"
+            :item-click="itemClick">
+      <yd-tab-panel v-for="(item,key) in items"
+                    :label="item.label"
+                    :key="key"
+                    class="cent">
+        <div class="empty"
+             v-show="!showData">
+          <img src="../../../img/bet_record/noRecords.png"
+               alt="">
           <p>暂无记录</p>
           <router-link to='/betting'>
             <button>立即购买</button>
           </router-link>
         </div>
-        <div v-for="(item,key) in data" :key="key"  v-show="showData">
-          <div class="info" @click="itemInfo(item,key)" v-for="(items,key) in item.bet_info" :key="key">
+        <div v-for="(item,key) in data"
+             :key="key"
+             v-show="showData">
+          <div class="info"
+               @click="itemInfo(item,key)"
+               v-for="(items,key) in item.bet_info"
+               :key="key">
             <p>{{items.play_method}}</p>
             <p>{{items.team}}</p>
             <p>{{items.bet_content}}
@@ -42,7 +62,8 @@
         </div>
       </yd-tab-panel>
     </yd-tab>
-    <yd-actionsheet :items="timeOptions" v-model="choosedTime"></yd-actionsheet>
+    <yd-actionsheet :items="timeOptions"
+                    v-model="choosedTime"></yd-actionsheet>
   </div>
 </template>
 <script>
@@ -52,103 +73,103 @@ export default {
   components: { FootballHeader },
   data() {
     return {
-      title: '足球',
-      data:[],
+      title: "足球",
+      data: [],
       showData: false,
       modelTitel: false,
       choosedTime: false,
       activeTitle: 0,
-      chooseTimeText:'今天',
-      next_time: '',
+      chooseTimeText: "今天",
+      next_time: "",
       // titleMap:[
       // ],
       tab: 0,
       items: [
-        { label: "全部", type: '' },
+        { label: "全部", type: "" },
         { label: "待开奖", type: 0 },
         { label: "已中奖", type: 1 },
         { label: "未中奖", type: 2 },
-        { label: "撤单", type: 4 },
+        { label: "撤单", type: 4 }
       ],
-      timeOptions:[
+      timeOptions: [
         {
-          label: '今天',
+          label: "今天",
           callback: () => {
-            this.chooseTimeText = '今天'
+            this.chooseTimeText = "今天";
             this.modifyFootballField({ lasttime: 0 });
             this.togetUserBetslip().then(ret => {
-              this.data = ret.betslip
-              if(ret === 0) {
-                this.data = []
-                this.showData = false
-                return
+              this.data = ret.betslip;
+              if (ret === 0) {
+                this.data = [];
+                this.showData = false;
+                return;
               }
-              this.showData = true
-              this.data = ret.betslip
+              this.showData = true;
+              this.data = ret.betslip;
             });
           }
         },
         {
-          label: '昨天',
+          label: "昨天",
           callback: () => {
-            this.chooseTimeText = '昨天'
+            this.chooseTimeText = "昨天";
             this.modifyFootballField({ lasttime: 1 });
             this.togetUserBetslip().then(ret => {
-              if(ret === 0) {
-                this.data = []
-                this.showData = false
-                return
+              if (ret === 0) {
+                this.data = [];
+                this.showData = false;
+                return;
               }
-              this.showData = true
-              this.data = ret.betslip
+              this.showData = true;
+              this.data = ret.betslip;
             });
           }
         },
         {
-          label: '本周',
+          label: "本周",
           callback: () => {
-            this.chooseTimeText = '本周'
+            this.chooseTimeText = "本周";
             this.modifyFootballField({ lasttime: 2 });
             this.togetUserBetslip().then(ret => {
-              if(ret === 0) {
-                this.data = []
-                this.showData = false
-                return
+              if (ret === 0) {
+                this.data = [];
+                this.showData = false;
+                return;
               }
-              this.showData = true
-              this.data = ret.betslip
+              this.showData = true;
+              this.data = ret.betslip;
             });
           }
         },
         {
-          label: '本月',
+          label: "本月",
           callback: () => {
-            this.chooseTimeText = '本月'
-            this.modifyFootballField({lasttime: 3 });
+            this.chooseTimeText = "本月";
+            this.modifyFootballField({ lasttime: 3 });
             this.togetUserBetslip().then(ret => {
-              if(ret === 0) {
-                this.data = []
-                this.showData = false
-                return
+              if (ret === 0) {
+                this.data = [];
+                this.showData = false;
+                return;
               }
-              this.showData = true
-              this.data = ret.betslip
+              this.showData = true;
+              this.data = ret.betslip;
             });
           }
         },
         {
-          label: '上月',
+          label: "上月",
           callback: () => {
-            this.chooseTimeText = '上月'
-            this.modifyFootballField({lasttime: 4 });
+            this.chooseTimeText = "上月";
+            this.modifyFootballField({ lasttime: 4 });
             this.togetUserBetslip().then(ret => {
-              if(ret === 0) {
-                this.data = []
-                this.showData = false
-                return
+              if (ret === 0) {
+                this.data = [];
+                this.showData = false;
+                return;
               }
-              this.showData = true
-              this.data = ret.betslip
+              this.showData = true;
+              this.data = ret.betslip;
             });
           }
         }
@@ -156,60 +177,60 @@ export default {
     };
   },
   computed: {
-    ...mapState("football", ["sportTypeMap", "sport_id","status","lasttime"]),
+    ...mapState("football", ["sportTypeMap", "sport_id", "status", "lasttime"]),
     title() {
       return this.sportTypeMap.filter(
         item => item.sport_id === this.sport_id
       )[0].name;
-    },
+    }
   },
   mounted() {
     this.togetUserBetslip().then(ret => {
-      if(ret === 0) {
-        this.data = []
-        this.showData = false
-        return
+      if (ret === 0) {
+        this.data = [];
+        this.showData = false;
+        return;
       }
-      this.showData = true
-      this.data = ret.betslip
+      this.showData = true;
+      this.data = ret.betslip;
     });
   },
   methods: {
-    ...mapActions("football", ["modifyFootballField","getUserBetslip"]),
+    ...mapActions("football", ["modifyFootballField", "getUserBetslip"]),
     switchs(index, item) {
-      this.title = item.name
+      this.title = item.name;
       this.modelTitel = false;
       this.activeTitle = index;
       this.modifyFootballField({ sport_id: item.sport_id });
     },
     async togetUserBetslip(request) {
-      let ret = await this.getUserBetslip(request);
+      const ret = await this.getUserBetslip(request);
       this.next_time = ret.next_time;
-      return ret;dd
+      return ret;
     },
     itemClick(key) {
       this.modifyFootballField({ status: this.items[key].type });
       this.tab = key;
       this.togetUserBetslip().then(ret => {
-        if(ret === 0) {
-          this.data = []
-          this.showData = false
-          return
+        if (ret === 0) {
+          this.data = [];
+          this.showData = false;
+          return;
         }
-        this.showData = true
-        this.data = ret.betslip
+        this.showData = true;
+        this.data = ret.betslip;
       });
     },
-    itemInfo(item,key) {
+    itemInfo(item, key) {
       this.$router.push({
         name: "goucaijilu",
-        params: {item ,key},
+        params: { item, key }
       });
     },
     clickCategory() {
       this.choosedTime = true;
-    },
-  },
+    }
+  }
   // beforeRouteEnter(t, f, n) {
   //   n(vm => {});
   // },
@@ -244,14 +265,15 @@ export default {
       color: #fff;
       background-color: #f93;
       outline: none;
-      border:none;
+      border: none;
     }
   }
   .title-right {
     font-size: 1rem;
     color: #fff;
     line-height: 1.5rem;
-    background: url("~img/bet_record/today.png") no-repeat 100% 50%/1.2rem 1.4rem;
+    background: url("~img/bet_record/today.png") no-repeat 100% 50%/1.2rem
+      1.4rem;
     width: 3.75rem;
     height: 1.5rem;
     // background-size: poTorem(23px) poTorem(23px);
@@ -299,13 +321,13 @@ export default {
           font-weight: 400;
         }
         .orange {
-          color: #ff7c34
+          color: $mainColor;
         }
         .green {
-          color: green
+          color: green;
         }
         .red {
-          color: red
+          color: red;
         }
       }
     }

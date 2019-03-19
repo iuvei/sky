@@ -1,14 +1,23 @@
 <template>
   <div class="prizeRecord_main_body">
-    <publicHead :title="funcName" :type="1" :timeText="chooseTimeText" @chooseTimeShow="changeState"></publicHead>
-    <div class="empty" v-show="this.allData==0">
-      <img src="../../../../img/bet_record/noRecords.png" alt="">
+    <publicHead :title="funcName"
+                :type="1"
+                :timeText="chooseTimeText"
+                @chooseTimeShow="changeState"></publicHead>
+    <div class="empty"
+         v-show="this.allData==0">
+      <img src="../../../../img/bet_record/noRecords.png"
+           alt="">
       <p>暂无记录</p>
       <router-link to='/betting'>
         <button>立即购买</button>
       </router-link>
     </div>
-    <div class="hasContent" @click="toDetails(item)" v-for="(item, index) in allData" :key="index" v-show="this.allData!=0">
+    <div class="hasContent"
+         @click="toDetails(item)"
+         v-for="(item, index) in allData"
+         :key="index"
+         v-show="this.allData!=0">
       <div class="left">
         <p>{{item.game_name}}</p>
         <p>{{item.tz_time}}</p>
@@ -19,128 +28,140 @@
           <p>{{item.is_win}}</p>
           <!-- 0=待开奖, 1=已中奖 2=未中奖 3=撤单 4=追号 -->
           <p class="win">
-          {{'赢'+item.win+'元'}}</p>
+            {{'赢'+item.win+'元'}}</p>
         </div>
         <div>
-          <img src="../../../../img/bet_record/arrow.png" alt="">
+          <img src="../../../../img/bet_record/arrow.png"
+               alt="">
         </div>
       </div>
     </div>
-    <p class="all_present" v-show="this.allData!=0" @click="getMoreData">{{isAllPresent?'已显示全部':'查看更多'}}</p>
-    <yd-actionsheet :items="timeOptions" v-model="choosedTime" class="changePeriod"></yd-actionsheet>
+    <p class="all_present"
+       v-show="this.allData!=0"
+       @click="getMoreData">{{isAllPresent?'已显示全部':'查看更多'}}</p>
+    <yd-actionsheet :items="timeOptions"
+                    v-model="choosedTime"
+                    class="changePeriod"></yd-actionsheet>
   </div>
 </template>
 <script>
-import publicHead from '../moreService/publicHead'
+import publicHead from "../moreService/publicHead";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '中奖记录',
+      funcName: "中奖记录",
       allData: [],
       choosedTime: false,
       isAllPresent: false,
-      chooseTimeText: '今天',
+      chooseTimeText: "今天",
       choosedTimeIndex: 0,
       pageID: 0,
-      timeOptions:[
+      timeOptions: [
         {
-          label: '今天',
+          label: "今天",
           callback: () => {
-            this.chooseTimeText = '今天'
-            this.choosedTimeIndex = 0
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "今天";
+            this.choosedTimeIndex = 0;
+            this.pageID = 0;
+            this.getData();
           }
         },
         {
-          label: '昨天',
+          label: "昨天",
           callback: () => {
-            this.chooseTimeText = '昨天'
-            this.choosedTimeIndex = 1
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "昨天";
+            this.choosedTimeIndex = 1;
+            this.pageID = 0;
+            this.getData();
           }
         },
         {
-          label: '本周',
+          label: "本周",
           callback: () => {
-            this.chooseTimeText = '本周'
-            this.choosedTimeIndex = 2
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "本周";
+            this.choosedTimeIndex = 2;
+            this.pageID = 0;
+            this.getData();
           }
         },
         {
-          label: '本月',
+          label: "本月",
           callback: () => {
-            this.chooseTimeText = '本月'
-            this.choosedTimeIndex = 3
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "本月";
+            this.choosedTimeIndex = 3;
+            this.pageID = 0;
+            this.getData();
           }
         },
         {
-          label: '上月',
+          label: "上月",
           callback: () => {
-            this.chooseTimeText = '上月'
-            this.choosedTimeIndex = 4
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "上月";
+            this.choosedTimeIndex = 4;
+            this.pageID = 0;
+            this.getData();
           }
         }
       ]
-    }
+    };
   },
   activated() {
-    this.getData()
+    this.getData();
   },
   methods: {
-    getData(){
-      this.$ajax('request', {
-        ac: 'getUserTouzhuLog',
+    getData() {
+      this.$ajax("request", {
+        ac: "getUserTouzhuLog",
         type: 2,
         pageid: this.pageID,
         lasttime: this.choosedTimeIndex,
         gameid: 0
       }).then(res => {
-        console.log(res)
-        if(res.length != 30) {this.isAllPresent = true}
-        this.allData = res
-      })
+        console.log(res);
+        if (res.length != 30) {
+          this.isAllPresent = true;
+        }
+        this.allData = res;
+      });
     },
     toDetails(n) {
       this.$router.push({
-        name: 'zhongjiangxiangqing',
+        name: "zhongjiangxiangqing",
         params: n
-      })
+      });
     },
     refresh() {
-      this.getData()
+      this.getData();
     },
     changeState() {
-      this.choosedTime = true
+      this.choosedTime = true;
     },
     getMoreData() {
-      this.pageID ++
-      if(!this.isAllPresent) {
-        this.$ajax('request', {
-        ac: 'getUserTouzhuLog',
-        type: 2,
-        pageid: this.pageID,
-        lasttime: this.choosedTimeIndex,
-        gameid: 0
-      }).then(res => {
-        if(res.length != 30) {this.isAllPresent = true}
-        if(res === 0) { this.allData = this.allData.concat(res); return }
-        this.allData = this.allData.concat(res)
-      })
+      this.pageID++;
+      if (!this.isAllPresent) {
+        this.$ajax("request", {
+          ac: "getUserTouzhuLog",
+          type: 2,
+          pageid: this.pageID,
+          lasttime: this.choosedTimeIndex,
+          gameid: 0
+        }).then(res => {
+          if (res.length != 30) {
+            this.isAllPresent = true;
+          }
+          if (res === 0) {
+            this.allData = this.allData.concat(res);
+            return;
+          }
+          this.allData = this.allData.concat(res);
+        });
       }
-    },
+    }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -171,7 +192,7 @@ export default {
       color: #fff;
       background-color: #f93;
       outline: none;
-      border:none;
+      border: none;
     }
   }
   .hasContent {

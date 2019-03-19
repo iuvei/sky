@@ -1,7 +1,12 @@
 <template>
-  <AppModel :show="show" @close="()=>{this.$emit('close')}">
-    <div class="shadow" v-show="show">
-      <span v-for="(item, index) in gameTypeMap" :key="index" :class="{active: index==gameType}" @click="switchs(index,item)">
+  <AppModel :show="show"
+            @close="()=>{this.$emit('close')}">
+    <div class="shadow"
+         v-show="show">
+      <span v-for="(item, index) in gameTypeMap"
+            :key="index"
+            :class="{active: index==gameType}"
+            @click="switchs(index,item)">
         <i>{{item.label}}</i>
         <i class="red">{{data[item.field]}}</i>
       </span>
@@ -18,18 +23,18 @@ export default {
   data() {
     return {
       title: "",
-      data: {},
+      data: {}
     };
   },
   watch: {
-    show(v){
-      if(v){
+    show(v) {
+      if (v) {
         this.togetSportMatchList();
       }
     }
   },
   computed: {
-    ...mapState("football", ["gameTypeMap", "gameType", "playTypeMap"]),
+    ...mapState("football", ["gameTypeMap", "gameType", "playTypeMap"])
   },
   methods: {
     ...mapActions("football", ["changeTitle", "getSportMatchList"]),
@@ -43,11 +48,11 @@ export default {
     },
     async togetSportMatchList() {
       this.data = await this.getSportMatchList();
-    },
+    }
   },
   mounted() {
     this.togetSportMatchList();
-  },
+  }
 };
 </script>
 
@@ -59,10 +64,10 @@ export default {
   position: absolute;
   left: 0;
   width: 100%;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   background: #fff;
   z-index: 21;
-   @include start;
+  @include start;
   span {
     height: poTorem(35px);
     width: 31%;
@@ -73,7 +78,7 @@ export default {
     color: #1e2123;
     font-weight: bold;
     border: 1px solid #d2d3d5;
-    margin: .2rem;
+    margin: 0.2rem;
   }
   .red {
     color: #f00;

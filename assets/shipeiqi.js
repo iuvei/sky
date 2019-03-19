@@ -103,4 +103,52 @@
   } else {
     console.log('您的设备不支持震动')
   }
+
+  function unregister() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(registration => {
+        registration.unregister()
+      })
+    }
+    // 注册失败，删除缓存
+    if ('caches' in window) {
+      window.caches.keys().then(keys => {
+        keys.forEach(key => {
+          window.caches.delete(key)
+        })
+      })
+    }
+  }
+
+  function register() {
+    navigator.serviceWorker
+      .register('sw.js')
+      .then(reg => {
+        // console.log('reg', )
+        console.log('serviceWorker has been installed!')
+      })
+      .catch(err => {
+        console.warn(err)
+        unregister()
+        // navigator.serviceWorker.register('assets/sw.js').then(reg => {})
+      })
+  }
+
+  // 添加service worker 注册
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('DOMContentLoaded', () => {
+      fetch('sw.js')
+        .then(res => {
+          if (
+            res.status === 200 &&
+            res.headers.get('content-type').indexOf('javascript') > -1
+          ) {
+            register()
+          }
+        })
+        .catch(err => {
+          unregister()
+        })
+    })
+  }
 }(document, window))

@@ -1,6 +1,6 @@
 <template>
   <div class="heads">
-    <div class="heads_con">
+    <div :class="[{'heads_con_pig': isfestival},'heads_con']">
       <router-link to="/">
         <div class="icon"></div>
       </router-link>
@@ -11,9 +11,13 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 export default {
   data() {
     return {};
+  },
+  computed: {
+    ...mapState(['isfestival'])
   },
   mounted() {},
   methods: {}
@@ -33,6 +37,9 @@ export default {
     height: poTorem(48px);
     position: relative;
     top: 0;
+    &.heads_con_pig {
+      @include pigbg;
+    }
     a {
       width: 20%;
       height: poTorem(48px);

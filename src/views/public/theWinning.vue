@@ -1,36 +1,28 @@
 <template>
-<!-- 用于中奖记录 -->
+  <!-- 用于中奖记录 -->
   <div class="theWinning">
-      <!-- 头部 -->
+    <!-- 头部 -->
     <span class="theWinning_head">
       <router-link to="/member">
         <span class="iconfont icon-fanhui"></span>
       </router-link>
       <span class="title">中奖记录</span>
       <span class="shuaxin">
-      <span class="icon icon-shuaxin"></span>
+        <span class="icon icon-shuaxin"></span>
       </span>
     </span>
 
+  </div>
 
-    
-    </div>
-  
 </template>
 <script>
 export default {
   data() {
     return {
-        data(){
-
-        }
+      data() {}
     };
   },
-  computed: {
-       
-
-
-  },
+  computed: {},
   methods: {}
 };
 </script>
@@ -51,24 +43,21 @@ export default {
     }
     .title {
       margin-right: poTorem(-22px);
-       color: #fff;
+      color: #fff;
       font-weight: bolder;
       font-size: poTorem(19px);
     }
 
     .shuaxin {
-      display: flex;      
-        
+      display: flex;
 
       .icon {
-    
         width: poTorem(50px);
         justify-content: space-around;
         text-align: center;
         font-size: poTorem(40px);
         color: #fff;
         margin-right: poTorem(8px);
-        
       }
     }
   }

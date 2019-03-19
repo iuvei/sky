@@ -2,10 +2,12 @@
   <div class="footballRule_main_body">
     <FootballHeader title="玩法规则"></FootballHeader>
     <div class="top">
-      <span>足球</span>
+      <select v-model="selectBall" class="select-ball">
+        <option v-for="el in staticSports" :key="el.sport_id" :value="el.sport_id">{{el.name}}</option>
+      </select>
     </div>
     <div class="title other-block">
-      <yd-tab class="rule-wrap">
+      <yd-tab v-if="selectBall === 2001" class="rule-wrap">
         <yd-tab-panel label="一般规则">
           <div class="ybgz">
             <h5>一般规则</h5>
@@ -14,7 +16,7 @@
             <p>3.除非在个别玩法规则另有注明，所有滚球投注的结算将以90分钟的赛果为准。</p>
             <p>4.对于某些以全场完场时间为80分钟（2 x 40分钟）的特定赛事或者友谊赛，所有投注的结算皆以完场时间为准。</p>
             <p>5.若少年赛、友谊赛的完场时间为70分钟（2 x 35分钟）或更少，本公司将在开赛前做出公布，否则该场赛事的注单一律作废。</p>
-            <p>6.如果比赛或赛事取消，中断或延迟并且没有在官方指定开球时间的36小时内重新开始，所有该场赛事的投注即被视为无效且取消，除非在个别体育规则里另有指定注明。 某些无条件终止的盘口将会相应地结算。单独的体育规则中对此类盘口的结算程序做了说明。公司取消该赛事所有注单的结果被视为最终决定，无需参考官方赛事裁判或相关部门的决定。连串投注将会继续按照注单剩余赛事的赛果结算，该取消赛事的赔率将会按照1计算。</p>
+            <p>6.如果比赛或赛事取消，中断或延迟并且没有在官方指定开球时间的36小时内重新开始，所有该场赛事的投注即被视为无效且取消，除非在个别体育规则里另有指定注明。 某些无条件终止的盘口将会相应地结算。单独的体育规则中对此类盘口的结算程序做了说明。公司取消该赛事所有注单的结果被视为最终决定，连串投注之注单亦同，本公司均以撤单处理。</p>
             <p>7.除非在个别玩法规则另有注明，乌龙球将予以计算在内。</p>
             <p>8.如果比赛场地有变更（主客队调换），所有此注单将被取消。</p>
             <p>9.对于国际赛事，只要变更的场地仍在同一个国家内，所有注单将保持有效。</p>
@@ -1463,21 +1465,55 @@
           </yd-accordion>
         </yd-tab-panel>
       </yd-tab>
+      <div v-else v-html="otherRule"></div>
     </div>
   </div>
 </template>
 <script>
-import FootballHeader from "../components/FootballHeader";
+import { mapState } from 'vuex'
+import FootballHeader from '../components/FootballHeader'
+import bkRule from './rule-bk'
+import tnRule from './rule-tn'
+import bsRule from './rule-bs'
+import vbRule from './rule-vb'
+
 export default {
   components: { FootballHeader },
   data() {
     return {
-      funcName: "玩法规则"
-    };
-  }
-};
+      funcName: '玩法规则',
+      selectBall: ''
+    }
+  },
+  computed: {
+    ...mapState('football', ['staticSports', 'sport_id']),
+    otherRule() {
+      let rule = ''
+      switch (this.selectBall) {
+        case 2002:
+          rule = bkRule
+          break
+        case 2003:
+          rule = tnRule
+          break
+        case 2004:
+          rule = bsRule
+          break
+        case 2005:
+          rule = vbRule
+          break
+      }
+      return rule
+    }
+  },
+  activated() {
+    this.selectBall = this.sport_id
+  },
+  methods: {}
+}
 </script>
 <style lang="scss">
+@import '~css/resources.scss';
 .rule-wrap {
   .yd-tab-box {
     margin-bottom: 0.5rem;
@@ -1497,7 +1533,7 @@ export default {
     }
     .yd-tab-active {
       color: #ffffff !important;
-      background-color: #ff7c34;
+      background-color: $mainColor;
       border-radius: 0.2rem;
     }
     .yd-tab-active:before {
@@ -1512,25 +1548,33 @@ export default {
     .yd-accordion-title {
       font-size: 1rem;
       line-height: 2.5rem;
-      color: #ff7c34;
+      color: $mainColor;
     }
-    .yd-accordion-head:after, .yd-accordion-content:after {
+    .yd-accordion-head:after,
+    .yd-accordion-content:after {
       border-bottom: none !important;
     }
   }
 }
 </style>
 <style lang="scss" scoped>
-@import "../../../css/resources.scss";
+@import '~css/resources.scss';
 .footballRule_main_body {
-  background-color: #eee;
+  // background-color: #eee;
+  line-height: 2rem;
+  .select-ball {
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+  }
   .top {
-    padding: 1rem 0;
+    padding: 1rem;
     span {
       display: block;
       width: 40%;
       margin: 0 auto;
-      background-color: #ff7c34;
+      background-color: $mainColor;
       color: #fff;
       text-align: center;
       line-height: 2.2rem;
@@ -1547,7 +1591,7 @@ export default {
       border: 1px solid #c9c9c9;
       margin-bottom: 1rem;
       h5 {
-        color: #ff7c34;
+        color: $mainColor;
         font-weight: 400;
         font-size: 1rem;
         line-height: 2rem;

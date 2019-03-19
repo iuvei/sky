@@ -2,7 +2,9 @@
   <div>
     <div class="success">
       <div class="txt">
-        <img :src="require('~/img/recharge/success.png')" alt="" class="img">
+        <img :src="require('~/img/recharge/success.png')"
+             alt=""
+             class="img">
         <span>充值成功！</span>
       </div>
       <div class="red">{{money}}元</div>
@@ -22,11 +24,11 @@ export default {
     return {};
   },
   methods: {
-    backstep(item) {
+    backstep() {
       // this.$emit("backstep");
-      this.$router.back()
-    },
-  },
+      this.$router.back();
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

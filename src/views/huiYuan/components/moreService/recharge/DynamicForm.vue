@@ -1,6 +1,11 @@
 <template>
-  <form :action="data.url" :method="data.method">
-    <input type="text" v-for="(val,key) in data.data" :key="key" :name="key" :value="val">
+  <form :action="data.url"
+        :method="data.method">
+    <input type="text"
+           v-for="(val,key) in data.data"
+           :key="key"
+           :name="key"
+           :value="val">
   </form>
 </template>
 <script>
@@ -24,16 +29,15 @@ export default {
         // saoma   url就是二维码信息
         this.$emit("backstep");
       }
-    },
+    }
   },
   methods: {
-    backstep(item) {
+    backstep() {
       this.$router.push("/moreService/Nrecharge");
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
-
 </style>
 

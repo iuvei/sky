@@ -1,21 +1,34 @@
 <template>
   <div class="correctLoginPW_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="content">
       <yd-cell-group class="form_ipt">
         <yd-cell-item v-show="isShow">
           <span slot="left">原微信</span>
-          <input slot="right" type="text" :placeholder="oldWechat" v-model="oldWechat1">
+          <input slot="right"
+                 type="text"
+                 :placeholder="oldWechat"
+                 v-model="oldWechat1">
         </yd-cell-item>
         <yd-cell-item>
           <span slot="left">{{txt}}</span>
-          <input slot="right" type="text" placeholder="请输入新微信" v-model="newWechat">
+          <input slot="right"
+                 type="text"
+                 placeholder="请输入新微信"
+                 v-model="newWechat">
         </yd-cell-item>
         <yd-cell-item>
           <span slot="left">验证码</span>
-          <input slot="right" type="number" placeholder="请输入验证码" v-model="verifyNum">
-          <span slot="right" @click="getVerify">
-            <img :src="verifyImg" alt="" class="verify_img">
+          <input slot="right"
+                 type="number"
+                 placeholder="请输入验证码"
+                 v-model="verifyNum">
+          <span slot="right"
+                @click="getVerify">
+            <img :src="verifyImg"
+                 alt=""
+                 class="verify_img">
           </span>
         </yd-cell-item>
       </yd-cell-group>
@@ -29,7 +42,7 @@
 import publicHead from "./publicHead";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   data() {
     return {
@@ -40,41 +53,43 @@ export default {
       newWechat: "",
       verifyImg: "",
       verifyNum: "",
-      vid: '',
-      txt: '微信'
+      vid: "",
+      txt: "微信"
     };
   },
   activated() {
-    this.oldWechat = ''
-    this.oldWechat1 = ''
-    this.newWechat = ''
-    this.verifyNum = ''
+    this.oldWechat = "";
+    this.oldWechat1 = "";
+    this.newWechat = "";
+    this.verifyNum = "";
     this.$dialog.loading.open("正在加载中···");
     if (this.$store.state.userinfo.accountInfo.wechat) {
       this.isShow = true;
-      this.txt = '新微信'
-      this.funcName = '修改微信'
+      this.txt = "新微信";
+      this.funcName = "修改微信";
       this.oldWechat = this.$store.state.userinfo.accountInfo.wechat;
     } else {
       this.isShow = false;
-      this.txt = '微信'
-      this.funcName = '绑定微信'
+      this.txt = "微信";
+      this.funcName = "绑定微信";
     }
     this.getVerify();
   },
   methods: {
     submitData() {
-      let isPass = this.isShow ? this.oldWechat1 && this.newWechat : this.newWechat
-      if(!isPass) {
-        this.$dialog.toast({mes: '请输入微信号'})
-        return
+      const isPass = this.isShow
+        ? this.oldWechat1 && this.newWechat
+        : this.newWechat;
+      if (!isPass) {
+        this.$dialog.toast({ mes: "请输入微信号" });
+        return;
       }
-      if(!this.verifyNum) {
-        this.$dialog.toast({mes: '请输入验证码'})
-        return
+      if (!this.verifyNum) {
+        this.$dialog.toast({ mes: "请输入验证码" });
+        return;
       } else if (!/^[0-9]{4}$/.test(this.verifyNum)) {
-        this.$dialog.toast({mes: '请输入正确验证码'})
-        return
+        this.$dialog.toast({ mes: "请输入正确验证码" });
+        return;
       }
       this.$ajax("request", {
         ac: "updateUserInfo",
@@ -82,44 +97,44 @@ export default {
         wechat: this.newWechat,
         vcode: this.verifyNum,
         vid: this.vid,
-        type: 4,
-      }).then(res => {
-        this.getVerify()
+        type: 4
+      }).then(() => {
+        this.getVerify();
         this.$dialog.alert({ mes: "提交成功，请等待审核" });
 
         this.$ajax("request", {
           ac: "encodeLogin",
-          code: this.$store.state.userinfo.accountInfo.code,
+          code: this.$store.state.userinfo.accountInfo.code
         }).then(res => {
           console.log(res);
           this.$store.commit("GET_USERINFO", {
             accountInfo: res,
-            isLogin: true,
+            isLogin: true
           });
           this.$router.back();
         });
       });
     },
-    getVerify(i) {
+    getVerify() {
       this.$ajax("request", {
         ac: "getVerifyImage"
       }).then(res => {
         this.verifyImg = res.img;
-        this.vid = res.vid
+        this.vid = res.vid;
         this.$dialog.loading.close();
       });
     },
     randomNum() {
       return Math.floor(Math.random() * 10000) + "";
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
 .correctLoginPW_main_body {
   .content {
-    height: poTorem(688px);
+    height: 100%;
     background-color: #eee;
     padding: poTorem(20px);
     .form_ipt {
@@ -147,7 +162,7 @@ export default {
         font-size: poTorem(16px);
         line-height: poTorem(16px);
         color: #fff;
-        background-color: #ff7c34;
+        background-color: $mainColor;
         border-radius: poTorem(5px);
         outline: none;
         border: none;

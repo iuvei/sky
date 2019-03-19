@@ -1,21 +1,7 @@
 import calc from '../../views/gouCai/lottery/qxc/components/calc'
 import { RenderTypes } from './commonTypes'
+import getDwdArr from './util'
 const QXCUtil = {
-  /**
-   * 所有的定位胆都需要单独计算一个位置参数
-   * 只要当前行有值，就取当前行的2次方数，和即为位置数组
-   * @param {array} arr
-   * @returns
-   */
-  getDwdArr(arr) {
-    let c = 0
-    arr.forEach((x, i) => {
-      if (x.length) {
-        c += Math.pow(2, i)
-      }
-    })
-    return [c.toString()].concat(arr)
-  },
   /**
    * 计算注数
    *
@@ -27,7 +13,7 @@ const QXCUtil = {
   calcZhushu(playid, singleRow, mutilRow) {
     // 一定位(类似定位胆)
     if ([1, 2, 3, 4, 8].includes(playid)) {
-      mutilRow = this.getDwdArr(mutilRow).filter(x => x.length)
+      mutilRow = getDwdArr(mutilRow).filter(x => x.length)
       return calc(playid, mutilRow)
     } else if ([5, 6].includes(playid)) {
       // 二字现  三字现
@@ -115,7 +101,7 @@ const QXCUtil = {
       arr2: towDimValuesArr,
       formatShowStr,
       dwdValuesArr: [1, 2, 3, 4, 8].includes(betData.playid)
-        ? this.getDwdArr(towDimValuesArr)
+        ? getDwdArr(towDimValuesArr)
         : '', // 定位胆专用取值
       wanfa: betData.wanfa,
       zhushu: 1, // 注数

@@ -1,13 +1,16 @@
 <template>
-  <footer class="picking" :class="{fadeInUp:footer}" v-show="footer">
-    <div v-if="gameType === 3 && zhgg_preview">
+  <footer class="picking"
+          :class="{fadeInUp:footer}"
+          v-show="footer">
+    <div v-if="isMulti && zhgg_preview">
       <div class="picking-active">
         <div class="picking-active-money">
           <span class="name">{{bet_txt}}串1</span>
           <span class="value">@{{getPl}}</span>
           <span>{{tip}}</span>
         </div>
-        <div class="picking-active-submit" @click="previewClick">下一步</div>
+        <div class="picking-active-submit"
+             @click="previewClick">下一步</div>
       </div>
     </div>
     <div v-else>
@@ -15,37 +18,96 @@
       <div class="picking-info">
         <div class="picking-info-team">
           <span class="name">{{bet_txt}}</span>
-          <span v-show="gameType===3">串1</span>
+          <span v-show="isMulti">串1</span>
           <span class="value">@{{getPl}}</span>
           <span>{{tip}}</span>
         </div>
         <div>
-          <AppCheckbox :value='is_better' @change="changeCheckbox" onColor="#313131" offColor="#7d7d7d">
-            <span slot class="label">自动接受较佳赔率</span>
+          <AppCheckbox :value='is_better'
+                       @change="changeCheckbox"
+                       onColor="#313131"
+                       offColor="#7d7d7d">
+            <span slot
+                  class="label">自动接受较佳赔率</span>
           </AppCheckbox>
         </div>
       </div>
       <!-- 投注 -->
       <div class="picking-active">
         <div class="picking-active-money">
-          <input type="number" v-model.number="money" @input="updateMoney" @click="input_focus">
+          <input type="number"
+                 v-model.number="money"
+                 @input="updateMoney"
+                 @click="input_focus">
           <span>
             元，可赢
             <span class="money">{{win}}</span>
             元
           </span>
         </div>
-        <div class="picking-active-submit" @click="bettingClick">下注</div>
+        <div class="picking-active-submit"
+             @click="bettingClick">下注</div>
       </div>
     </div>
   </footer>
 </template>
 
 <script>
-import reduce from "lodash/reduce";
 import debounce from "lodash/debounce";
 import { mapState, mapGetters, mapActions } from "vuex";
-const wangfas = ["HC", "HHC", "GL", "HGL"];
+const gl = [
+  "GL",
+  "HGL",
+  "GLH",
+  "HGLH",
+  "GLV",
+  "HGLV",
+  "GLHT1",
+  "GLHT2",
+  "GLQ1",
+  "GLQ2",
+  "GLQ3",
+  "GLQ4",
+  "TGL",
+  "TGLH",
+  "TGLV",
+  "GLS1",
+  "GLS2",
+  "GLS3",
+  "GLS4",
+  "GLS5",
+  "GLHHT1",
+  "GLHHT2",
+  "GLVHT1",
+  "GLVHT2",
+  "GLHQ1",
+  "GLHQ2",
+  "GLHQ3",
+  "GLHQ4",
+  "GLVQ1",
+  "GLVQ2",
+  "GLVQ3",
+  "GLVQ4"
+];
+const hc = [
+  "HC",
+  "HHC",
+  "HCHT1",
+  "HCHT2",
+  "HCQ1",
+  "HCQ2",
+  "HCQ3",
+  "HCQ4",
+  "GHC",
+  "SHC",
+  "HCS1",
+  "HCS2",
+  "HCS3",
+  "HCS4",
+  "HCS5"
+];
+// 这些玩法计算出的可赢金额赔率不减1
+const wangfas = [...hc, ...gl];
 
 export default {
   name: "FootballFooter",
@@ -63,11 +125,17 @@ export default {
       "bet_txt",
       "bet_data",
       "gameType",
+      "playType",
       "zhgg_preview"
     ]),
+    // 综合过关
+    isMulti() {
+      // 旧版是this.gameType === 3
+      return this.playType === 4;
+    },
     tip() {
       let tip = "";
-      if (this.gameType === 3) {
+      if (this.isMulti) {
         if (this.bet_txt < 3) tip = "(最小串3关)";
         else if (this.bet_txt > 10) tip = "(最大串10关)";
       }
@@ -75,16 +143,16 @@ export default {
     },
     win() {
       let bet_pl = this.getPl;
-      let wanfa = (this.bet_data[0] && this.bet_data[0].play_method) || "";
-      if (this.gameType === 3 || !wangfas.includes(wanfa)) {
+      const wanfa = (this.bet_data[0] && this.bet_data[0].play_method) || "";
+      if (this.isMulti || !wangfas.includes(wanfa)) {
         bet_pl = bet_pl - 1;
       }
       return (bet_pl * this.money).toFixed(2);
     }
   },
-  watch:{
-    min_stake(min_stake){
-      if(min_stake > 0){
+  watch: {
+    min_stake(min_stake) {
+      if (min_stake > 0) {
         this.modifyFootballField({ money: min_stake });
       }
     }
@@ -100,7 +168,7 @@ export default {
       target.value = "";
     },
     updateMoney({ target }) {
-      let money = Math.round(target.value * 1) || "";
+      const money = Math.round(target.value * 1) || "";
       target.value = money;
       this.modifyFootballField({ money });
     },
@@ -108,25 +176,26 @@ export default {
       this.modifyFootballField({ is_better: val });
     },
     previewClick() {
-      if (this.bet_txt < 3 || this.bet_txt > 10)
+      if (this.bet_txt < 3 || this.bet_txt > 10) {
         return this.$dialog.toast({
           mes: "不符合串关要求"
         });
+      }
 
       this.queryComputed(["reset"]);
       this.modifyFootballField({ zhgg_preview: false });
       this.$router.push({ name: "zhggPreview" });
     },
     bettingClick: debounce(async function() {
-      let res = await this.betting();
+      const res = await this.betting();
       if (res && res.id_list && res.id_list.length > 0) {
         this.$dialog.toast({
           mes: "下注成功！",
-          icon: "success",
+          icon: "success"
           // timeout: 1000
         });
 
-        let obj = {
+        const obj = {
           money: this.min_stake || 2,
           footer: false,
           zhggPreview: true,
@@ -135,7 +204,7 @@ export default {
         };
         this.modifyFootballField(obj);
 
-        if (this.gameType === 3) {
+        if (this.isMulti) {
           // this.$router.replace({ path: "/football/multi" });
           this.$router.back();
         }
@@ -146,7 +215,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../../css/resources.scss";
+@import "~css/resources.scss";
 @keyframes fadeInUp {
   from {
     opacity: 0;

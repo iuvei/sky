@@ -1,18 +1,17 @@
 <template>
   <div>
-    <p class="next_step" v-show="nextBtnIsShow">下一步</p>
-  
+    <p class="next_step"
+       v-show="nextBtnIsShow">下一步</p>
+
   </div>
 </template>
 <script>
-export default {
-  
-}
+export default {};
 </script>
 <style lang="scss" scoped>
 .next_step {
   width: 100%;
-  background-color: #ff7c34;
+  background-color: $mainColor;
   font-size: poTorem(18px);
   color: #fff;
   text-align: center;

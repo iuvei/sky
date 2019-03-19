@@ -1,16 +1,23 @@
 <template>
   <div class="activities_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="content_box">
-      <div class="empty" v-show="allActivities==0">
-        <img src="../../../../img/bet_record/noRecords.png" alt="">
+      <div class="empty"
+           v-show="allActivities==0">
+        <img src="../../../../img/bet_record/noRecords.png"
+             alt="">
         <p>暂无记录</p>
       </div>
-      <div v-for="(item, index) in allActivities" :key="index" class="content" @click="popIsShow(item.is_can_get)">
+      <div v-for="(item, index) in allActivities"
+           :key="index"
+           class="content"
+           @click="popIsShow(item.is_can_get)">
         <p>{{item.event_title}}</p>
         <p>活动时间：{{item.begin_time}}</p>
         <div :class="[{'cantGet': item.is_can_get==0}, 'red_packet']">
-          <img :src="item.is_can_get==0||item.is_can_get==3?src0:item.is_can_get==1?src1:src2" alt="">
+          <img :src="item.is_can_get==0||item.is_can_get==3?src0:item.is_can_get==1?src1:src2"
+               alt="">
           <div class="red_packet_intro">
             <p>需单笔充值满{{item.event_param}}元</p>
             <p>当前剩余
@@ -22,18 +29,25 @@
         <p>截止时间：{{item.end_time}}</p>
         <p>
           <span>{{item.is_can_get==0?'未达到领取资格':item.is_can_get==1?'点击领取':item.is_can_get==2?'已领取':'还剩余多久触发'}}</span>
-          <img src="../../../../img/bet_record/arrow.png" alt="">
+          <img src="../../../../img/bet_record/arrow.png"
+               alt="">
         </p>
       </div>
     </div>
-    <yd-popup v-model="isShow1" position="center" width="60%" class="pop_win">
+    <yd-popup v-model="isShow1"
+              position="center"
+              width="60%"
+              class="pop_win">
       <p>领取成功</p>
       <p>获得100元</p>
       <p>
         <button @click="isShow1=false">确定</button>
       </p>
     </yd-popup>
-    <yd-popup v-model="isShow2" position="center" width="60%" class="pop_win">
+    <yd-popup v-model="isShow2"
+              position="center"
+              width="60%"
+              class="pop_win">
       <p>很抱歉，您还未达到领取资格</p>
       <p>
         <router-link to='/moreService/Nrecharge'>
@@ -44,14 +58,14 @@
   </div>
 </template>
 <script>
-import publicHead from '../moreService/publicHead'
+import publicHead from "../moreService/publicHead";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '红包活动',
+      funcName: "红包活动",
       isShow1: false,
       isShow2: false,
       allActivities: [
@@ -96,34 +110,34 @@ export default {
         //   state: 0
         // }
       ],
-      src0: require('../../../../img/welfareTask/red_packet_g.png'),
-      src1: require('../../../../img/welfareTask/red_packet_c.png'),
-      src2: require('../../../../img/welfareTask/red_packet_o.png')
-    }
+      src0: require("../../../../img/welfareTask/red_packet_g.png"),
+      src1: require("../../../../img/welfareTask/red_packet_c.png"),
+      src2: require("../../../../img/welfareTask/red_packet_o.png")
+    };
   },
   activated() {
-    this.$dialog.loading.open(' ')
-    this.getData()
+    this.$dialog.loading.open(" ");
+    this.getData();
   },
   methods: {
     popIsShow(n) {
-      if(n == 1 || n == 2) {
-        this.isShow1 = true
+      if (n == 1 || n == 2) {
+        this.isShow1 = true;
       } else {
-        this.isShow2 = true
+        this.isShow2 = true;
       }
     },
     getData() {
-      this.$ajax('request', {
-        ac: 'getGameEventGiftList'
+      this.$ajax("request", {
+        ac: "getGameEventGiftList"
       }).then(res => {
-        this.allActivities = res == 0 ? [] : res
-        this.$dialog.loading.close()
-        if(res==0) this.$dialog.alert({mes: '暂时没有红包活动'})
-      })
+        this.allActivities = res == 0 ? [] : res;
+        this.$dialog.loading.close();
+        if (res == 0) this.$dialog.alert({ mes: "暂时没有红包活动" });
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -153,11 +167,13 @@ export default {
       margin-bottom: poTorem(20px);
       line-height: poTorem(28px);
       p {
-        &:first-child, &:last-child {
+        &:first-child,
+        &:last-child {
           font-size: poTorem(16px);
           color: #000;
         }
-        &:nth-child(2), &:nth-child(4) {
+        &:nth-child(2),
+        &:nth-child(4) {
           font-size: poTorem(12px);
           color: #5d5d5d;
         }

@@ -2,17 +2,6 @@ import { getRenderTypeByPlayID } from '~/js/touzhu/touzhu.pcdd.calc'
 import { RenderTypes } from './commonTypes'
 
 const pcddUtil = {
-  getDwdArr(arr) {
-    // 所有的定位胆都需要单独计算一个位置参数
-    // 只要当前行有值，就取当前行的2次方数，和即为位置数组
-    let c = 0
-    arr.forEach((x, i) => {
-      if (x.length) {
-        c += Math.pow(2, i)
-      }
-    })
-    return [c.toString()].concat(arr)
-  },
   calcZhushu(playid, arr) {
     if (playid === 2) return arr.length > 2 ? 1 : 0
     if ([1, 3].includes(playid)) {

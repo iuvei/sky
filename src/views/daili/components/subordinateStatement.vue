@@ -1,46 +1,64 @@
 <template>
   <div class="subordinateStatement_main_body">
-    <publicHead :title="funcName" :type="1" :timeText="chooseTimeText" @chooseTimeShow="changeState"></publicHead>
+    <publicHead :title="funcName"
+                :type="1"
+                :timeText="chooseTimeText"
+                @chooseTimeShow="changeState"></publicHead>
     <yd-layout class="subordinateStatement_main_content">
-      <yd-infinitescroll :callback="scrollGetData" ref="ISCom">
-        <yd-list theme="4" slot="list">
+      <yd-infinitescroll :callback="scrollGetData"
+                         ref="ISCom">
+        <yd-list theme="4"
+                 slot="list">
           <div class="title_wrap">
             <p>账号</p>
             <p>类型</p>
             <p>报表人数</p>
             <p>盈利</p>
           </div>
-          <yd-list-item class="rows_wrap" v-for="(item, index) in baseData" :key="index" @click.native="optionShow(item)">
+          <yd-list-item class="rows_wrap"
+                        v-for="(item, index) in baseData"
+                        :key="index"
+                        @click.native="optionShow(item)">
             <p slot="other">{{item.username}}</p>
             <p slot="other">{{item.actype}}</p>
-            <p slot="other">{{item.next_count}}</p>
+            <p slot="other">{{item.active_count}}</p>
             <p slot="other">{{item.yingli_price}}</p>
           </yd-list-item>
           <!-- <p class="else_word" v-show="baseData!=0" @click="getMoreData">{{hasPage?'查看更多':'已显示全部数据'}}</p> -->
           <!-- <p class="else_word">查看更多</p> -->
-          <div class="empty" v-show="baseData==0">
-            <img src="../../../img/bet_record/noRecords.png" alt="">
+          <div class="empty"
+               v-show="baseData==0">
+            <img src="../../../img/bet_record/noRecords.png"
+                 alt="">
             <p>暂无记录</p>
           </div>
         </yd-list>
-        <span slot="doneTip" style="font-size:1.125rem">已显示全部数据</span>
-        <img style="width:1.5rem;height:1.5rem" slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+        <span slot="doneTip"
+              style="font-size:1.125rem">已显示全部数据</span>
+        <img style="width:1.5rem;height:1.5rem"
+             slot="loadingTip"
+             src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
       </yd-infinitescroll>
     </yd-layout>
-    <yd-actionsheet :items="timeOptions" v-model="choosedTime" class="changePeriod"></yd-actionsheet>
-    <yd-actionsheet :items="agencyOptions" v-model="chooseAgency" class="choose_agency_type" cancel="取消"></yd-actionsheet>
+    <yd-actionsheet :items="timeOptions"
+                    v-model="choosedTime"
+                    class="changePeriod"></yd-actionsheet>
+    <yd-actionsheet :items="agencyOptions"
+                    v-model="chooseAgency"
+                    class="choose_agency_type"
+                    cancel="取消"></yd-actionsheet>
   </div>
 </template>
 <script>
 import publicHead from "../../huiYuan/components/moreService/publicHead";
 import { mapState, mapActions } from "vuex";
-import { getDate, getMonday, getMonth } from "../../../js/agencyDate";
+// import { getDate, getMonday, getMonth } from "../../../js/agencyDate";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   computed: {
-    ...mapState("member", ["st_timeData"]),
+    ...mapState("member", ["st_timeData"])
   },
   data() {
     return {
@@ -67,7 +85,7 @@ export default {
             this.pageID = 0;
             this.isFirst = 1;
             this.getBaseData(0);
-          },
+          }
         },
         {
           label: "昨天",
@@ -77,7 +95,7 @@ export default {
             this.pageID = 0;
             this.isFirst = 1;
             this.getBaseData(1);
-          },
+          }
         },
         {
           label: "本周",
@@ -87,7 +105,7 @@ export default {
             this.pageID = 0;
             this.isFirst = 1;
             this.getBaseData(2);
-          },
+          }
         },
         {
           label: "本月",
@@ -97,7 +115,7 @@ export default {
             this.pageID = 0;
             this.isFirst = 1;
             this.getBaseData(3);
-          },
+          }
         },
         {
           label: "上月",
@@ -107,10 +125,10 @@ export default {
             this.pageID = 0;
             this.isFirst = 1;
             this.getBaseData(4);
-          },
-        },
+          }
+        }
       ],
-      agencyOptions: [],
+      agencyOptions: []
     };
   },
   mounted() {
@@ -121,28 +139,25 @@ export default {
   methods: {
     ...mapActions("agent", ["getChlidStatic"]),
     initTimeData() {
-      this.timeOptions = Array.from(this.st_timeData).map(v => {
-        return {
-          val: v[0],
-          label: v[1],
-          callback: item => {
-            this.chooseTimeText = item.label;
-            this.type = item.val;
-            this.pageID = 0;
-            this.isFirst = 1;
-            this.getBaseData(0);
-          },
-        };
-      });
+      this.timeOptions = Array.from(this.st_timeData).map(v => ({
+        val: v[0],
+        label: v[1],
+        callback: item => {
+          this.chooseTimeText = item.label;
+          this.type = item.val;
+          this.pageID = 0;
+          this.isFirst = 1;
+          this.getBaseData(0);
+        }
+      }));
     },
-    changeState(n) {
+    changeState() {
       this.choosedTime = true;
     },
     togetChlidStatic() {
       this.getChlidStatic();
     },
     scrollGetData() {
-      let i = this.type;
       let s, e;
 
       this.$ajax("request", {
@@ -152,7 +167,7 @@ export default {
         bdate: s,
         edate: e,
         count: 20,
-        pageid: this.pageID,
+        pageid: this.pageID
       }).then(res => {
         if (res == 0) {
           this.$refs.ISCom.$emit("ydui.infinitescroll.loadedDone");
@@ -164,12 +179,12 @@ export default {
         this.pageID++;
       });
     },
-    getBaseData(i) {
+    getBaseData() {
       // this.$dialog.loading.open("正在加载中···");
       this.getChlidStatic({
         username: "",
         user_id: this.userID,
-        lasttime: this.type,
+        lasttime: this.type
         // user_type: '',
       }).then(res => {
         this.baseData = res;
@@ -178,15 +193,15 @@ export default {
       });
     },
     optionShow(n) {
-      if(n.actype == '会员') {
-        return
+      if (n.actype == "会员") {
+        return;
       }
-      if (n.next_count) {
+      if (n.active_count) {
         if (n.tuijian == this.$store.state.userinfo.accountInfo.uid) {
           this.agencyOptions = [
             {
               label: "someone",
-              callback: () => {},
+              callback: () => {}
             },
             {
               label: "查看报表",
@@ -195,10 +210,10 @@ export default {
                   name: "dailibaobiao",
                   params: {
                     username: n.username,
-                    userID: n.uid,
-                  },
+                    userID: n.uid
+                  }
                 });
-              },
+              }
             },
             {
               label: "查看下级",
@@ -206,18 +221,20 @@ export default {
                 this.superiorArr.push(n.uid);
                 console.log(this.superiorArr);
                 this.userID = n.uid;
-                this.pageID = 0; //  重置页码
-                this.isFirst = 1; //重置为首次请求
+                this.pageID = 0;
+                //  重置页码
+                this.isFirst = 1;
+                // 重置为首次请求
                 this.getBaseData(this.type);
                 this.$refs.ISCom.$emit("ydui.infinitescroll.reInit");
-              },
-            },
+              }
+            }
           ];
         } else {
           this.agencyOptions = [
             {
               label: "someone",
-              callback: () => {},
+              callback: () => {}
             },
             {
               label: "查看报表",
@@ -226,10 +243,10 @@ export default {
                   name: "dailibaobiao",
                   params: {
                     username: n.username,
-                    userID: n.uid,
-                  },
+                    userID: n.uid
+                  }
                 });
-              },
+              }
             },
             {
               label: "查看下级",
@@ -237,12 +254,14 @@ export default {
                 this.superiorArr.push(n.uid);
                 console.log(this.superiorArr);
                 this.userID = n.uid;
-                this.pageID = 0; //  重置页码
-                this.isFirst = 1; //重置为首次请求
+                // 重置页码
+                this.pageID = 0;
+                // 重置为首次请求
+                this.isFirst = 1;
                 this.cengjiNum++;
                 this.getBaseData(this.type);
                 this.$refs.ISCom.$emit("ydui.infinitescroll.reInit");
-              },
+              }
             },
             {
               label: "查看上级",
@@ -251,13 +270,15 @@ export default {
                   ? (this.userID = "")
                   : (this.userID = this.superiorArr.splice(-2, 1)[0]);
                 console.log(this.superiorArr);
-                this.pageID = 0; //  重置页码
-                this.isFirst = 1; //重置为首次请求
+                //  重置页码
+                this.pageID = 0;
+                // 重置为首次请求
+                this.isFirst = 1;
                 this.cengjiNum--;
                 this.getBaseData(this.type);
                 this.$refs.ISCom.$emit("ydui.infinitescroll.reInit");
-              },
-            },
+              }
+            }
           ];
         }
       } else {
@@ -265,7 +286,7 @@ export default {
           this.agencyOptions = [
             {
               label: "someone",
-              callback: () => {},
+              callback: () => {}
             },
             {
               label: "查看报表",
@@ -274,17 +295,17 @@ export default {
                   name: "dailibaobiao",
                   params: {
                     username: n.username,
-                    userID: n.uid,
-                  },
+                    userID: n.uid
+                  }
                 });
-              },
-            },
+              }
+            }
           ];
         } else {
           this.agencyOptions = [
             {
               label: "someone",
-              callback: () => {},
+              callback: () => {}
             },
             {
               label: "查看报表",
@@ -293,10 +314,10 @@ export default {
                   name: "dailibaobiao",
                   params: {
                     username: n.username,
-                    userID: n.uid,
-                  },
+                    userID: n.uid
+                  }
                 });
-              },
+              }
             },
             {
               label: "查看上级",
@@ -305,13 +326,15 @@ export default {
                   ? (this.userID = "")
                   : (this.userID = this.superiorArr.splice(-2, 1)[0]);
                 console.log(this.superiorArr);
-                this.pageID = 0; //  重置页码
-                this.isFirst = 1; //重置为首次请求
+                //  重置页码
+                this.pageID = 0;
+                // 重置为首次请求
+                this.isFirst = 1;
                 this.cengjiNum--;
                 this.getBaseData(this.type);
                 this.$refs.ISCom.$emit("ydui.infinitescroll.reInit");
-              },
-            },
+              }
+            }
           ];
         }
       }
@@ -328,8 +351,8 @@ export default {
       } else {
         this.hasPage = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -366,7 +389,7 @@ export default {
           color: #00a0e9;
         }
         &:last-child {
-          color: #ff7c34;
+          color: $mainColor;
         }
         &:nth-child(3),
         &:nth-child(4) {

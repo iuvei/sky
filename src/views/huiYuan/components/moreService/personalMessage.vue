@@ -1,42 +1,58 @@
 <template>
   <div class="personalMessage_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <yd-tab class="msg_tab">
       <yd-tab-panel label="全部">
         <div class="message_box">
-          <div v-for="(item, index) in messageBox" :key="index" :class="[item.status==0?'unread':'read', 'tab_content']" @click="fillWord(item, index)">
+          <div v-for="(item, index) in messageBox"
+               :key="index"
+               :class="[item.status==0?'unread':'read', 'tab_content']"
+               @click="fillWord(item, index)">
             <p>{{item.title}}</p>
             <p>{{item.content}}</p>
             <p>{{sendTime(item.sendtime)}}</p>
           </div>
-          <div class="empty" v-show="messageBox.length==0">
-            <img src="../../../../img/bet_record/noRecords.png" alt="">
+          <div class="empty"
+               v-show="messageBox.length==0">
+            <img src="../../../../img/bet_record/noRecords.png"
+                 alt="">
             <p>暂无记录</p>
           </div>
         </div>
       </yd-tab-panel>
       <yd-tab-panel label="已读">
         <div class="message_box">
-          <div v-for="(item, index) in readMsg" :key="index" class="read tab_content" @click="fillWord(item, index)">
+          <div v-for="(item, index) in readMsg"
+               :key="index"
+               class="read tab_content"
+               @click="fillWord(item, index)">
             <p>{{item.title}}</p>
             <p>{{item.content}}</p>
             <p>{{sendTime(item.sendtime)}}</p>
           </div>
-          <div class="empty" v-show="readMsg.length==0">
-            <img src="../../../../img/bet_record/noRecords.png" alt="">
+          <div class="empty"
+               v-show="readMsg.length==0">
+            <img src="../../../../img/bet_record/noRecords.png"
+                 alt="">
             <p>暂无记录</p>
           </div>
         </div>
       </yd-tab-panel>
       <yd-tab-panel label="未读">
         <div class="message_box">
-          <div v-for="(item, index) in unreadMsg" :key="index" class="unread tab_content" @click="fillWord(item, index)">
+          <div v-for="(item, index) in unreadMsg"
+               :key="index"
+               class="unread tab_content"
+               @click="fillWord(item, index)">
             <p>{{item.title}}</p>
             <p>{{item.content}}</p>
             <p>{{sendTime(item.sendtime)}}</p>
           </div>
-          <div class="empty" v-show="unreadMsg.length==0">
-            <img src="../../../../img/bet_record/noRecords.png" alt="">
+          <div class="empty"
+               v-show="unreadMsg.length==0">
+            <img src="../../../../img/bet_record/noRecords.png"
+                 alt="">
             <p>暂无记录</p>
           </div>
         </div>
@@ -45,84 +61,95 @@
   </div>
 </template>
 <script>
-import publicHead from './publicHead'
+import publicHead from "./publicHead";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '个人消息',
-      defaultClass: 'tab_content',
+      funcName: "个人消息",
+      defaultClass: "tab_content",
       messageBox: [],
       readMsg: [],
       unreadMsg: [],
-      filledContent: {title: '', content: '', time: ''}
-    }
+      filledContent: { title: "", content: "", time: "" }
+    };
   },
   activated() {
-    this.$dialog.loading.open(' ')
-    this.getData()
+    this.$dialog.loading.open(" ");
+    this.getData();
   },
   methods: {
-    fillWord(o, i) {
+    fillWord(o) {
       this.$router.push({
-        name: 'xiaoxixiangqing',
+        name: "xiaoxixiangqing",
         params: o
-      })
-      Object.assign(this.filledContent, o)
-      if(o.status==0)
-      this.$ajax('request', {
-        ac: 'readUserMessage',
-        id: o.guid
-      }).then(res => {
-        this.getData()
-      })
+      });
+      Object.assign(this.filledContent, o);
+      if (o.status == 0) {
+        this.$ajax("request", {
+          ac: "readUserMessage",
+          id: o.guid
+        }).then(() => {
+          this.getData();
+        });
+      }
     },
-    getData(i) {
-      this.$ajax('request', {
-        ac: 'getUserMessage',
+    getData() {
+      this.$ajax("request", {
+        ac: "getUserMessage",
         // bdate: 1,
         // edate: '',
         type: 0,
         limit: 20,
         pageid: 0
       }).then(res => {
-        console.log(res)
-        this.messageBox = res==0?[]:res
-        let readAyy = [], unreadAyy = []
+        console.log(res);
+        this.messageBox = res == 0 ? [] : res;
+        const readAyy = [],
+          unreadAyy = [];
         this.messageBox.forEach(item => {
-          if(item.status==1) readAyy.push(item)
-          else unreadAyy.push(item)
-        })
-        this.readMsg = readAyy
-        this.unreadMsg = unreadAyy
-        this.$dialog.loading.close()
-      })
+          if (item.status == 1) readAyy.push(item);
+          else unreadAyy.push(item);
+        });
+        this.readMsg = readAyy;
+        this.unreadMsg = unreadAyy;
+        this.$dialog.loading.close();
+      });
     },
     sendTime(j) {
-      let timestamp = j*1000
-      let assignTime = new Date(timestamp),
+      const timestamp = j * 1000;
+      const assignTime = new Date(timestamp),
         y = assignTime.getFullYear(),
         M = assignTime.getMonth() + 1,
         d = assignTime.getDate(),
         h = assignTime.getHours(),
         m = assignTime.getMinutes(),
         s = assignTime.getSeconds(),
-        add0 = (m) => {
-          return m > 9 ? m : '0' + m
-        }
-      return y + '-' + add0(M) + '-' + add0(d) + " " + add0(h) + ":" + add0(m) + ":" + add0(s)
-       
+        add0 = m => (m > 9 ? m : "0" + m);
+      return (
+        y +
+        "-" +
+        add0(M) +
+        "-" +
+        add0(d) +
+        " " +
+        add0(h) +
+        ":" +
+        add0(m) +
+        ":" +
+        add0(s)
+      );
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
 .personalMessage_main_body {
   .msg_tab {
-    height: poTorem(688px);
+    height: 100%;
     background-color: #eee;
     .message_box {
       padding: poTorem(10px);
@@ -150,7 +177,7 @@ export default {
           color: #fff;
           background-color: #f93;
           outline: none;
-          border:none;
+          border: none;
         }
       }
       .tab_content {
@@ -179,11 +206,12 @@ export default {
         }
       }
       .read {
-        background: #fff url(~img/personal_center/read.png) no-repeat poTorem(354px) 0;
+        background: #fff url(~img/personal_center/read.png) no-repeat right top;
         background-size: poTorem(40px);
       }
       .unread {
-        background: #fff url(~img/personal_center/unread.png) no-repeat poTorem(354px) 0;
+        background: #fff url(~img/personal_center/unread.png) no-repeat right
+          top;
         background-size: poTorem(40px);
       }
     }

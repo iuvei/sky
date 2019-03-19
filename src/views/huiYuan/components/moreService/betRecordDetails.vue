@@ -1,9 +1,11 @@
 <template>
   <div class="betRecordDetails_main_body">
-    <publicHead :title="funcName" :type="2"></publicHead>
+    <publicHead :title="funcName"
+                :type="2"></publicHead>
     <div class="up_content">
       <div class="icon">
-        <img :src="baseData.icon" alt="">
+        <img :src="baseData.icon"
+             alt="">
       </div>
       <div class="lottery_info">
         <p class="lottery_type">
@@ -12,19 +14,29 @@
         </p>
         <p class="lottery_num">
           <span>开奖号码：</span>
-          <span v-if="baseData.gameid==51" class="number">
+          <span v-if="baseData.gameid==51"
+                class="number">
             <span v-ds>{{returnz(kjballs.split(' ')[0])}}</span>
             <span v-ds>{{returnsz(kjballs.split(' ')[1])}}</span>
             <span v-ds>{{returny(kjballs.split(' ')[2])}}</span>
           </span>
-          <span v-else-if="baseData.gameid==52" class="nc">
-            <span v-if="kjballs != ''" class="Colorno" v-for="(items,indexs) in kjballs.split(' ')" :key="indexs">
-              <img :src="require('../../../../img/xync_background/lucky_ball_'+ items +'.png')" alt="图片">
+          <span v-else-if="baseData.gameid==52"
+                class="nc">
+            <span v-if="kjballs != ''"
+                  class="Colorno"
+                  v-for="(items,indexs) in kjballs.split(' ')"
+                  :key="indexs">
+              <img :src="require('../../../../img/xync_background/lucky_ball_'+ items +'.png')"
+                   alt="图片">
             </span>
           </span>
-          <span v-else-if="baseData.gameid==54" class="kaijiang">
-            <span v-if="kjballs != ''" v-for="(num,dex) in kjballs.split(' ')" :key="dex">
-              <img :src="require('../../../../img/puke/card/'+ calchs(num) + '_' + calcdx(num) + '.png')" alt="">
+          <span v-else-if="baseData.gameid==54"
+                class="kaijiang">
+            <span v-if="kjballs != ''"
+                  v-for="(num,dex) in kjballs.split(' ')"
+                  :key="dex">
+              <img :src="require('../../../../img/puke/card/'+ calchs(num) + '_' + calcdx(num) + '.png')"
+                   alt="">
             </span>
             <!-- <p v-else> -->
             <!-- <img :src="require('../../../../img/puke/seperate/card_bg.png')" alt="">
@@ -53,7 +65,8 @@
         <!-- <p>是否关盘</p> -->
         <p>玩法名称</p>
       </div>
-      <div class="content" style="float: right">
+      <div class="content"
+           style="float: right">
         <p>{{baseData.zhudan}}</p>
         <p>{{baseData.price}}</p>
         <p>{{baseData.zhushu}}</p>
@@ -66,37 +79,40 @@
         <!-- <p>是</p> -->
         <p>{{baseData.wanfa}}</p>
       </div>
-      <p class="title_word" style="margin-top: 1.25rem">投注号码</p>
+      <p class="title_word"
+         style="margin-top: 1.25rem">投注号码</p>
       <p class="lottery_number">{{baseData.xiangqing}}</p>
       <div class="one_more">
-        <div @click="toBetting" v-show="show">
+        <div @click="toBetting"
+             v-show="show">
           <button>再来一注</button>
         </div>
-        <button v-show="!show" @click="revoke">撤单</button>
+        <button v-show="!show"
+                @click="revoke">撤单</button>
       </div>
     </div>
   </div>
 </template>
 <script>
-import publicHead from './publicHead'
-import api from '../../../../../api/game.js'
-import { mapState } from 'vuex'
-const thArr = ['0'],
-  thszArr = ['1']
+import publicHead from "./publicHead";
+import api from "../../../../../api/game.js";
+import { mapState, mapActions } from "vuex";
+const thArr = ["0"],
+  thszArr = ["1"];
 export default {
   directives: {
     ds: el => {
-      if (el.innerHTML == '单') {
-        el.style.color = '#fff'
-        el.style.background = '#019fe9'
-      } else if (el.innerHTML == '双') {
-        el.style.color = '#fff'
-        el.style.background = '#e43838'
-      } else if (el.innerHTML == '左' || el.innerHTML == '右') {
-        el.style.background = '#dcdcdc'
-      } else if (el.innerHTML == '3' || el.innerHTML == '4') {
-        el.style.color = '#fff'
-        el.style.background = '#626262'
+      if (el.innerHTML == "单") {
+        el.style.color = "#fff";
+        el.style.background = "#019fe9";
+      } else if (el.innerHTML == "双") {
+        el.style.color = "#fff";
+        el.style.background = "#e43838";
+      } else if (el.innerHTML == "左" || el.innerHTML == "右") {
+        el.style.background = "#dcdcdc";
+      } else if (el.innerHTML == "3" || el.innerHTML == "4") {
+        el.style.color = "#fff";
+        el.style.background = "#626262";
       }
     }
   },
@@ -105,13 +121,16 @@ export default {
   },
   data() {
     return {
-      funcName: '详情',
+      funcName: "详情",
       baseData: []
-    }
+    };
   },
   activated() {
-    this.baseData = this.$route.params
-    console.log(this.baseData)
+    if (this.$route.params && Object.keys(this.$route.params).length) {
+      this.setBetDetailParams(this.$route.params);
+      this.baseData = this.$route.params;
+    } else this.baseData = this.$store.state.betting.betDetailParams;
+    // console.log(this.baseData)
   },
   computed: {
     // 试玩账号不能撤单
@@ -120,101 +139,103 @@ export default {
     }),
     kjballs() {
       if (this.baseData.kj_balls) {
-        let arr = this.baseData.kj_balls.split(' ')
+        const arr = this.baseData.kj_balls.split(" ");
         if (arr.length == 4 && this.baseData.gameid != 56) {
-          return `${arr[0]}+${arr[1]}+${arr[2]}=${arr[3]}`
+          return `${arr[0]}+${arr[1]}+${arr[2]}=${arr[3]}`;
         } else {
-          return this.baseData.kj_balls
+          return this.baseData.kj_balls;
         }
       } else {
-        return ''
+        return "";
       }
     },
     show() {
-      return this.baseData.status == 0 ? false : true
+      return this.baseData.status != 0;
     }
   },
   methods: {
-    //计算花色
+    ...mapActions(["setBetDetailParams"]),
+    // 计算花色
     calchs(ball) {
-      let balls = parseInt(ball, 10)
-      let color = ball % 4
-      let hs = ''
+      // const balls = parseInt(ball, 10);
+      const color = ball % 4;
+      let hs = "";
       if (color == 0) {
-        hs = 'spade'
+        hs = "spade";
       } else if (color == 1) {
-        hs = 'heart'
+        hs = "heart";
       } else if (color == 2) {
-        hs = 'plum'
+        hs = "plum";
       } else if (color == 3) {
-        hs = 'block'
+        hs = "block";
       } else {
-        hs = '-'
+        hs = "-";
       }
-      return hs
+      return hs;
     },
-    //计算数字
+    // 计算数字
     calcdx(ball) {
-      let balls = parseInt(ball, 10)
-      let dx = parseInt(balls / 4 + 1)
-      if (dx == 11) return 'J'
-      if (dx == 12) return 'Q'
-      if (dx == 13) return 'K'
-      if (dx == 1) return 'A'
-      return dx
+      const balls = parseInt(ball, 10);
+      const dx = parseInt(balls / 4 + 1);
+      if (dx == 11) return "J";
+      if (dx == 12) return "Q";
+      if (dx == 13) return "K";
+      if (dx == 1) return "A";
+      return dx;
     },
     returnz(val) {
       if (thArr.includes(val)) {
-        return '左'
+        return "左";
       } else if (thszArr.includes(val)) {
-        return '右'
+        return "右";
       }
     },
     returnsz(val) {
       if (thArr.includes(val)) {
-        return '3'
+        return "3";
       } else if (thszArr.includes(val)) {
-        return '4'
+        return "4";
       }
     },
     returny(val) {
       if (thArr.includes(val)) {
-        return '单'
+        return "单";
       } else if (thszArr.includes(val)) {
-        return '双'
+        return "双";
       }
     },
     revoke() {
       if (this.isDemoAccount) {
         return this.$dialog.confirm({
-          title: '温馨提示',
-          mes: '您的账号是试玩账号，不能撤单！',
+          title: "温馨提示",
+          mes: "您的账号是试玩账号，不能撤单！",
           opts: [
             {
-              txt: '确定',
+              txt: "确定",
               color: true,
               stay: false
             }
           ]
-        })
+        });
       }
-      this.$dialog.loading.open(' ')
-      this.$ajax('request', {
-        ac: 'cancelTouzhu',
+      this.$dialog.loading.open(" ");
+      this.$ajax("request", {
+        ac: "cancelTouzhu",
         gameid: this.baseData.gameid,
         idlist: this.baseData.guid
-      }).then(res => {
-        this.show = true
-        this.baseData.status = 3
-        this.$dialog.loading.close()
-      })
+      }).then(() => {
+        this.show = true;
+        this.baseData.status = 3;
+        this.$dialog.loading.close();
+      });
     },
     async toBetting() {
-      let gameList = await api.getGameList()
+      const gameList = await api.getGameList();
       const thisGame = gameList.find(
         item => item.game_id === this.baseData.gameid
-      )
-      this.$router.replace({
+      );
+      // this.$router.replace({
+      this.$router.push({
         name: thisGame.js_tag,
         params: {
           lotter_id: thisGame.game_id,
@@ -224,12 +245,13 @@ export default {
           speed: thisGame.speed,
           play_type: thisGame.play_type,
           isHome: true,
-          wanfa: this.$route.params.wanfa || ''
+          wanfa: this.$route.params.wanfa || '',
+          yearid: thisGame.yearid || 0
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -341,7 +363,7 @@ export default {
       }
       .wait {
         font-size: poTorem(16px);
-        color: #ff7c34;
+        color: $mainColor;
       }
       .win {
         font-size: poTorem(16px);
@@ -357,7 +379,7 @@ export default {
     padding: poTorem(20px);
     .title_word {
       padding-left: poTorem(5px);
-      border-left: poTorem(5px) solid #ff7c34;
+      border-left: poTorem(5px) solid $mainColor;
       font-size: poTorem(16px);
       color: #313131;
       height: poTorem(18px);
@@ -382,7 +404,7 @@ export default {
         color: #a0a0a0;
       }
       .wait {
-        color: #ff7c34;
+        color: $mainColor;
       }
       .win {
         color: #097c25;
@@ -415,7 +437,7 @@ export default {
       text-align: center;
       button {
         width: poTorem(304px);
-        background-color: #ff7c34;
+        background-color: $mainColor;
         font-size: poTorem(16px);
         color: #fff;
         height: poTorem(40px);

@@ -1,32 +1,39 @@
 <template>
-  <yd-infinitescroll :callback="_callback" ref="infinitescrollDemo">
-    <yd-list theme="1" slot="list" class="yd_list">
+  <yd-infinitescroll :callback="_callback"
+                     ref="infinitescrollDemo">
+    <yd-list theme="1"
+             slot="list"
+             class="yd_list">
       <ul class="thelist_list">
         <li class="title">
           <div class="issue">期号</div>
           <div class="number">开奖号码</div>
         </li>
       </ul>
-      <ul class="thelist_list" v-for="(item,index) in list" :key="index" v-if="index >= 0">
+      <ul class="thelist_list"
+          v-for="(item,index) in list"
+          :key="index"
+          v-if="index >= 0">
         <li>
           <div class="issue">{{(item.qishu+'').substr(-4)}}期</div>
-          <div class="number" v-if="item.balls.length > 1">
+          <div class="number"
+               v-if="item.balls.length > 1">
             <span v-ds>{{returnz(item.balls.split('+')[0])}}</span>
             <span v-ds>{{returnsz(item.balls.split('+')[1])}}</span>
             <span v-ds>{{returny(item.balls.split('+')[2])}}</span>
           </div>
-          <div class="number" v-else>正在开奖</div>
+          <div class="number"
+               v-else>正在开奖</div>
         </li>
       </ul>
     </yd-list>
     <!-- 数据全部加载完毕显示 -->
     <span slot="doneTip">不要在拉了,没有数据啦~~</span>
-    <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+    <img slot="loadingTip"
+         src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
   </yd-infinitescroll>
 </template>
 <script>
-import { trend_get } from "../../../../../api/user";
-import { mapState } from "vuex";
 const thArr = ["0"],
   thszArr = ["1"];
 export default {

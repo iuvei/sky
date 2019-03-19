@@ -1,57 +1,102 @@
 <template>
   <div class="bet-area">
-    <div class="con_item" v-for="(item,index) in dataSet" :key="index">
+    <div class="con_item"
+         v-for="(item,index) in dataSet"
+         :key="index">
       <!-- 快捷操作-->
-      <div class="head" v-if="!isDanshi">
+      <div class="head"
+           v-if="!isDanshi">
         <span class="arrow">{{setArrowTitle(item)}}</span>
-        <span data-v="1" :class="[{'by_right':modelTitle=='连码'},'odds']" v-if="peilvIsShow && ![1,8,21,30,33].includes(curPlayItem.playid) && js_tag=='lhc'">(赔率：{{peilv.length>0?peilv:'-'}})</span>
-        <span data-v="2" class="odds" v-if="[21,8].includes(curPlayItem.playid) && js_tag=='lhc'">(赔率：{{pl==0?"0.0":pl}})</span>
-        <span data-v="2" class="odds" v-if="[30,33].includes(curPlayItem.playid) && js_tag=='lhc'">(赔率：{{peilv}})</span>
-        <div class="actions" v-if="([1, 36, 10, 11, 12, 13, 14, 15, 16].includes(curPlayItem.playid) && js_tag=='lhc') || js_tag!='lhc' && !isDanma(item.name)">
-          <span v-for="(action, i) in item.actions" @click="doAction(action, item)" :class="{'active': action.checked && action.label !='清'}">{{action.label}}</span>
+        <span data-v="1"
+              :class="[{'by_right':modelTitle=='连码'},'odds']"
+              v-if="peilvIsShow && ![1,8,21,30,33].includes(curPlayItem.playid) && js_tag=='lhc'">(赔率：{{peilv.length>0?peilv:'-'}})</span>
+        <span data-v="2"
+              class="odds"
+              v-if="[21,8].includes(curPlayItem.playid) && js_tag=='lhc'">(赔率：{{pl==0?"0.0":pl}})</span>
+        <span data-v="2"
+              class="odds"
+              v-if="[30,33].includes(curPlayItem.playid) && js_tag=='lhc'">(赔率：{{lianmaTxt}})</span>
+        <div class="actions"
+             v-if="([1, 36, 10, 11, 12, 13, 14, 15, 16].includes(curPlayItem.playid) && js_tag=='lhc') || js_tag!='lhc' && !isDanma(item.name)">
+          <span v-for="(action, i) in item.actions"
+                @click="doAction(action, item)"
+                :class="{'active': action.checked && action.label !='清'}">{{action.label}}</span>
         </div>
       </div>
-      <ul class="balls" v-if="!isDanshi && js_tag!='lhc'" :class="{'elex5': item.data.length === 11}">
-        <li @click.stop="clickBall(item, ball)" v-for="(ball, ball_index) in item.data" :key="ball_index" style="position:relative" :data-val="ball.value" :class="{'shift_line' : curPlayItem.playid == 7 && ball_index == 5}">
-          <div class="ball" ref="ballOptions" :class="[{choosed: ball.checked}]">{{ball.name}}</div>
-          <input type="checkbox" v-model="ball.checked">
+      <ul class="balls"
+          v-if="!isDanshi && js_tag!='lhc'"
+          :class="{'elex5': item.data.length === 11}">
+        <li @click.stop="clickBall(item, ball)"
+            v-for="(ball, ball_index) in item.data"
+            :key="ball_index"
+            style="position:relative"
+            :data-val="ball.value"
+            :class="{'shift_line' : curPlayItem.playid == 7 && ball_index == 5}">
+          <div class="ball"
+               ref="ballOptions"
+               :class="[{choosed: ball.checked}]">{{ball.name}}</div>
+          <input type="checkbox"
+                 v-model="ball.checked">
         </li>
       </ul>
     </div>
-    <div class="betting_right" v-if="js_tag=='lhc'">
+    <div class="betting_right"
+         v-if="js_tag=='lhc'">
       <div class="betting_con">
         <!-- 循环投注页面 -->
-        <div class="con_item" v-for="(item,index) in dataSet" :key="index">
+        <div class="con_item"
+             v-for="(item,index) in dataSet"
+             :key="index">
           <ul :class="{'around':[3].includes(curPlayItem.playid)}">
             <!-- 其他 -->
-            <li @click="clickBall(item, ball, indexs)" v-for="(ball, indexs) in item.data" :key="indexs" :class="[{l_ball:typeNum==3},{xxl_ball: typeNum==0},{xl_ball: typeNum==4},{s_ball:typeNum==2}, {m_ball:typeNum==1}]">
-              <input type="checkbox" v-model="ball.checked" v-show="false">
-              <div ref="ballOptions" v-setChoosed="ball.checked" :class="[{medium_box:typeNum==3},{big_box: typeNum==0},{xxl_box: typeNum==4},{lottery_options:typeNum==2}, {square_box:typeNum==1, 'choosed': ball.checked}]">
+            <li @click="clickBall(item, ball, indexs)"
+                v-for="(ball, indexs) in item.data"
+                :key="indexs"
+                :class="[{l_ball:typeNum==3},{xxl_ball: typeNum==0},{xl_ball: typeNum==4},{s_ball:typeNum==2}, {m_ball:typeNum==1}]">
+              <input type="checkbox"
+                     v-model="ball.checked"
+                     v-show="false">
+              <div ref="ballOptions"
+                   v-setChoosed="ball.checked"
+                   :class="[{medium_box:typeNum==3},{big_box: typeNum==0},{xxl_box: typeNum==4},{lottery_options:typeNum==2}, {square_box:typeNum==1, 'choosed': ball.checked}]">
                 <span>{{ball.name}}</span>
-                <div v-if="[0, 3, 4].includes(typeNum)" :class="{grid:[3,9].includes(curPlayItem.playid) && isSupportGridLayout,wxgrid:[9].includes(curPlayItem.playid) && !isSupportGridLayout,flexgrid:[3].includes(curPlayItem.playid) && !isSupportGridLayout}">
-                  <span v-for="(item, index) in ball.balls " :key="index ">{{item}}</span>
+                <div v-if="[0, 3, 4].includes(typeNum)"
+                     :class="{grid:[3,9].includes(curPlayItem.playid) && isSupportGridLayout,wxgrid:[9].includes(curPlayItem.playid) && !isSupportGridLayout,flexgrid:[3].includes(curPlayItem.playid) && !isSupportGridLayout}">
+                  <span v-for="(item, index) in ball.balls "
+                        :key="index ">{{item}}</span>
                 </div>
               </div>
-              <div class="peilv_num " v-if="!peilvIsShow ">{{Array.isArray(peilvs) && peilvs.length && peilvs.length > 0 ? peilvs[indexs] : '-'}}</div>
+              <div class="peilv_num "
+                   v-if="!peilvIsShow ">{{Array.isArray(peilvs) && peilvs.length && peilvs.length > 0 ? peilvs[indexs] : '-'}}</div>
             </li>
           </ul>
         </div>
       </div>
     </div>
     <!-- 单式 -->
-    <div class="con_item" v-if="isDanshi && js_tag!='lhc'">
+    <div class="con_item"
+         v-if="isDanshi && js_tag!='lhc'">
       <span class="arrow">{{curPlayItem.playname}}</span>
       <div class="danshi">
         <p>{{curPlayItem.play_title}}</p>
-        <textarea autofocus cols="30" rows="8" :placeholder="'例如：' + myPlaceholder" v-model="danshiExcl" @focus="shopShow=false" @blur="shopShow=true"></textarea>
+        <textarea autofocus
+                  cols="30"
+                  rows="8"
+                  :placeholder="'例如：' + myPlaceholder"
+                  v-model="danshiExcl"
+                  @focus="shopShow=false"
+                  @blur="shopShow=true"></textarea>
         <p class="caution">注意：</p>
         <p>每个号码之间请用空格隔开，每一注号码之间请用一个逗号[,]隔开</p>
       </div>
     </div>
-    <div @click="clickCart" class="shop_icon" v-show="shopShow">
+    <div @click="clickCart"
+         class="shop_icon"
+         v-show="shopShow">
       <div class="_drag">
-        <i class="spots" v-show="cartNumber>0">
-          {{cartNumber}}
+        <i class="spots"
+           v-show="cartNumber>0">
+          {{cartNumber > 99 ? '99+' : cartNumber}}
         </i>
       </div>
     </div>
@@ -61,232 +106,234 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
+import danshiUtil from "~/js/touzhu/danshi.util";
 export default {
-  name: 'BetArea',
+  name: "BetArea",
   props: [
-    'curPlayItem',
-    'dataSet',
-    'placeholder',
-    'peilvIsShow',
-    'modelTitle',
-    'peilv',
-    'typeNum',
-    'peilvs',
-    'pl',
-    'isSupportGridLayout'
+    "curPlayItem",
+    "dataSet",
+    "placeholder",
+    "peilvIsShow",
+    "modelTitle",
+    "peilv",
+    "typeNum",
+    "peilvs",
+    "pl",
+    "isSupportGridLayout"
   ],
   data() {
     return {
-      myPlaceholder: '',
-      danshiExcl: '',
+      myPlaceholder: "",
+      danshiExcl: "",
       shopShow: true
-    }
+    };
   },
   directives: {
     setChoosed: {
       update(el, { value }) {
-        if (value && el.classList && !el.classList.contains('choosed')) {
-          el.classList.add('choosed')
+        if (value && el.classList && !el.classList.contains("choosed")) {
+          el.classList.add("choosed");
         }
       }
     }
   },
   methods: {
-    //号码选择互斥
+    // 号码选择互斥
     mutex_11x5(name, curItem) {
-      if (name.indexOf('胆码') != -1 || name.indexOf('拖码') != -1) {
-        //互斥的号码一般为胆拖，两行
-        let arr1 = this.dataSet[0].data.filter(x => x.checked),
-          arr2 = this.dataSet[1].data.filter(x => x.checked)
+      if (name.indexOf("胆码") != -1 || name.indexOf("拖码") != -1) {
+        // 互斥的号码一般为胆拖，两行
+        const arr1 = this.dataSet[0].data.filter(x => x.checked),
+          arr2 = this.dataSet[1].data.filter(x => x.checked);
 
         // 如果是第一行点击，则第二行球消失
         if (name == this.dataSet[0].name) {
           arr1.forEach(item => {
-            var index = arr2.findIndex(x => x.name === item.name)
-            if (index >= 0) arr2[index].checked = !arr2[index].checked
-          })
-          //胆码最多只能选择三个或者两个
-          if (curItem.playid == 51 && arr1.length > 7)
-            arr1.filter(x => x.name != curItem.name)[0].checked = false
-          else if (curItem.playid == 50 && arr1.length > 6)
-            arr1.filter(x => x.name != curItem.name)[0].checked = false
-          else if (curItem.playid == 49 && arr1.length > 5)
-            arr1.filter(x => x.name != curItem.name)[0].checked = false
-          else if (curItem.playid == 48 && arr1.length > 4)
-            arr1.filter(x => x.name != curItem.name)[0].checked = false
-          else if (curItem.playid == 47 && arr1.length > 3)
-            arr1.filter(x => x.name != curItem.name)[0].checked = false
-          else if (curItem.playid == 46 && arr1.length > 2)
-            arr1.filter(x => x.name != curItem.name)[0].checked = false
-          else if (curItem.playid == 45 && arr1.length > 1)
-            arr1.filter(x => x.name != curItem.name)[0].checked = false
-          else if ([5, 10, 15].includes(curItem.playid) && arr1.length > 2)
-            arr1.filter(x => x.name != curItem.name)[0].checked = false
-          else if ([20, 25].includes(curItem.playid) && arr1.length > 1)
-            arr1.filter(x => x.name != curItem.name)[0].checked = false
+            const index = arr2.findIndex(x => x.name === item.name);
+            if (index >= 0) arr2[index].checked = !arr2[index].checked;
+          });
+          // 胆码最多只能选择三个或者两个
+          if (curItem.playid == 51 && arr1.length > 7) {
+            arr1.filter(x => x.name != curItem.name)[0].checked = false;
+          } else if (curItem.playid == 50 && arr1.length > 6) {
+            arr1.filter(x => x.name != curItem.name)[0].checked = false;
+          } else if (curItem.playid == 49 && arr1.length > 5) {
+            arr1.filter(x => x.name != curItem.name)[0].checked = false;
+          } else if (curItem.playid == 48 && arr1.length > 4) {
+            arr1.filter(x => x.name != curItem.name)[0].checked = false;
+          } else if (curItem.playid == 47 && arr1.length > 3) {
+            arr1.filter(x => x.name != curItem.name)[0].checked = false;
+          } else if (curItem.playid == 46 && arr1.length > 2) {
+            arr1.filter(x => x.name != curItem.name)[0].checked = false;
+          } else if (curItem.playid == 45 && arr1.length > 1) {
+            arr1.filter(x => x.name != curItem.name)[0].checked = false;
+          } else if ([5, 10, 15].includes(curItem.playid) && arr1.length > 2) {
+            arr1.filter(x => x.name != curItem.name)[0].checked = false;
+          } else if ([20, 25].includes(curItem.playid) && arr1.length > 1) {
+            arr1.filter(x => x.name != curItem.name)[0].checked = false;
+          }
         }
         // 如果是第二行点击，则第一行球消失
         if (name == this.dataSet[1].name) {
           arr2.forEach(item => {
-            var index = arr1.findIndex(x => x.name === item.name)
-            if (index >= 0) arr1[index].checked = !arr1[index].checked
-          })
+            const index = arr1.findIndex(x => x.name === item.name);
+            if (index >= 0) arr1[index].checked = !arr1[index].checked;
+          });
         }
       }
     },
     mutex_ssc(name, curItem) {
       if ([16, 30, 112, 122, 40].includes(this.curPlayItem.playid)) {
-        //互斥的号码一般为胆拖，两行
-        let arr1 = this.dataSet[0].data.filter(x => x.checked)
+        // 互斥的号码一般为胆拖，两行
+        const arr1 = this.dataSet[0].data.filter(x => x.checked);
 
         if (arr1.length > 1) {
-          arr1.find(x => x.name != curItem.name).checked = false
+          arr1.find(x => x.name != curItem.name).checked = false;
         }
       }
     },
     // 设置箭头标题
     setArrowTitle(item) {
-      if (!item) return ''
+      if (!item) return "";
       if (this.dataSet && this.dataSet.length === 1) {
-        return this.curPlayItem.playname
+        return this.curPlayItem.playname;
       }
-      return item.name.split('|')[0]
+      return item.name.split("|")[0];
     },
     clickCart() {
       if (this.cart.length) {
-        this.$router.push('/shopCart')
+        this.$router.push("/shopCart");
       } else {
-        this.$dialog.toast({ mes: '您的购物车空空如也' })
+        this.$dialog.toast({ mes: "您的购物车空空如也" });
       }
     },
     // 点击快捷选球
     doAction(action, row) {
       row.actions.forEach(x => {
-        x.checked = false
-      })
-      action.checked = true
+        x.checked = false;
+      });
+      action.checked = true;
       // console.log(action, arr)
       row.data.forEach(x => {
-        x.checked = false
+        x.checked = false;
         // 互斥，胆拖胆码清空
         if (
           [5, 10, 15, 20, 25, 45, 46, 47, 48, 49, 50, 51].includes(
             this.curPlayItem.playid
           ) &&
-          this.js_tag === '11x5' &&
-          action.label != '清'
+          this.js_tag === "11x5" &&
+          action.label != "清"
         ) {
-          this.dataSet[0].data.forEach(x => (x.checked = false))
+          this.dataSet[0].data.forEach(x => (x.checked = false));
         }
         switch (action.label) {
-          case '全':
-            x.checked = true
-            break
-          case '大':
-            if (this.action_big(x.value)) x.checked = true
-            break
-          case '小':
-            if (this.action_small(x.value)) x.checked = true
-            break
-          case '单':
-            if (x.value % 2 !== 0) x.checked = true
-            break
-          case '双':
-            if (x.value % 2 === 0) x.checked = true
-            break
+          case "全":
+            x.checked = true;
+            break;
+          case "大":
+            if (this.action_big(x.value)) x.checked = true;
+            break;
+          case "小":
+            if (this.action_small(x.value)) x.checked = true;
+            break;
+          case "单":
+            if (x.value % 2 !== 0) x.checked = true;
+            break;
+          case "双":
+            if (x.value % 2 === 0) x.checked = true;
+            break;
         }
-      })
-      this.$emit('chooseBall', null, null)
+      });
+      this.$emit("chooseBall", null, null);
     },
     // 选择大 3d,ssc, 0到9，pk10 1到10 11x5 11选5 1到11
     action_big(value) {
       switch (this.js_tag) {
-        case 'ssc':
-        case 'qxc':
-          return value > 4
-        case 'pk10':
-        case '11x5':
-          return value > 5
-        case '3d':
+        case "ssc":
+        case "qxc":
+          return value > 4;
+        case "pk10":
+        case "11x5":
+          return value > 5;
+        case "3d":
           if ([3, 6].includes(this.curPlayItem.playid)) {
-            return value > 13
+            return value > 13;
           } else if (this.curPlayItem.playid === 7) {
-            return value > 12
-          } else return value > 4
-        case 'lhc':
-          return value > 24
+            return value > 12;
+          } else return value > 4;
+        case "lhc":
+          return value > 24;
       }
     },
     // 选择小
     action_small(value) {
       switch (this.js_tag) {
-        case 'ssc':
-        case 'qxc':
-          return value < 5
-        case 'pk10':
-        case '11x5':
-          return value < 6
-        case '3d':
+        case "ssc":
+        case "qxc":
+          return value < 5;
+        case "pk10":
+        case "11x5":
+          return value < 6;
+        case "3d":
           if ([3, 6].includes(this.curPlayItem.playid)) {
-            return value < 14
+            return value < 14;
           } else if (this.curPlayItem.playid === 7) {
-            return value < 13
-          } else return value < 5
-        case 'lhc':
-          return value < 25
+            return value < 13;
+          } else return value < 5;
+        case "lhc":
+          return value < 25;
       }
     },
     // 选择球
     clickBall(item, ball) {
-      ball.checked = !ball.checked
-      if (this.js_tag === '11x5') this.mutex_11x5(item.name, ball)
-      if (this.js_tag === 'ssc') this.mutex_ssc(item.name, ball)
-      this.linkToFastSelect(item)
-      this.$emit('chooseBall', item, ball)
+      ball.checked = !ball.checked;
+      if (this.js_tag === "11x5") this.mutex_11x5(item.name, ball);
+      if (this.js_tag === "ssc") this.mutex_ssc(item.name, ball);
+      this.linkToFastSelect(item);
+      this.$emit("chooseBall", item, ball);
     },
     // 清除球和单式输入框
     clearBalls() {
       this.dataSet.forEach(x => {
         x.data.forEach(y => {
-          y.checked = false
-        })
+          y.checked = false;
+        });
         x.actions.forEach(y => {
-          y.checked = false
-        })
-      })
-      this.danshiExcl = ''
+          y.checked = false;
+        });
+      });
+      this.danshiExcl = "";
     },
-    //联动快捷选项
+    // 联动快捷选项
     linkToFastSelect(row) {
       const chckedItems = row.data.filter(x => x.checked),
-        isMutilSelect = chckedItems.length >= row.data.length / 2
-      console.log(chckedItems)
-      if (row.data.every(x => x.checked))
-        this.clickFastSelect(row.actions, '全')
-      else if (row.data.every(x => !x.checked))
-        this.clickFastSelect(row.actions, '清')
-      else if (chckedItems.every(x => x.value % 2 === 0) && isMutilSelect)
-        this.clickFastSelect(row.actions, '双')
-      else if (chckedItems.every(x => x.value % 2 !== 0) && isMutilSelect)
-        this.clickFastSelect(row.actions, '单')
-      else if (
+        isMutilSelect = chckedItems.length >= row.data.length / 2;
+      console.log(chckedItems);
+      if (row.data.every(x => x.checked)) {
+        this.clickFastSelect(row.actions, "全");
+      } else if (row.data.every(x => !x.checked)) {
+        this.clickFastSelect(row.actions, "清");
+      } else if (chckedItems.every(x => x.value % 2 === 0) && isMutilSelect) {
+        this.clickFastSelect(row.actions, "双");
+      } else if (chckedItems.every(x => x.value % 2 !== 0) && isMutilSelect) {
+        this.clickFastSelect(row.actions, "单");
+      } else if (
         chckedItems.every(x => this.action_big(x.value)) &&
         isMutilSelect
-      )
-        this.clickFastSelect(row.actions, '大')
-      else if (
+      ) {
+        this.clickFastSelect(row.actions, "大");
+      } else if (
         chckedItems.every(x => this.action_small(x.value)) &&
         isMutilSelect
-      )
-        this.clickFastSelect(row.actions, '小')
-      else this.clickFastSelect(row.actions)
+      ) {
+        this.clickFastSelect(row.actions, "小");
+      } else this.clickFastSelect(row.actions);
     },
     // 选择快捷选项
     clickFastSelect(actions, label) {
-      actions.forEach(x => (x.checked = false))
+      actions.forEach(x => (x.checked = false));
       if (label) {
-        actions.find(x => x.label === label).checked = true
+        actions.find(x => x.label === label).checked = true;
       }
     },
     // 设置快捷选项数据
@@ -294,23 +341,24 @@ export default {
       if (dataSet.length && !dataSet[0].actions) {
         dataSet.forEach(x => {
           x.actions = [
-            { label: '全', checked: false },
-            { label: '大', checked: false },
-            { label: '小', checked: false },
-            { label: '单', checked: false },
-            { label: '双', checked: false },
-            { label: '清', checked: false }
-          ]
-        })
+            { label: "全", checked: false },
+            { label: "大", checked: false },
+            { label: "小", checked: false },
+            { label: "单", checked: false },
+            { label: "双", checked: false },
+            { label: "清", checked: false }
+          ];
+        });
       }
     },
     // 是否是胆码
     isDanma(name) {
+      if (this.$route.name !== "liaotianshi") return false;
       return (
-        (this.isDantuo && name.includes('胆')) ||
-        (this.js_tag == 'ssc' &&
+        (this.isDantuo && name.includes("胆")) ||
+        (this.js_tag == "ssc" &&
           [18, 32, 114].includes(this.curPlayItem.playid))
-      )
+      );
     }
   },
   computed: {
@@ -320,94 +368,51 @@ export default {
       cart: state => state.betting.cart
     }),
     isDanshi() {
-      if (this.js_tag === 'pk10') {
-        return [3, 5].includes(this.curPlayItem.playid)
-      } else if (this.js_tag === '11x5') {
-        return [
-          2,
-          4,
-          7,
-          9,
-          12,
-          14,
-          17,
-          19,
-          22,
-          24,
-          38,
-          39,
-          40,
-          41,
-          42,
-          43,
-          44
-        ].includes(this.curPlayItem.playid)
-      } else if (this.js_tag === '3d') {
-        return [2].includes(this.curPlayItem.playid)
-      } else if (this.js_tag === 'ssc') {
-        return [
-          2,
-          4,
-          6,
-          11,
-          13,
-          20,
-          25,
-          27,
-          34,
-          38,
-          58,
-          61,
-          64,
-          67,
-          69,
-          73,
-          95,
-          102,
-          107,
-          109,
-          116,
-          120
-        ].includes(this.curPlayItem.playid)
-      }
+      return danshiUtil.isSingleMode(this.js_tag, this.curPlayItem.playid);
     },
     // 是否是胆拖
     isDantuo() {
       return (
-        this.curPlayItem.wanfa.includes('胆拖') ||
-        this.curPlayItem.wanfa.includes('包胆')
-      )
+        this.curPlayItem.wanfa.includes("胆拖") ||
+        this.curPlayItem.wanfa.includes("包胆")
+      );
+    },
+    // 六合彩连码下特殊显示的文字赔率
+    lianmaTxt() {
+      return this.curPlayItem.playid == 33
+        ? `${this.peilvs[0] || "-"}(中特)/${this.peilvs[1] || "-"}(中二)`
+        : `${this.peilvs[0] || "-"}(三中二)/${this.peilvs[1] || "-"}(三中二三)`;
     }
   },
   watch: {
     placeholder(val) {
-      if (val) this.myPlaceholder = val
+      if (val) this.myPlaceholder = val;
     },
     danshiExcl(val) {
-      this.$emit('input', val)
+      this.$emit("input", val);
     },
     dataSet(val) {
-      this.setFastSelect(val)
+      this.setFastSelect(val);
     }
   },
   beforeMount() {
-    this.setFastSelect(this.dataSet)
+    this.setFastSelect(this.dataSet);
   },
   activated() {
-    this.setFastSelect(this.dataSet)
-    this.bus.$on('clearBalls', this.clearBalls)
+    this.setFastSelect(this.dataSet);
+    this.bus.$on("clearBalls", this.clearBalls);
     this.$nextTick(() => {
-      this.dataSet.forEach(x => x.actions.forEach(y => (y.checked = false)))
-    })
+      this.dataSet.forEach(x => x.actions.forEach(y => (y.checked = false)));
+    });
   },
   deactivated() {
-    this.bus.$off('clearBalls')
+    this.bus.$off("clearBalls");
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '../../../css/resources.scss';
+@import "../../../css/resources.scss";
 .bet-area {
   background: rgb(243, 243, 243);
   width: 100%;
@@ -532,7 +537,7 @@ export default {
             > span {
               font-size: poTorem(18px);
               display: block;
-              padding: 4px 0;
+              // padding: 4px 0;
             }
             p {
               @include start;
@@ -630,34 +635,34 @@ export default {
           }
         }
         .s_ball {
-          padding-right: 2rem;
-          &:nth-child(5n) {
-            padding-right: 0;
-          }
+          padding-right: 1.5rem;
+          // &:nth-child(5n) {
+          //   padding-right: 0;
+          // }
         }
         .m_ball {
-          padding-right: 1.7rem;
-          &:nth-child(4n) {
-            padding-right: 0;
-          }
+          padding-right: 1.2rem;
+          // &:nth-child(4n) {
+          //   padding-right: 0;
+          // }
         }
         .l_ball {
-          padding-right: 0.6rem;
-          &:nth-child(3n) {
-            padding-right: 0;
-          }
+          padding-right: 0.4rem;
+          // &:nth-child(3n) {
+          //   padding-right: 0;
+          // }
         }
         .xl_ball {
-          padding-right: 2rem;
-          &:nth-child(2n) {
-            padding-right: 0;
-          }
+          padding-right: 0.9rem;
+          // &:nth-child(2n) {
+          //   padding-right: 0;
+          // }
         }
         .xxl_ball {
-          padding-right: 2.5rem;
-          &:nth-child(2) {
-            padding-right: 0;
-          }
+          padding: 0 0.8rem;
+          // &:nth-child(2) {
+          //   padding-right: 0;
+          // }
         }
       }
     }
@@ -776,15 +781,15 @@ export default {
       .spots {
         position: absolute;
         @include center;
-        width: poTorem(18px);
-        height: poTorem(18px);
+        width: poTorem(24px);
+        height: poTorem(24px);
         background: #e03a3a;
         display: flex;
         border-radius: 50%;
         font-weight: bolder;
         color: #fff;
-        right: poTorem(8px);
-        top: poTorem(8px);
+        right: 0;
+        top: 0;
       }
     }
   }

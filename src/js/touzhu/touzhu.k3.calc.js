@@ -167,28 +167,6 @@ function Calc_Zhushu_Obj() {
   // END CLASS
 }
 
-const getCalcFuncByName = name => {
-  if (name.includes('和值')) {
-    return 'calc_sum'
-  }
-  if (name.includes('三同号')) {
-    return 'calc_3thtx'
-  }
-  if (name.includes('三不同号')) {
-    // 胆拖
-    return 'calc_3bthdt'
-  }
-  if (name.includes('二同号')) {
-    return 'calc_2thfx'
-  }
-  if (name.includes('二不同号')) {
-    return 'calc_2bthdt'
-  }
-  if (name.includes('两面玩法') || name.includes('双面盘')) {
-    return 'calc_sum'
-  }
-}
-
 const getCalcFuncByPlayID = playid => {
   switch (playid) {
     case 1: // 和值
@@ -205,6 +183,17 @@ const getCalcFuncByPlayID = playid => {
       return 'calc_sum'
   }
 }
+
+const calcFunc = new Calc_Zhushu_Obj()
+
+const CalcObj = new Map([
+  [1, { name: '和值', calcFunc: calcFunc.calc_sum }],
+  [5, { name: '三不同号', calcFunc: calcFunc.calc_3bthdt }],
+  [7, { name: '二同号', calcFunc: calcFunc.calc_sum }],
+  [10, { name: '二不同号', calcFunc: calcFunc.calc_2bthdt }],
+  [14, { name: '两面玩法 双面盘', calcFunc: calcFunc.calc_sum }],
+  [15, { name: '三同号', calcFunc: calcFunc.calc_3thtx }]
+])
 
 /**
  * 根据玩法返回其玩法的显示类型
@@ -250,8 +239,8 @@ const getRenderTypeByPlayID = playid => {
 // 根据玩法类型取得其显示类型
 
 export {
+  CalcObj,
   Calc_Zhushu_Obj,
-  getCalcFuncByName,
   getCalcFuncByPlayID,
   getRenderTypeByName,
   getRenderTypeByPlayID

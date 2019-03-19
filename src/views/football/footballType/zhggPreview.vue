@@ -7,7 +7,7 @@
         </div>
 
         <div class="title">
-          <i>{{gameTypeMap[gameType].label}}</i>
+          <i>综合过关</i>
         </div>
         <div class="switch">
           <div class="cate">
@@ -21,11 +21,13 @@
 
     <div class="con">
       <div class="chase">
-        <span class="chases" @click="addSchedule">
+        <span class="chases"
+              @click="addSchedule">
           <i class="icon_add"></i>
           <span>添加赛事</span>
         </span>
-        <span class="chases" @click="clearSchedule">
+        <span class="chases"
+              @click="clearSchedule">
           <i class="icon_zhui"></i>
           <span>清空重选</span>
         </span>
@@ -59,7 +61,8 @@
                   <!-- <i>{{render_pl(item)}}</i> -->
                 </span>
               </div>
-              <span class="icon" @click="delBet(index)"></span>
+              <span class="icon"
+                    @click="delBet(index)"></span>
             </li>
           </template>
         </ul>
@@ -67,7 +70,10 @@
       </div>
       <!-- <p class="serrated"></p> -->
       <div class="protocol">
-        <yd-checkbox class="checkbox" v-model="isAgree" @click.native.prevent="showAggrement($event)" color="#fff">我已阅读并同意
+        <yd-checkbox class="checkbox"
+                     v-model="isAgree"
+                     @click.native.prevent="showAggrement($event)"
+                     color="#fff">我已阅读并同意
           <span>《{{sysinfo.web_title}}服务协议》</span>
         </yd-checkbox>
       </div>
@@ -81,7 +87,11 @@ import debounce from "lodash/debounce";
 import { mapActions, mapState } from "vuex";
 import FootballTime from "../components/FootballTime";
 import FootballFooter from "../components/FootballFooter";
-import { playPMs, BTLists, getItem } from "./components/allPlay/allPlay.const.js";
+import {
+  playPMs,
+  BTLists,
+  getItem
+} from "./components/allPlay/allPlay.const.js";
 
 export default {
   name: "zhggPreview",
@@ -97,7 +107,7 @@ export default {
       sysinfo: state => state.sysinfo
     }),
     ...mapState("football", [
-      "gameTypeMap",
+      // "gameTypeMap",
       "gameType",
       "playType",
       "bet_data",
@@ -108,7 +118,7 @@ export default {
   watch: {
     "timeCount.getData"() {
       if (!this.zhgg_preview) this.getNew();
-    },
+    }
     // bet_data() {
     //   if (!this.zhgg_preview) this.getNew();
     // }
@@ -163,41 +173,65 @@ export default {
       });
     },
     delBet(i) {
-      let bet_data = Object.assign([], this.bet_data);
+      const bet_data = Object.assign([], this.bet_data);
       bet_data.splice(i, 1);
-      this.modifyFootballField({ bet_data: bet_data,bet_txt: bet_data.length });
+      this.modifyFootballField({
+        bet_data,
+        bet_txt: bet_data.length
+      });
     },
-    render_normal({schedule_id}, field) {
-      let data =
+    render_normal({ schedule_id }, field) {
+      const data =
         this.newData.filter(el => el.schedule_id === schedule_id)[0] || {};
       return data[field];
     },
-    render_play_method({play_method}) {
-      let one = getItem(playPMs, play_method)
-      let s= one.name + one.target
+    render_play_method({ play_method }) {
+      const one = getItem(playPMs, play_method);
+      const s = one.name + one.target;
       return s;
     },
-    render_txt({schedule_id,play_method,team, k}) {
+    render_txt({ play_method, team, k }) {
       // console.error(play_method,team , k)
-      let s = getItem(BTLists, team || k).name || k
-      s+= team && k;
+      // 让球特别处理k值
+      if (
+        [
+          "HC",
+          "HHC",
+          "HCHT1",
+          "HCHT2",
+          "HCQ1",
+          "HCQ2",
+          "HCQ3",
+          "HCQ4",
+          "GHC",
+          "SHC",
+          "HCS1",
+          "HCS2",
+          "HCS3",
+          "HCS4",
+          "HCS5"
+        ].includes(play_method)
+      ) {
+        k = k.includes("-") ? k.substr(1) : "";
+      }
+      let s = getItem(BTLists, team || k).name || k;
+      s += team && k;
       return s;
     },
-    render_pl({schedule_id,play_method,team, k}) {
-      let data = this.newData.filter(
-        el => el.schedule_id === schedule_id
-      )[0] || {};
-      data = data.bet_data || {}
-      data = data[play_method]
-      if(!data) return ''
+    render_pl({ schedule_id, play_method, team, k }) {
+      let data =
+        this.newData.filter(el => el.schedule_id === schedule_id)[0] || {};
+      data = data.bet_data || {};
+      data = data[play_method];
+      if (!data) return "";
       let s = "";
-      if(team)s= data[team][0].p
-      else s= data.filter(el => el.k === k)[0].p;
+      if (team) s = data[team][0].p;
+      else s = data.filter(el => el.k === k)[0].p;
       return s;
     },
     getNew: debounce(async function() {
       if (!this.bet_data.length) return (this.newData = []);
-      let data = await this.getSportGameData();
+      const data = await this.getSportGameData();
       this.newData = data;
       this.queryComputed(["reset"]);
     }, 500)
@@ -205,7 +239,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../css/resources.scss";
+@import "~css/resources.scss";
 .zzgg-preview {
   .head {
     width: 100%;
@@ -241,8 +275,8 @@ export default {
           height: 0px;
           border-bottom: solid poTorem(6px) #ffffff;
           border-right: solid poTorem(6px) #ffffff;
-          border-top: solid poTorem(6px) #ff7c34;
-          border-left: solid poTorem(6px) #ff7c34;
+          border-top: solid poTorem(6px) $mainColor;
+          border-left: solid poTorem(6px) $mainColor;
           margin-left: poTorem(5px);
         }
       }
@@ -261,13 +295,13 @@ export default {
           color: #fff;
           font-weight: bolder;
         }
-        i {
-          display: inline-block;
-          background: url(~img/football/category.png);
-          width: poTorem(23px);
-          height: poTorem(23px);
-          background-size: poTorem(23px) poTorem(23px);
-        }
+        // i {
+        //   display: inline-block;
+        //   background: url(~img/football/category.png);
+        //   width: poTorem(23px);
+        //   height: poTorem(23px);
+        //   background-size: poTorem(23px) poTorem(23px);
+        // }
       }
     }
   }
@@ -317,7 +351,6 @@ export default {
     overflow-y: auto;
     position: relative;
     width: 100%;
-    padding-bottom: 7rem;
     &::-webkit-scrollbar {
       display: none;
     }
@@ -332,7 +365,7 @@ export default {
       ul {
         overflow-y: auto;
         width: 100%;
-        padding: .5rem 1rem;
+        padding: 0.5rem 1rem;
         li {
           @include column;
           align-items: flex-start;

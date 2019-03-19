@@ -1,5 +1,7 @@
 <template>
-  <div class="con_math" ref="keyboard" :class="{'hide': hide}">
+  <div class="con_math"
+       ref="keyboard"
+       :class="{'hide': hide}">
     <span class="math_title">
       <slot></slot>
       <span style="width:50%">{{content}}</span>
@@ -7,8 +9,13 @@
     </span>
     <div class="digital">
       <ul>
-        <li v-for="(item, index) in keyboardArr" :key="index" :class="{nothing: item === '',thin: thinSkin}" @click="setNumber(item)">{{item}}</li>
-        <li class="icon" @click="deleteNum" :class="{thin: thinSkin}">
+        <li v-for="(item, index) in keyboardArr"
+            :key="index"
+            :class="{nothing: item === '',thin: thinSkin}"
+            @click="setNumber(item)">{{item}}</li>
+        <li class="icon"
+            @click="deleteNum"
+            :class="{thin: thinSkin}">
           <i></i>
         </li>
       </ul>
@@ -18,65 +25,65 @@
 
 <script>
 export default {
-  props: ['num', 'title', 'hide', 'thinSkin', 'relative'],
+  props: ["num", "title", "hide", "thinSkin", "relative"],
   data() {
     return {
-      keyboardArr: [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0],
+      keyboardArr: [1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0],
       number: this.num || 0
-    }
+    };
   },
   computed: {
     content() {
-      return this.title || '请输入购买金额'
+      return this.title || "请输入购买金额";
     }
   },
   methods: {
     transformBoard() {
-      this.$emit('hideKeyboard')
+      this.$emit("hideKeyboard");
     },
     setNumber(num) {
       if (num == 0 && this.number == 0) {
-        this.number = ''
+        this.number = "";
       } else if (this.number === 0 && Number(num) > 0) {
-        this.number = Number(num)
+        this.number = Number(num);
       } else {
-        let c = Number(this.number.toString() + num.toString())
+        const c = Number(this.number.toString() + num.toString());
         if (c < 100001) {
-          this.number = c
+          this.number = c;
         }
       }
-      this.$emit('keyboardPressed', this.number)
+      this.$emit("keyboardPressed", this.number);
     },
     deleteNum() {
-      let c = this.number.toString()
-      console.log(this.number.toString())
+      let c = this.number.toString();
+      console.log(this.number.toString());
       if (c.length === 1 || c.length === 0) {
-        c = ''
-      } else c = Number(c.substring(0, c.length - 1))
-      this.number = c
-      this.$emit('keyboardPressed', this.number)
+        c = "";
+      } else c = Number(c.substring(0, c.length - 1));
+      this.number = c;
+      this.$emit("keyboardPressed", this.number);
     }
   },
   watch: {
     hide(val) {
       if (val) {
-        this.$refs.keyboard.classList.remove('relative')
-        this.$refs.keyboard.style = ''
+        this.$refs.keyboard.classList.remove("relative");
+        this.$refs.keyboard.style = "";
       } else {
         this.$nextTick(() => {
-          this.$refs.keyboard.classList.add('relative')
-          this.$refs.keyboard.style = 'position:relative'
+          this.$refs.keyboard.classList.add("relative");
+          this.$refs.keyboard.style = "position:relative";
           document.documentElement.scrollTop =
-            document.documentElement.scrollHeight
-          document.body.scrollTop = document.body.scrollHeight
-        })
+            document.documentElement.scrollHeight;
+          document.body.scrollTop = document.body.scrollHeight;
+        });
       }
     },
     num(val) {
-      this.number = val
+      this.number = val;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

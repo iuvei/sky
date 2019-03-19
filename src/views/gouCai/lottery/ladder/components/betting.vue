@@ -2,7 +2,8 @@
   <!-- 投注界面 -->
   <div class="ladder-betting">
     <div class="one-game">
-      <div class="wanfa-title" style="display:none">双面</div>
+      <div class="wanfa-title"
+           style="display:none">双面</div>
       <yd-flexbox>
         <yd-flexbox-item>号码</yd-flexbox-item>
         <yd-flexbox-item>赔率</yd-flexbox-item>
@@ -12,45 +13,57 @@
 
       <yd-flexbox>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#dcdcdc" color="#333">左</yd-badge>
+          <yd-badge bgcolor="#dcdcdc"
+                    color="#333">左</yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[0])}]" @click.native="selectClick(keys[0])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[0])}]"
+                         @click.native="selectClick(keys[0])">
           {{peilvs[0]}}
         </yd-flexbox-item>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#dcdcdc" color="#333">右</yd-badge>
+          <yd-badge bgcolor="#dcdcdc"
+                    color="#333">右</yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[1])}]" @click.native="selectClick(keys[1])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[1])}]"
+                         @click.native="selectClick(keys[1])">
           {{peilvs[1]}}
         </yd-flexbox-item>
       </yd-flexbox>
 
       <yd-flexbox>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#626262" color="#FFF">3</yd-badge>
+          <yd-badge bgcolor="#626262"
+                    color="#FFF">3</yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[2])}]" @click.native="selectClick(keys[2])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[2])}]"
+                         @click.native="selectClick(keys[2])">
           {{peilvs[2]}}
         </yd-flexbox-item>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#626262" color="#FFF">4</yd-badge>
+          <yd-badge bgcolor="#626262"
+                    color="#FFF">4</yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[3])}]" @click.native="selectClick(keys[3])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[3])}]"
+                         @click.native="selectClick(keys[3])">
           {{peilvs[3]}}
         </yd-flexbox-item>
       </yd-flexbox>
 
       <yd-flexbox>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#1AA1E7" color="#FFF">单</yd-badge>
+          <yd-badge bgcolor="#1AA1E7"
+                    color="#FFF">单</yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[4])}]" @click.native="selectClick(keys[4])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[4])}]"
+                         @click.native="selectClick(keys[4])">
           {{peilvs[4]}}
         </yd-flexbox-item>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#E33B3F" color="#FFF">双</yd-badge>
+          <yd-badge bgcolor="#E33B3F"
+                    color="#FFF">双</yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[5])}]" @click.native="selectClick(keys[5])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[5])}]"
+                         @click.native="selectClick(keys[5])">
           {{peilvs[5]}}
         </yd-flexbox-item>
       </yd-flexbox>
@@ -68,52 +81,71 @@
 
       <yd-flexbox>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#1AA1E7" color="#FFF">
+          <yd-badge bgcolor="#1AA1E7"
+                    color="#FFF">
             单
-            <yd-badge bgcolor="#626262" color="#FFF" style="right:-.5rem;top:0;">3</yd-badge>
+            <yd-badge bgcolor="#626262"
+                      color="#FFF"
+                      style="right:-.5rem;top:0;">3</yd-badge>
           </yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[6])}]" @click.native="selectClick(keys[6])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[6])}]"
+                         @click.native="selectClick(keys[6])">
           {{peilvs[6]}}
         </yd-flexbox-item>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#E33B3F" color="#FFF">
+          <yd-badge bgcolor="#E33B3F"
+                    color="#FFF">
             双
-            <yd-badge bgcolor="#626262" color="#FFF" style="left:-.5rem;top:0;">3</yd-badge>
+            <yd-badge bgcolor="#626262"
+                      color="#FFF"
+                      style="left:-.5rem;top:0;">3</yd-badge>
           </yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[7])}]" @click.native="selectClick(keys[7])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[7])}]"
+                         @click.native="selectClick(keys[7])">
           {{peilvs[7]}}
         </yd-flexbox-item>
       </yd-flexbox>
 
       <yd-flexbox>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#1AA1E7" color="#FFF">
+          <yd-badge bgcolor="#1AA1E7"
+                    color="#FFF">
             单
-            <yd-badge bgcolor="#626262" color="#FFF" style="left:-.5rem;top:0;">4</yd-badge>
+            <yd-badge bgcolor="#626262"
+                      color="#FFF"
+                      style="left:-.5rem;top:0;">4</yd-badge>
           </yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[8])}]" @click.native="selectClick(keys[8])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[8])}]"
+                         @click.native="selectClick(keys[8])">
           {{peilvs[8]}}
         </yd-flexbox-item>
         <yd-flexbox-item>
-          <yd-badge bgcolor="#E33B3F" color="#FFF">
+          <yd-badge bgcolor="#E33B3F"
+                    color="#FFF">
             双
-            <yd-badge bgcolor="#626262" color="#FFF" style="right:-.5rem;top:0;">4</yd-badge>
+            <yd-badge bgcolor="#626262"
+                      color="#FFF"
+                      style="right:-.5rem;top:0;">4</yd-badge>
           </yd-badge>
         </yd-flexbox-item>
-        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[9])}]" @click.native="selectClick(keys[9])">
+        <yd-flexbox-item :class="['bet-area',{selected:selected.includes(keys[9])}]"
+                         @click.native="selectClick(keys[9])">
           {{peilvs[9]}}
         </yd-flexbox-item>
       </yd-flexbox>
     </div>
 
     <!-- 购物车 -->
-    <div @click="clickCart" style="display:flex" v-drag>
+    <div @click="clickCart"
+         style="display:flex"
+         v-drag>
       <div class="ladder_drag">
-        <i class="spots" v-show="cartNumber>0">
-          {{cartNumber}}
+        <i class="spots"
+           v-show="cartNumber>0">
+          {{cartNumber > 99 ? '99+' : cartNumber}}
         </i>
       </div>
     </div>
@@ -148,58 +180,52 @@ export default {
       cart: state => state.betting.cart,
       cartNumber: state => state.betting.cartNumber
     }),
-    selected:{
+    selected: {
       get() {
-        return this.tzSelected
+        return this.tzSelected;
       },
       set(selected) {
         this.updateField({
           tzSelected: selected
-        })
+        });
       }
     },
     peilvs() {
-      let pl = this.odds || []
+      let pl = this.odds || [];
       pl = pl.filter(el => el.playid === this.playid)[0] || {};
-      pl = pl.peilv || ''
-      pl = pl.split("|")
-      
+      pl = pl.peilv || "";
+      pl = pl.split("|");
+
       if (!pl[0]) {
-        pl = Array(keys.length).fill('-');
+        pl = Array(keys.length).fill("-");
       }
       return pl;
     },
     dataSet() {
-      return keys.map(el => {
-        return {
-          name: labels[el],
-          value: el,
-          checked: this.tzSelected.includes(el),
-          peilv: this.peilvs[el],
-          playid: this.playid
-        };
-      });
+      return keys.map(el => ({
+        name: labels[el],
+        value: el,
+        checked: this.tzSelected.includes(el),
+        peilv: this.peilvs[el],
+        playid: this.playid
+      }));
     },
     selectedData() {
       return this.dataSet.filter(el => el.checked);
     },
     selectedData2() {
-      let data = this.dataSet.filter(el => el.checked);
-      return Object.assign([], data).map((el, idx) => {
-        return {
-          name: el.value < 6 ? '双面' : '终点X梯子',
-          data: [el]
-        };
-      });
+      const data = this.dataSet.filter(el => el.checked);
+      return Object.assign([], data).map(el => ({
+        name: el.value < 6 ? "双面" : "终点X梯子",
+        data: [el]
+      }));
     },
     dataSet2() {
-      let data = this.dataSet;
-      return Object.assign([], data).map((el, idx) => {
-        return {
-          name: el.value < 6 ? '双面' : '终点X梯子',
-          data: [el]
-        };
-      });
+      const data = this.dataSet;
+      return Object.assign([], data).map(el => ({
+        name: el.value < 6 ? "双面" : "终点X梯子",
+        data: [el]
+      }));
     }
   },
   mixins: [oddMixin],
@@ -218,27 +244,39 @@ export default {
     tzSelected(tzSelected) {
       const sm = tzSelected.filter(el => el < 6);
       const zdx = tzSelected.filter(el => el >= 6);
-      let formatedStr = sm.length && '双面（' + sm.map(x => `<span style="color:red">${labels[x]}</span>`) + ')' || ''
-      formatedStr += zdx.length && '终点X梯子（' + zdx.map(x => `<span style="color:red">${labels[x]}</span>`) + ')' || ''
+      let formatedStr =
+        (sm.length &&
+          "双面（" +
+            sm.map(x => `<span style="color:red">${labels[x]}</span>`) +
+            ")") ||
+        "";
+      formatedStr +=
+        (zdx.length &&
+          "终点X梯子（" +
+            zdx.map(x => `<span style="color:red">${labels[x]}</span>`) +
+            ")") ||
+        "";
       this.setBetNumber(tzSelected.length);
-      if(this.js_tag === 'tzyx')this.setBetData({
-        type: 1, //双面玩法,0为官方玩法
-        // peilv: this.peilv,
-        peilvType: RenderTypes.SINGLE_ROW_MUTI_PEILV, // 0 为单赔率,1为多赔率
-        formatedStr,
-        // formatValueStr: this.selected,
-        // formatShowStr: this.selected,
-        wanfa: this.$store.state.betting.gameName, // 玩法
-        arr: this.selectedData,
-        arr2: this.selectedData2,
-        zhushu: tzSelected.length, //注数
-        gameid: this.$store.state.betting.gameId,
-        playid: this.playid,
-        dataSet: this.selectedData, // 数据源,已选中的一维数组
-        dataSource: this.dataSet2, // 包含name data 全数据
-        js_tag: this.js_tag,
-        filteredData: this.selectedData2 //已经选中的项数组 二维数组
-      });
+      if (this.js_tag === "tzyx") {
+        this.setBetData({
+          type: 1, // 双面玩法,0为官方玩法
+          // peilv: this.peilv,
+          peilvType: RenderTypes.SINGLE_ROW_MUTI_PEILV, // 0 为单赔率,1为多赔率
+          formatedStr,
+          // formatValueStr: this.selected,
+          // formatShowStr: this.selected,
+          wanfa: this.$store.state.betting.gameName, // 玩法
+          arr: this.selectedData,
+          arr2: this.selectedData2,
+          zhushu: tzSelected.length, // 注数
+          gameid: this.$store.state.betting.gameId,
+          playid: this.playid,
+          dataSet: this.selectedData, // 数据源,已选中的一维数组
+          dataSource: this.dataSet2, // 包含name data 全数据
+          js_tag: this.js_tag,
+          filteredData: this.selectedData2 // 已经选中的项数组 二维数组
+        });
+      }
     }
   },
   activated() {
@@ -249,7 +287,13 @@ export default {
   },
   deactivated() {},
   methods: {
-    ...mapActions(["setBetNumber", "description", "setBetData", 'updateField', "setBetOdd"]),
+    ...mapActions([
+      "setBetNumber",
+      "description",
+      "setBetData",
+      "updateField",
+      "setBetOdd"
+    ]),
     clickCart() {
       if (this.cart.length) {
         this.$router.push("/shopCart");
@@ -258,7 +302,7 @@ export default {
       }
     },
     selectClick(n) {
-      let idx = this.selected.indexOf(n);
+      const idx = this.selected.indexOf(n);
       if (idx === -1) {
         this.selected.push(n);
       } else {
@@ -273,7 +317,7 @@ export default {
       });
       this.setBetData({});
     },
-    async getData(tag = this.js_tag || 'tzyx') {
+    async getData(tag = this.js_tag || "tzyx") {
       let config = (await api.getGamePlayConfig(tag)) || [];
       config = (config[0] && config[0].submenu) || [];
       config = (config[0] && config[0].playlist) || [];
@@ -310,15 +354,15 @@ export default {
     .spots {
       position: absolute;
       @include center;
-      width: poTorem(18px);
-      height: poTorem(18px);
+      width: poTorem(24px);
+      height: poTorem(24px);
       background: #e03a3a;
       display: flex;
       border-radius: 50%;
       font-weight: bolder;
       color: #fff;
-      right: poTorem(8px);
-      top: poTorem(8px);
+      right: 0;
+      top: 0;
     }
   }
   .bet-area {

@@ -1,20 +1,28 @@
 <template>
   <div class="betting_right">
-    <div class="select" @click="changeGameType(modelTitle)">
-      <span>{{modelTitle}}</span>
-      <span class="icon"></span>
-    </div>
-    <span :class="['odds']" v-if="odd && odd.length">(赔率：{{odd}})</span>
+    <div class="select"
+         style="border:none;height:1rem;"></div>
+    <span :class="['odds']"
+          v-if="odd && odd.length">(赔率：{{odd}})</span>
     <div class="betting_con">
       <!-- 循环投注页面 -->
-      <div class="con_item" v-for="(item,index) in dataSet" :key="index">
+      <div class="con_item"
+           v-for="(item,index) in dataSet"
+           :key="index">
         <span>{{item.name}}</span>
         <ul ref="ballOptions">
           <!-- 其他 -->
-          <li class="sm" @click="clickBall(item, ball)" v-for="(ball,indexs) in item.data" :key="indexs" :class="{'choosed': ball.checked}">
-            <label for=""><input type="checkbox" v-model="ball.checked"></label>
-            <div class="ball" :class="[{'choosed': ball.checked}]">{{ball.name}}</div>
-            <div class="peilv_num" v-if="!odd || !odd.length">{{ball.peilv}}</div>
+          <li class="sm"
+              @click="clickBall(item, ball)"
+              v-for="(ball,indexs) in item.data"
+              :key="indexs"
+              :class="{'choosed': ball.checked}">
+            <label for=""><input type="checkbox"
+                     v-model="ball.checked"></label>
+            <div class="ball"
+                 :class="[{'choosed': ball.checked}]">{{ball.name}}</div>
+            <div class="peilv_num"
+                 v-if="!odd || !odd.length">{{ball.peilv}}</div>
           </li>
         </ul>
       </div>
@@ -23,44 +31,44 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
-  name: 'qxc_doubleplay',
-  props: ['switchs', 'playList', 'curPlayItem', 'dataSet'],
+  name: "qxc_doubleplay",
+  props: ["switchs", "playList", "curPlayItem", "dataSet"],
   data() {
     return {
       show: false
-    }
+    };
   },
   methods: {
     changeList(item, index) {
-      this.$emit('changeList', item, index)
+      this.$emit("changeList", item, index);
     },
-    changeGameType(val) {
+    changeGameType() {
       // this.show = !this.show
       // this.playList.map((item, index) => {
       //   item.name == val && (this.player = item)
       // })
     },
     clickBall(row, ball) {
-      this.$emit('chooseBall', row, ball)
+      this.$emit("chooseBall", row, ball);
     }
   },
   computed: {
     ...mapState({
       odd: state => {
-        let odd = state.betting.odd
+        const odd = state.betting.odd;
         if (odd) {
-          return odd.includes('|') ? '' : odd
+          return odd.includes("|") ? "" : odd;
         }
-        return ''
+        return "";
       }
     }),
     modelTitle() {
-      return (this.curPlayItem ? this.curPlayItem.playname : '') || ''
+      return (this.curPlayItem ? this.curPlayItem.playname : "") || "";
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -80,14 +88,6 @@ export default {
     position: relative;
     margin: 0 auto;
     margin-top: poTorem(15px);
-    // .icon {
-    //   position: absolute;
-    //   background: url(~img/goucai/sanjiao.png) no-repeat;
-    //   background-size: contain;
-    //   width: poTorem(29px);
-    //   height: poTorem(14px);
-    //   right: 0px;
-    // }
   }
   .odds {
     color: #535353;
@@ -196,7 +196,7 @@ export default {
         color: #535353;
       }
       .caution {
-        color: #ff7c34;
+        color: $mainColor;
       }
       textarea {
         width: 100%;

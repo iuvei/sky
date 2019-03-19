@@ -1,22 +1,25 @@
 <template>
   <menu class="football-menu">
     <ul>
-      <li v-for="(item,key) in data" :key="key" :class="{active: key === index()}" class="item" @click="clickItem(key,item)">{{item.label}}</li>
+      <li v-for="(item,key) in data"
+          :key="key"
+          :class="{active: key === index()}"
+          class="item"
+          @click="clickItem(key,item)">{{item.label}}</li>
     </ul>
   </menu>
 </template>
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   name: "AppMenu",
   props: {
     data: { default: [] },
-    propsKey: { default: 0 },
+    propsKey: { default: 0 }
   },
 
   data() {
     return {
-      key: 0,
+      key: 0
     };
   },
 
@@ -27,8 +30,8 @@ export default {
     clickItem(key, item) {
       console.log(key, item);
       this.key = key;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -53,8 +56,8 @@ export default {
       color: #454545;
     }
     .active {
-      color: #ff7c34;
-      border-bottom: poTorem(5px) solid #ff7c34;
+      color: $mainColor;
+      border-bottom: poTorem(5px) solid $mainColor;
     }
   }
 }

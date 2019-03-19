@@ -19,26 +19,34 @@
         </div>
         <div class="balls">
           <ul v-if="balls.length > 1">
-            <li v-for="(item,index) in balls" :key="index">
-              <img class="ball-icon" :src="ball_icons[item-1]" :alt="item">
+            <li v-for="(item,index) in balls"
+                :key="index">
+              <img class="ball-icon"
+                   :src="ball_icons[item-1]"
+                   :alt="item">
             </li>
           </ul>
           <ul v-else>
-            <li v-for="(item,index) in randomBalls" :key="index">
-              <img class="ball-icon" :src="ball_icons[item-1]" :alt="item">
+            <li v-for="(item,index) in randomBalls"
+                :key="index">
+              <img class="ball-icon"
+                   :src="ball_icons[item-1]"
+                   :alt="item">
             </li>
           </ul>
           <!-- <p v-show="this.balls.length == 0">正在开奖</p> -->
           <span @click="openHistory">
             <i>历史开奖</i>
-            <i class="icon" :class="{'slidedown' : isOpen}"></i>
+            <i class="icon"
+               :class="{'slidedown' : isOpen}"></i>
           </span>
         </div>
       </div>
       <div class="heads_bottom">
         <!-- 历史开奖 -->
         <yd-accordion>
-          <yd-accordion-item ref="accordion" :auto="false">
+          <yd-accordion-item ref="accordion"
+                             :auto="false">
             <div class="history">
               <ul>
                 <li class="title">
@@ -46,10 +54,16 @@
                   <div>开奖号码</div>
                   <div>总和</div>
                 </li>
-                <li v-for="(item, index) in kjBalls" v-if="index <= 7" :key="index">
+                <li v-for="(item, index) in kjBalls"
+                    v-if="index <= 7"
+                    :key="index">
                   <div>{{item.qishu.toString().slice(-4)}}</div>
                   <div class="kaijiang">
-                    <img class="ball-icon" v-for="ball in item.balls" :key="ball" :src="ball_icons[ball-1]" :alt="ball">
+                    <img class="ball-icon"
+                         v-for="ball in item.balls"
+                         :key="ball"
+                         :src="ball_icons[ball-1]"
+                         :alt="ball">
                     <span v-if="!item.balls.length">正在开奖</span>
                   </div>
                   <div>
@@ -71,16 +85,27 @@
             <i>{{nextQishu}}</i>期{{closeIsShow?'截止时间':'已封盘'}}:
           </div>
           <div class="haoma">
-            <app-count-down ref="openless" v-model="openless_leftTime" :time="openless" timetype="second" done-text="正在开奖" format="{%h}:{%m}:{%s}" :callback="_openCallback"></app-count-down>
+            <app-count-down ref="openless"
+                            v-model="openless_leftTime"
+                            :time="openless"
+                            timetype="second"
+                            done-text="正在开奖"
+                            format="{%h}:{%m}:{%s}"
+                            :callback="_openCallback"></app-count-down>
           </div>
-          <div class="haoma" v-html="renderStr" @click="userBalanceClick"></div>
+          <div class="haoma"
+               v-html="renderStr"
+               @click="userBalanceClick"></div>
         </div>
       </div>
     </div>
     <!-- 投注部分 -->
-    <betting :routeList="routeLists" ref='chooseBall'></betting>
+    <betting :routeList="routeLists"
+             ref='chooseBall'></betting>
     <!-- 购物车 -->
-    <shop :quotation="closeIsShow" ref='touzhuBtn' @clearAll='transmit'></shop>
+    <shop :quotation="closeIsShow"
+          ref='touzhuBtn'
+          @clearAll='transmit'></shop>
   </div>
 </template>
 <script>
@@ -89,10 +114,16 @@ import betting from "./betting";
 import shop from "../../shop";
 import { mapActions, mapState } from "vuex";
 import countDownMixin from "../../countDownMixin";
-const ball_icons = Array(20).fill('').map((el,id) => require('img/xync_background/lucky_ball_'+(id+1+'').padStart(2,'0')+'.png'))
+const ball_icons = Array(20)
+  .fill("")
+  .map((el, id) =>
+    require("img/xync_background/lucky_ball_" +
+      (id + 1 + "").padStart(2, "0") +
+      ".png")
+  );
 
 export default {
-  name:'xync-content',
+  name: "xync-content",
   data() {
     return {
       ball_icons,
@@ -120,7 +151,7 @@ export default {
       if (typeof arr === "string" && arr.includes("+")) {
         arr = arr.split("+");
       }
-      let s = arr && arr.reduce && arr.reduce((x, y) => x * 1 + y * 1, 0);
+      const s = arr && arr.reduce && arr.reduce((x, y) => x * 1 + y * 1, 0);
       if (isNaN(s) || s === 0) return "-";
       return s;
     },
@@ -129,7 +160,7 @@ export default {
       if (typeof arr === "string" && arr.includes("+")) {
         arr = arr.split("+");
       }
-      let s = arr && arr.reduce && arr.reduce((x, y) => x * 1 + y * 1, 0);
+      const s = arr && arr.reduce && arr.reduce((x, y) => x * 1 + y * 1, 0);
       if (isNaN(s) || s === 0) return "-";
       return s > 84 ? "大" : "小";
     },
@@ -138,7 +169,7 @@ export default {
       if (typeof arr === "string" && arr.includes("+")) {
         arr = arr.split("+");
       }
-      let s = arr && arr.reduce && arr.reduce((x, y) => x * 1 + y * 1, 0);
+      const s = arr && arr.reduce && arr.reduce((x, y) => x * 1 + y * 1, 0);
       if (isNaN(s) || s === 0) return "-";
       return s % 2 === 0 ? "双" : "单";
     },
@@ -164,7 +195,7 @@ export default {
   async activated() {
     this.routeLists = this.$route.params;
     resetRouteParams(this, "xync");
-    let name_tag =
+    const name_tag =
       this.$route.params.name_tag || this.$store.state.betting.name_tag;
     if (name_tag) {
       await this.getOpened(name_tag);
@@ -217,8 +248,8 @@ export default {
       }
     },
     formatOpenTime(s) {
-      let now = new Date();
-      let period = Math.ceil((s * 1000 - now.getTime()) / 1000);
+      const now = new Date();
+      const period = Math.ceil((s * 1000 - now.getTime()) / 1000);
       return period;
     },
     ...mapActions(["setBetCurent", "setQishu", "setBetData", "clearCart"])
@@ -230,6 +261,7 @@ export default {
 <style lang="scss" scoped>
 @import "~css/resources.scss";
 .xync-content {
+  height: calc(100vh - 3rem);
   width: 100%;
   background: #fff;
   // position: absolute;

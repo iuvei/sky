@@ -23,10 +23,9 @@ webpackConfig.plugins.push(
     }
   ])
 )
+// 确保模块 hash 生成稳定
+webpackConfig.plugins.push(new webpack.HashedModuleIdsPlugin())
 
-// webpackConfig().plugins.push({
-
-// })
 // console.log(webpackConfig.plugins.length)
 const spinner = ora('building for production...')
 spinner.start()

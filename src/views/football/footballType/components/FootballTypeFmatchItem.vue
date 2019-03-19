@@ -9,22 +9,30 @@
       <div class="t-head-time">{{date}}</div>
     </div>
     <div class="t-body">
-      <div v-for="(item,key) in data.bet_data.HFT" :key="key" class="t-body-cell" @click="clickCell(item,key)" :class="{red:active===key}">
+      <div v-for="(item,key) in data.bet_data.HFT"
+           :key="key"
+           class="t-body-cell"
+           @click="clickCell(item,key)"
+           :class="{red:active===key}">
         <span>{{txt(item.k)}}</span>
         <span>{{item.p}}</span>
-        <i class="icon" v-one-html="item.p"></i>
+        <i class="icon"
+           v-one-html="item.p"></i>
       </div>
-      <div class="t-body-cell" @click="allGame()">
+      <div class="t-body-cell"
+           @click="allGame()">
         <p>所有</p>
         <p>玩法</p>
-        <img src="~img/football/more-game.png" alt="" style="width: .8rem">
+        <img src="~img/football/more-game.png"
+             alt=""
+             style="width: .8rem">
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "FootballTypeFmatchItem",
   props: ["data", "league", "item"],
@@ -33,9 +41,9 @@ export default {
       rule: {
         H: "主",
         V: "客",
-        X: "和",
+        X: "和"
       },
-      activeCell: "",
+      activeCell: ""
     };
   },
   computed: {
@@ -47,22 +55,25 @@ export default {
         return this.activeCell;
       }
       return false;
-    },
+    }
   },
 
   methods: {
-    ...mapActions('football',['modifyFootballField']),
+    ...mapActions("football", ["modifyFootballField"]),
     allGame() {
       // return this.$dialog.toast({
       //   mes: "暂未开放，敬请期待！",
       //   timeout: 1000
       // });
-      this.modifyFootballField({ allPlay_schedule_id_prefix: this.data.schedule_id, allPlayTeam: this.data });
+      this.modifyFootballField({
+        allPlay_schedule_id_prefix: this.data.schedule_id,
+        allPlayTeam: this.data
+      });
       this.$router.push("/football/allPlay");
     },
     txt(k) {
       Object.keys(this.rule).forEach(i => {
-        let exp = new RegExp("(" + i + ")", "g");
+        const exp = new RegExp("(" + i + ")", "g");
         if (exp.test(k)) {
           k = k.replace(exp, this.rule[i]);
         }
@@ -84,7 +95,7 @@ export default {
             team_score: this.data.team_score,
             h: this.data.h,
             v: this.data.v,
-            k_txt: this.txt(cell.k),
+            k_txt: this.txt(cell.k)
           },
           cell
         )
@@ -94,8 +105,8 @@ export default {
   directives: {
     oneHtml: {
       bind() {},
-      update(el, { value, oldValue }, vnode, oldv) {
-        let className = el.classList;
+      update(el, { value, oldValue }) {
+        const className = el.classList;
         className.remove("p_up", "p_down");
         if (value * 1 > oldValue * 1) {
           className.add("p_up");
@@ -103,9 +114,9 @@ export default {
         if (value * 1 < oldValue * 1) {
           className.add("p_down");
         }
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 

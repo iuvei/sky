@@ -1,13 +1,14 @@
 <template>
   <div class="xypk">
-    <heads :routes="routes" :type="1"></heads>
+    <heads :routes="routes"
+           :type="1"></heads>
     <puke :routes="routes"></puke>
   </div>
 </template>
 <script>
 import heads from "../head";
 import puke from "./components/puke";
-import { mapActions, mapState } from "vuex";
+
 export default {
   name: "xypk",
   data() {

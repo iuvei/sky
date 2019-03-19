@@ -1,9 +1,11 @@
 <template>
   <div class="prizeRecordDetails_main_body">
-    <publicHead :title="funcName" :type="2"></publicHead>
+    <publicHead :title="funcName"
+                :type="2"></publicHead>
     <div class="up_content">
       <div class="icon">
-        <img :src="baseData.icon" alt="">
+        <img :src="baseData.icon"
+             alt="">
       </div>
       <div class="lottery_info">
         <p class="lottery_type">
@@ -45,63 +47,70 @@
         <!-- <p>是</p> -->
         <p>{{baseData.wanfa}}</p>
       </div>
-      <p class="title_word" style="margin-top: 1.25rem">投注号码</p>
+      <p class="title_word"
+         style="margin-top: 1.25rem">投注号码</p>
       <p class="lottery_number">{{baseData.xiangqing}}</p>
       <div class="one_more">
-        <div @click="toBetting" v-show="show">
+        <div @click="toBetting"
+             v-show="show">
           <button>再来一注</button>
         </div>
-        <button v-show="!show" @click="revoke">撤单</button>
+        <button v-show="!show"
+                @click="revoke">撤单</button>
       </div>
     </div>
   </div>
 </template>
 <script>
 import publicHead from "./publicHead";
-import api from '../../../../../api/game.js'
+import api from "../../../../../api/game.js";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   data() {
     return {
       funcName: "详情",
-      baseData:[],
+      baseData: [],
       show: true
     };
   },
   activated() {
-    if(this.$route.params.game_name) {
-      this.baseData = this.$route.params
+    if (this.$route.params.game_name) {
+      this.baseData = this.$route.params;
     }
-    console.log(this.baseData)
-    if(this.baseData.status === 3) { this.show = false }
+    console.log(this.baseData);
+    if (this.baseData.status === 3) {
+      this.show = false;
+    }
   },
   computed: {
     kjballs() {
-      let arr = this.baseData.kj_balls.split(' ')
-      if(arr.length == 4) {
-        return `{$arr[0]+$arr[1]+$arr[2]=$arr[3]}`
+      const arr = this.baseData.kj_balls.split(" ");
+      if (arr.length == 4) {
+        return `{$arr[0]+$arr[1]+$arr[2]=$arr[3]}`;
       } else {
-        return this.baseData.kj_balls
+        return this.baseData.kj_balls;
       }
     }
   },
   methods: {
-    revoke () {
-      this.$dialog.loading.open(' ')
-      this.$ajax('request', {
-        ac: 'cancelTouzhu',
+    revoke() {
+      this.$dialog.loading.open(" ");
+      this.$ajax("request", {
+        ac: "cancelTouzhu",
         gameid: this.baseData.gameid,
         idlist: this.baseData.guid
       }).then(res => {
-        console.log(res)
-        this.$dialog.loading.close()
-      })
+        console.log(res);
+        this.$dialog.loading.close();
+      });
     },
     async toBetting() {
-      let gameList = await api.getGameList()
-      const thisGame = gameList.find(item => item.game_id === this.baseData.gameid)
+      const gameList = await api.getGameList();
+      const thisGame = gameList.find(
+        item => item.game_id === this.baseData.gameid
+      );
       this.$router.replace({
         name: thisGame.js_tag,
         params: {
@@ -111,10 +120,10 @@ export default {
           js_tag: thisGame.js_tag,
           speed: thisGame.speed
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -168,7 +177,7 @@ export default {
       }
       .wait {
         font-size: poTorem(14px);
-        color: #ff7c34;
+        color: $mainColor;
       }
       .win {
         font-size: poTorem(14px);
@@ -184,7 +193,7 @@ export default {
     padding: poTorem(20px);
     .title_word {
       padding-left: poTorem(5px);
-      border-left: poTorem(5px) solid #ff7c34;
+      border-left: poTorem(5px) solid $mainColor;
       font-size: poTorem(15px);
       color: #313131;
       height: poTorem(18px);
@@ -205,7 +214,7 @@ export default {
         color: #a0a0a0;
       }
       .wait {
-        color: #ff7c34;
+        color: $mainColor;
       }
       .win {
         color: #097c25;
@@ -235,7 +244,7 @@ export default {
       text-align: center;
       button {
         width: poTorem(304px);
-        background-color: #ff7c34;
+        background-color: $mainColor;
         font-size: poTorem(15px);
         color: #fff;
         height: poTorem(32px);

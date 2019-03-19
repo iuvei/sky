@@ -1,7 +1,7 @@
 import axios from '../server/axios'
-import http from '../server/http'
+import http from '../server/fetch'
 import { PROXY } from './commType'
-import { Odd, GamePlayConfig } from './store.util'
+import { Odd } from './store.util'
 
 export default {
   /**
@@ -11,37 +11,39 @@ export default {
    * @returns promise
    */
   async getGamePlayConfig(jsTag) {
-    // 如果有缓存，先取缓存
-    const config = new GamePlayConfig().getByTag(jsTag)
-    // 先调用接口查看是否有更新
-    const isUpdated = await this.getPlayConfigUpdate(
-      jsTag,
-      (config ? config.timestamp : 0) || 0
-    )
+    // // 如果有缓存，先取缓存
+    // const config = new GamePlayConfig().getByTag(jsTag)
+    // // 先调用接口查看是否有更新
+    // const isUpdated = await this.getPlayConfigUpdate(
+    //   jsTag,
+    //   (config ? config.timestamp : 0) || 0
+    // )
 
-    // 如果需要更新，则取接口更新
-    if (isUpdated) {
-      const _config = await this.getGamesPlayConfig(jsTag)
-      // 获取数据后更新缓存
-      if (_config) {
-        new GamePlayConfig().setByTag(jsTag, _config)
-      }
-      // 更新后返回
-      return _config.list || []
-    } else {
-      // 如果不需要更新，则返回缓存
-      if (config && config.list && config.list.length) {
-        return config.list
-      } else {
-        // 如果缓存没有，则重新请求接口获取，并写入缓存
-        const _config = await this.getGamesPlayConfig(jsTag)
-        if (_config) {
-          new GamePlayConfig().setByTag(jsTag, _config)
-        }
-        // 更新后返回
-        return _config.list || []
-      }
-    }
+    // // 如果需要更新，则取接口更新
+    // if (isUpdated) {
+    //   const _config = await this.getGamesPlayConfig(jsTag)
+    //   // 获取数据后更新缓存
+    //   if (_config) {
+    //     new GamePlayConfig().setByTag(jsTag, _config)
+    //   }
+    //   // 更新后返回
+    //   return _config.list || []
+    // } else {
+    //   // 如果不需要更新，则返回缓存
+    //   if (config && config.list && config.list.length) {
+    //     return config.list
+    //   } else {
+    //     // 如果缓存没有，则重新请求接口获取，并写入缓存
+    //     const _config = await this.getGamesPlayConfig(jsTag)
+    //     if (_config) {
+    //       new GamePlayConfig().setByTag(jsTag, _config)
+    //     }
+    //     // 更新后返回
+    //     return _config.list || []
+    //   }
+    // }
+    const _config = await this.getGamesPlayConfig(jsTag)
+    return _config.list || []
   },
   async getGamesPlayConfig(jsTag) {
     const config = await axios(PROXY, {

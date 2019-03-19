@@ -1,21 +1,37 @@
 <template>
   <div class="football-total">
     <!-- 上拉刷新 -->
-    <yd-pullrefresh :callback="pullRefresh" ref="pullRefresh" class="refresh" :show-init-tip="false">
+    <yd-pullrefresh :callback="pullRefresh"
+                    ref="pullRefresh"
+                    class="refresh"
+                    :show-init-tip="false">
       <!-- 空白页面 -->
       <AppEmpty v-if="!data"></AppEmpty>
       <!-- 滚动加载 -->
-      <yd-infinitescroll :callback="pullScroll" ref="infinitescroll" class="scoll">
+      <yd-infinitescroll :callback="pullScroll"
+                         ref="infinitescroll"
+                         class="scoll">
         <!-- 折叠板块 -->
-        <yd-accordion class="main" v-if="data" :accordion='true' slot="list">
-          <yd-accordion-item :title="item.league_name" class="group" v-for="item in data" :key="item.league_id">
+        <yd-accordion class="main"
+                      v-if="data"
+                      :accordion='true'
+                      slot="list">
+          <yd-accordion-item :title="item.league_name"
+                             class="group"
+                             v-for="item in data"
+                             :key="item.league_id">
             <!-- <div slot="txt" class="title">
               <span class="name">{{item.league_name}}</span>
             </div> -->
             <ul>
               <!-- 复用板块 -->
-              <li v-for="v in item.schedule" :key="v.history_id">
-                <FootballTypeTotalItem :data="v" class="group-v" :league="item.league_name" @clickCell="clickCell" :item="{ active}"></FootballTypeTotalItem>
+              <li v-for="v in item.schedule"
+                  :key="v.history_id">
+                <FootballTypeTotalItem :data="v"
+                                       class="group-v"
+                                       :league="item.league_name"
+                                       @clickCell="clickCell"
+                                       :item="{ active}"></FootballTypeTotalItem>
               </li>
             </ul>
           </yd-accordion-item>
@@ -36,20 +52,20 @@ export default {
       data: 0,
       active: "",
       next_time: "",
-      lockMark: false,
+      lockMark: false
     };
   },
   computed: {
-    ...mapState("football", ["timeCount", "sport_id"]),
+    ...mapState("football", ["timeCount", "sport_id"])
   },
   methods: {
     ...mapActions("football", [
       "getSportMobileGameList",
       "modifyFootballField",
-      "queryComputed",
+      "queryComputed"
     ]),
     async pullRefresh() {
-      let ret = await this.togetSportMobileGameList();
+      const ret = await this.togetSportMobileGameList();
       this.data = ret.result;
       this.queryComputed(["reset"]);
       this.$refs.pullRefresh.$emit("ydui.pullrefresh.finishLoad");
@@ -57,8 +73,8 @@ export default {
     async pullScroll() {
       if (this.lockMark) return;
       this.lockMark = true;
-      let ret = await this.togetSportMobileGameList({
-        start_time: this.next_time,
+      const ret = await this.togetSportMobileGameList({
+        start_time: this.next_time
       });
       if (!ret) {
         this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
@@ -71,7 +87,7 @@ export default {
     },
 
     clickCell(item) {
-      let request = {
+      const request = {
         sport_id: this.sport_id,
         history_id: item.history_id,
         schedule_id: item.schedule_id,
@@ -79,37 +95,37 @@ export default {
         p: item.p,
         play_method: item.play_method,
         team: "",
-        team_score: item.team_score,
+        team_score: item.team_score
       };
       this.active = item.history_id;
       this.modifyFootballField({
         footer: true,
         bet_pl: item.p,
         bet_txt: item.k_txt,
-        bet_data: [request],
+        bet_data: [request]
       });
     },
     //
     async togetSportMobileGameList(request) {
-      let ret = await this.getSportMobileGameList(request);
+      const ret = await this.getSportMobileGameList(request);
       this.next_time = ret.next_time;
       return ret;
-    },
+    }
   },
   watch: {
-    "timeCount.getData": function() {
+    "timeCount.getData"() {
       this.$refs.infinitescroll.$emit("ydui.infinitescroll.reInit");
       this.togetSportMobileGameList().then(ret => {
         this.data = ret.result;
         this.queryComputed(["reset"]);
       });
-    },
+    }
   },
   mounted() {
     this.togetSportMobileGameList().then(ret => {
       this.data = ret.result;
     });
-  },
+  }
 };
 </script>
 

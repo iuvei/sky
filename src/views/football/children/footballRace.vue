@@ -1,31 +1,54 @@
 <template>
   <div class="football-race">
     <!-- 头部 -->
-    <AppHeader :title='titleData[raceType]' :clickTitle="clickTitle" :clickCategory='clickCategory'>
-      <span slot="right" class="title-right"> </span>
+    <AppHeader :title='titleData[raceType]'
+               :clickTitle="clickTitle"
+               :clickCategory='clickCategory'>
+      <span slot="right"
+            class="title-right"> </span>
     </AppHeader>
-    <AppModel :show="modelTitel" @close="modelTitel=false">
-      <div class="shadow" slot>
-        <span v-for="(item, index) in titleData" :key="index" :class="{active: index==raceType}" @click="switchs(index,item)">{{item}}</span>
+    <AppModel :show="modelTitel"
+              @close="modelTitel=false">
+      <div class="shadow"
+           slot>
+        <span v-for="(item, index) in titleData"
+              :key="index"
+              :class="{active: index==raceType}"
+              @click="switchs(index,item)">{{item}}</span>
       </div>
     </AppModel>
-    <AppModel :show="modelDate" @close="modelDate=false" class="race-date">
-      <FootballRaceDate slot @close="modelDate=false" @submit="setDate" :unixStamp='unixStamp'></FootballRaceDate>
+    <AppModel :show="modelDate"
+              @close="modelDate=false"
+              class="race-date">
+      <FootballRaceDate slot
+                        @close="modelDate=false"
+                        @submit="setDate"
+                        :unixStamp='unixStamp'></FootballRaceDate>
     </AppModel>
 
     <!-- menu -->
-    <FootballRaceMenu class="menu" :unixStamp='unixStamp' @date="setDate"></FootballRaceMenu>
+    <FootballRaceMenu class="menu"
+                      :unixStamp='unixStamp'
+                      @date="setDate"></FootballRaceMenu>
     <!-- main -->
     <AppEmpty v-if="!data.length"></AppEmpty>
-    <yd-accordion class="main other-block" accordion>
-      <yd-accordion-item class="group" open v-for="(item,key) in data" :key="key">
-        <div slot="txt" class="title">
+    <yd-accordion class="main other-block"
+                  accordion>
+      <yd-accordion-item class="group"
+                         open
+                         v-for="(item,key) in data"
+                         :key="key">
+        <div slot="txt"
+             class="title">
           <span class="name">{{item.league_name}}</span>
           <span class="tg">全场</span>
           <span class="htg">上半场</span>
         </div>
-        <ul v-for="(v,k) in item.game_result" :key="k">
-          <FootballRaceItem :data="v" class="group-v" :league="item.league_name"></FootballRaceItem>
+        <ul v-for="(v,k) in item.game_result"
+            :key="k">
+          <FootballRaceItem :data="v"
+                            class="group-v"
+                            :league="item.league_name"></FootballRaceItem>
         </ul>
       </yd-accordion-item>
     </yd-accordion>
@@ -43,7 +66,7 @@ export default {
   components: {
     FootballRaceItem,
     FootballRaceDate,
-    FootballRaceMenu,
+    FootballRaceMenu
   },
   data() {
     return {
@@ -52,11 +75,11 @@ export default {
       modelDate: false,
       titleData: ["联赛", "冠军"],
       data: [],
-      unixStamp: new Date(),
+      unixStamp: new Date()
     };
   },
   computed: {
-    ...mapState("football", ["leagueList"]),
+    ...mapState("football", ["leagueList"])
   },
   methods: {
     ...mapActions("football", ["getRaceResList"]),
@@ -70,23 +93,24 @@ export default {
     clickCategory() {
       this.modelDate = true;
     },
-    switchs(k, v) {
+    switchs(k) {
       this.modelTitel = false;
       this.raceType = k;
       this.togetRaceResList();
     },
     async togetRaceResList() {
-      let ret = await this.getRaceResList({
-        type: this.raceType,
-        start_time: this.unixStamp,
-      }) || {};
+      const ret =
+        (await this.getRaceResList({
+          type: this.raceType,
+          start_time: this.unixStamp
+        })) || {};
       this.data = ret.result || [];
-    },
+    }
   },
   mounted() {
     // this.liKey = 4;
     this.togetRaceResList();
-  },
+  }
 };
 </script>
 

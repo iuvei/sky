@@ -12,7 +12,9 @@
       <p>
         <span>收款人</span>
         <span class="cash_receiver">{{manData.real_name}}</span>
-        <span v-clipboard:copy="manData.real_name" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</span>
+        <span v-clipboard:copy="manData.real_name"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError">复制</span>
       </p>
       <p>
         <span>银行</span>
@@ -21,7 +23,9 @@
       <p>
         <span>账号</span>
         <span>{{manData.bank_card}}</span>
-        <span v-clipboard:copy="manData.bank_card" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</span>
+        <span v-clipboard:copy="manData.bank_card"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError">复制</span>
       </p>
     </div>
     <p class="choose_titile">
@@ -31,13 +35,21 @@
     <div class="transfer_parts">
       <p>
         <span>存入金额</span>
-        <input type="text" placeholder="" v-model="manData.money" disabled>
+        <input type="text"
+               placeholder=""
+               v-model="manData.money"
+               disabled>
       </p>
       <p>
         <yd-cell-group>
-          <yd-cell-item arrow class="time-cell">
+          <yd-cell-item arrow
+                        class="time-cell">
             <span slot="left">存款时间</span>
-            <yd-datetime ref="time" v-model="time" slot="right" :start-date="startLimitTime" :end-date="endLimitTime"></yd-datetime>
+            <yd-datetime ref="time"
+                         v-model="time"
+                         slot="right"
+                         :start-date="startLimitTime"
+                         :end-date="endLimitTime"></yd-datetime>
           </yd-cell-item>
         </yd-cell-group>
       </p>
@@ -49,7 +61,10 @@
     <div class="transfer_parts">
       <p>
         <span>存款人姓名</span>
-        <input type="text" placeholder="请输入存款人姓名" v-model="card_name" class="card_name">
+        <input type="text"
+               placeholder="请输入存款人姓名"
+               v-model="card_name"
+               class="card_name">
       </p>
 
     </div>
@@ -61,7 +76,8 @@
     </div> -->
 
     <p class="transfer_tips choose_titile">
-      <img src="../../../../../img/recharge/transfer_tips.png" alt="">
+      <img src="../../../../../img/recharge/transfer_tips.png"
+           alt="">
       <span>{{manData.pc_tip}}</span>
     </p>
     <div class="a_btn">
@@ -72,8 +88,8 @@
 
 <script>
 import { mapState } from "vuex";
-import { randomFormtoken } from '~/js/user/gsfunc'
-import dayjs from 'dayjs'
+import { randomFormtoken } from "~/js/user/gsfunc";
+import dayjs from "dayjs";
 export default {
   props: ["manData"],
   data() {
@@ -94,7 +110,7 @@ export default {
             this.transferType = "网银转账";
             this.transferTypeNum = 1;
             this.showType = 1;
-          },
+          }
         },
         {
           label: "ATM自动柜员机",
@@ -102,7 +118,7 @@ export default {
             this.transferType = "ATM自动柜员机";
             this.transferTypeNum = 2;
             this.showType = 2;
-          },
+          }
         },
         {
           label: "ATM现金入款",
@@ -110,7 +126,7 @@ export default {
             this.transferType = "ATM现金入款";
             this.transferTypeNum = 3;
             this.showType = 2;
-          },
+          }
         },
         {
           label: "银行柜台转账",
@@ -118,7 +134,7 @@ export default {
             this.transferType = "银行柜台转账";
             this.transferTypeNum = 4;
             this.showType = 2;
-          },
+          }
         },
         {
           label: "手机银行转账",
@@ -126,7 +142,7 @@ export default {
             this.transferType = "手机银行转账";
             this.transferTypeNum = 5;
             this.showType = 1;
-          },
+          }
         },
         {
           label: "其他",
@@ -134,9 +150,9 @@ export default {
             this.transferType = "其他";
             this.transferTypeNum = 6;
             this.showType = 3;
-          },
-        },
-      ],
+          }
+        }
+      ]
     };
   },
   computed: {
@@ -144,18 +160,18 @@ export default {
       return [
         this.titleTxt[this.manData.weiType],
         this.titleTxt[this.manData.weiType],
-        this.step2Txt[this.manData.weiType],
+        this.step2Txt[this.manData.weiType]
       ];
     },
     startLimitTime() {
-      return dayjs(Date.now() - 48 * 60 * 60 * 1000).format('YYYY-MM-DD 00:00')
+      return dayjs(Date.now() - 48 * 60 * 60 * 1000).format("YYYY-MM-DD 00:00");
     },
     endLimitTime() {
       return new Date().format("yyyy-MM-dd") + " 23:59";
     },
     ...mapState({
-      real_name: state => state.userinfo.accountInfo.real_name,
-    }),
+      real_name: state => state.userinfo.accountInfo.real_name
+    })
   },
   methods: {
     transferItrmClick(i, n) {
@@ -170,8 +186,8 @@ export default {
     },
     submit() {
       if (!this.card_name) {
-        this.$dialog.alert({ mes: "请输入存款人姓名" })
-        return
+        this.$dialog.alert({ mes: "请输入存款人姓名" });
+        return;
       }
       this.$ajax("request", {
         ac: "submitPayCompany",
@@ -181,10 +197,10 @@ export default {
         card_name: this.card_name,
         time: this.time + ":00",
         form_unique_token: randomFormtoken()
-      }).then(res => {
+      }).then(() => {
         this.$emit("toSuccess");
       });
-    },
+    }
   }
 };
 </script>
@@ -218,10 +234,10 @@ export default {
           width: poTorem(53px);
           height: poTorem(23px);
           line-height: poTorem(21px);
-          border: poTorem(1px) solid #ff7c34;
+          border: poTorem(1px) solid $mainColor;
           border-radius: poTorem(12px);
           text-align: center;
-          color: #ff7c34;
+          color: $mainColor;
           margin-left: poTorem(10px);
         }
       }
@@ -324,7 +340,7 @@ export default {
       font-size: poTorem(18px);
       color: #fff;
       text-align: center;
-      background-color: #ff7c34;
+      background-color: $mainColor;
       border-radius: poTorem(5px);
       line-height: poTorem(35px);
       &:first-child {

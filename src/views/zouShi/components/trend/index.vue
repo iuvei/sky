@@ -9,9 +9,9 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
-import trendList from "./trendList";
-import trendHead from "./trendHead";
+import { mapState } from 'vuex';
+import trendList from './trendList';
+import trendHead from './trendHead';
 export default {
   components: {
     trendList,
@@ -75,7 +75,7 @@ export default {
       text-align: center;
       border-radius: 3px;
       color: #fff;
-      background: #ff7c34;
+      background: $mainColor;
       height: poTorem(30px);
       line-height: poTorem(30px);
       margin-right: 1em;

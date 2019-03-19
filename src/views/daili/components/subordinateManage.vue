@@ -1,6 +1,7 @@
 <template>
   <div class="subordinateManage_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="subordinateManage_main_content">
       <div class="title_wrap">
         <p>账号</p>
@@ -8,22 +9,36 @@
         <p>登录时间</p>
         <p>下级人数</p>
       </div>
-      <div class="rows_wrap" v-for="(item, index) in baseData" :key="index" v-show="baseData!=0" @click="optionShow(item)">
+      <div class="rows_wrap"
+           v-for="(item, index) in baseData"
+           :key="index"
+           v-show="baseData!=0"
+           @click="optionShow(item)">
         <p>{{item.username}}</p>
         <p>{{item.actype}}</p>
         <p>{{item.last_login_time}}</p>
         <p>{{item.next_count}}</p>
       </div>
-      <p class="else_word" v-show="baseData!=0" @click="getBaseData">{{hasPage?'查看更多':'已显示全部数据'}}</p>
+      <p class="else_word"
+         v-show="baseData!=0"
+         @click="getBaseData">{{hasPage?'查看更多':'已显示全部数据'}}</p>
       <!-- <p class="else_word">查看更多</p> -->
-      <div class="empty" v-show="baseData==0">
-        <img src="../../../img/bet_record/noRecords.png" alt="">
+      <div class="empty"
+           v-show="baseData==0">
+        <img src="../../../img/bet_record/noRecords.png"
+             alt="">
         <p>暂无记录</p>
       </div>
     </div>
-    <yd-actionsheet :items="agencyOptions" v-model="agencyShow" class="choose_agency_type" cancel="取消"></yd-actionsheet>
+    <yd-actionsheet :items="agencyOptions"
+                    v-model="agencyShow"
+                    class="choose_agency_type"
+                    cancel="取消"></yd-actionsheet>
     <!-- <yd-actionsheet :items="rebateOptions" v-model="rebateShow" class="choose_agency_type"></yd-actionsheet> -->
-    <SubOrdinateManageSheet :data='rebateOptions' v-show="rebateShow" @rebateShow="rebateShowEmit" @back="backEmit"></SubOrdinateManageSheet>
+    <SubOrdinateManageSheet :data='rebateOptions'
+                            v-show="rebateShow"
+                            @rebateShow="rebateShowEmit"
+                            @back="backEmit"></SubOrdinateManageSheet>
   </div>
 </template>
 <script>
@@ -35,7 +50,7 @@ console.log(SubOrdinateManageSheet);
 export default {
   components: {
     publicHead,
-    SubOrdinateManageSheet,
+    SubOrdinateManageSheet
   },
   computed: {
     ...mapState({
@@ -53,23 +68,22 @@ export default {
       pageid: 0, //  给后台页码值
       listNum: 0, //  数据总量
       isFirst: true, //  是否是首次请求
-      type: 0,
       superiorArr: [this.uid], // 可返回的层级
       baseData: [],
       clickItemData: {},
       agencyOptions: [
         {
           label: "someone",
-          callback: () => {},
+          callback: () => {}
         },
         {
           label: "查看返点",
-          callback: this.lookRebate,
-        },
+          callback: this.lookRebate
+        }
       ],
       agencyShow: false,
       rebateOptions: [],
-      rebateShow: false,
+      rebateShow: false
     };
   },
   mounted() {
@@ -79,7 +93,7 @@ export default {
   },
   methods: {
     ...mapActions("agent", ["getChlidStatic"]),
-    changeState(n) {
+    changeState() {
       this.choosedTime = true;
     },
     // 子组件同时 $emit 两个事件 问题?
@@ -91,12 +105,12 @@ export default {
     },
     async getBaseData() {
       // this.$dialog.loading.open('正在加载中···')
-      let res = await this.getChlidStatic({
+      const res = await this.getChlidStatic({
         username: "",
         user_type: 0,
         pageid: this.pageid,
         user_id: this.userID,
-        lasttime: this.type,
+        lasttime: this.type
       });
       if (res) {
         if (this.isFirst) {
@@ -116,35 +130,37 @@ export default {
       }
     },
     optionShow(n) {
-      this.agencyOptions = this.agencyOptions.splice(0, 2)
+      this.agencyOptions = this.agencyOptions.splice(0, 2);
       this.clickItemData = n;
       // this.agencyOptions.pop();
-      let opt = {
+      const opt = {
         label: "查看上级",
         callback: () => {
           this.userID = this.superiorArr[this.superiorArr.length - 2];
-          this.superiorArr.splice(-1, 1)
+          this.superiorArr.splice(-1, 1);
           this.pageid = 0; //  重置页码
-          this.isFirst = true; //重置为首次请求
+          this.isFirst = true; // 重置为首次请求
           this.getBaseData(this.type);
         }
-      }
+      };
       if (n.next_count) {
         this.agencyOptions[2] = {
           label: "查看下级",
           callback: () => {
-            this.superiorArr.push(n.uid)
+            this.superiorArr.push(n.uid);
             this.userID = n.uid;
             this.pageid = 0; //  重置页码
-            this.isFirst = true; //重置为首次请求
+            this.isFirst = true; // 重置为首次请求
             this.getBaseData(this.type);
-          },
+          }
         };
       } else {
         if (this.agencyOptions.length === 3) this.agencyOptions.pop();
       }
-      if(this.superiorArr.length > 1) {
-        n.next_count ? this.agencyOptions[3] = opt : this.agencyOptions[2] = opt
+      if (this.superiorArr.length > 1) {
+        n.next_count
+          ? (this.agencyOptions[3] = opt)
+          : (this.agencyOptions[2] = opt);
       }
       this.agencyShow = true;
       this.agencyOptions[0].label = n.username;
@@ -156,21 +172,22 @@ export default {
     },
     lookRebate() {
       console.log(this.clickItemData);
-      let arr = [
+      const arr = [
         ["val_ssc", "时时彩"],
         ["val_k3", "快三"],
         ["val_11x5", "11选5"],
         ["val_3d", "福彩3D"],
         ["val_pk10", "pk拾"],
         ["val_pcdd", "pc蛋蛋"],
-        ["val_lhc", "六合彩"],
+        ["val_lhc", "六合彩"]
       ];
-      this.rebateOptions = arr.map(v => {
-        return { label: v[1], value: this.clickItemData[v[0]] };
-      });
+      this.rebateOptions = arr.map(v => ({
+        label: v[1],
+        value: this.clickItemData[v[0]]
+      }));
       this.rebateShow = true;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -203,7 +220,7 @@ export default {
           color: #00a0e9;
         }
         &:last-child {
-          color: #ff7c34;
+          color: $mainColor;
         }
         &:nth-child(2),
         &:nth-child(3) {

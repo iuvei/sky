@@ -1,6 +1,6 @@
 <template>
   <header class="head">
-    <div class="head_con" :style="bgImg">
+    <div :class="[{'head_con_pig': isfestival},'head_con']" :style="bgImg">
       <div @click="router" class="left">
         <div class="icon"></div>
       </div>
@@ -19,6 +19,7 @@
 </template>
 <script>
 import jss from "./jss";
+import { mapState } from 'vuex';
 export default {
   name: "AppHeader",
   props: ["clickRouter", "clickTitle", "clickCategory", "title", "type"],
@@ -27,6 +28,7 @@ export default {
     return {};
   },
   computed: {
+    ...mapState(['isfestival']),
     bgImg() {
       return jss.bgImg(this.type);
     },
@@ -63,6 +65,9 @@ export default {
     position: relative;
     top: 0;
     z-index: 1999;
+    &.head_con_pig {
+      @include pigbg;
+    }
     .left {
       position: relative;
       width: 20%;
@@ -92,8 +97,8 @@ export default {
         height: 0px;
         border-bottom: solid poTorem(6px) #ffffff;
         border-right: solid poTorem(6px) #ffffff;
-        border-top: solid poTorem(6px) #ff7c34;
-        border-left: solid poTorem(6px) #ff7c34;
+        border-top: solid poTorem(6px) $mainColor;
+        border-left: solid poTorem(6px) $mainColor;
         margin-left: poTorem(5px);
         margin-top: poTorem(5px);
       }

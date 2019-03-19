@@ -7,7 +7,8 @@
       <span>彩种</span>
     </div>
     <ul ref="scroll_ul">
-      <li v-for="(item, index) in list" :key="index">
+      <li v-for="(item, index) in list"
+          :key="index">
         <div>
           <div class="win_user">
             {{item.username.substr(0, 3)}}***
@@ -30,7 +31,7 @@ export default {
     };
   },
   activated() {
-    let list = JSON.parse(sessionStorage.getItem("winlist"));
+    const list = JSON.parse(sessionStorage.getItem("winlist"));
     if (list.res.length) {
       this.list = list.res;
     }

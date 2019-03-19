@@ -1,60 +1,69 @@
 <template>
-<div>
-  <div class="num">
-    <div class="left">
-      <span v-show="!betNum.length">请选择号码</span>
-      <span class="n" v-for="(item, index) in betNum" :key="index">{{result[item - 1]}}
-        <i>@{{odd[item - 1]}}</i>
-      </span>
+  <div>
+    <div class="num">
+      <div class="left">
+        <span v-show="!betNum.length">请选择号码</span>
+        <span class="n"
+              v-for="(item, index) in betNum"
+              :key="index">{{result[item - 1]}}
+          <i>@{{odd[item - 1]}}</i>
+        </span>
+      </div>
+      <div class="right">
+        <span>预计盈利<span class="m">{{setprofit()}}</span>元</span>
+      </div>
     </div>
-    <div class="right">
-      <span>预计盈利<span class="m">{{setprofit()}}</span>元</span>
-    </div>
-  </div>
-  <div class="shop">
-    <div class="clear" @click="clearAction">
-      <i class="icon"></i>
-      <span>清空</span>
-    </div>
-    <div class="play" @click="openConfrim">
-      <i class="icon"></i>
-      <span>说明</span>
-    </div>
-    <!-- 
+    <div class="shop">
+      <div class="clear"
+           @click="clearAction">
+        <i class="icon"></i>
+        <span>清空</span>
+      </div>
+      <div class="play"
+           @click="openConfrim">
+        <i class="icon"></i>
+        <span>说明</span>
+      </div>
+      <!-- 
     <div class="play">
       <i class="icon"></i>
       <span @click="openConfrim">玩法说明</span>
     </div> -->
-    <div class="money">
-      <input type="number" placeholder="请输入购买金额" v-model="money">
-    </div>
-    <div :class="[{'active': !isTouzhuEnable},'bet']" @click="betting" :style="this.betNum.length?'':'background-color: #ccc'">
-      <i class="icon"></i>
-      <span>
-        <span>{{quotation ? "下注" : "已封盘"}}</span>
-      </span>
-    </div>
-    <yd-popup v-model="tipShow" position="center" width="60%">
-      <div class="tips">
-        <p>温馨提示</p>
-        <p>您尚未登录！！</p>
-        <p>
-          <button @click="tipShow = false">再看看</button>
-          <button @click="$router.push('/login')">马上登录</button>
-        </p>
+      <div class="money">
+        <input type="number"
+               placeholder="请输入购买金额"
+               v-model="money">
       </div>
-    </yd-popup>
-    <!-- 投注界面 -->
-    <!-- <model-bet :show='show' @close="close"></model-bet> -->
+      <div :class="[{'active': !isTouzhuEnable},'bet']"
+           @click="betting"
+           :style="this.betNum.length?'':'background-color: #ccc'">
+        <i class="icon"></i>
+        <span>
+          <span>{{quotation ? "下注" : "已封盘"}}</span>
+        </span>
+      </div>
+      <yd-popup v-model="tipShow"
+                position="center"
+                width="60%">
+        <div class="tips">
+          <p>温馨提示</p>
+          <p>您尚未登录！！</p>
+          <p>
+            <button @click="tipShow = false">再看看</button>
+            <button @click="$router.push('/login')">马上登录</button>
+          </p>
+        </div>
+      </yd-popup>
+      <!-- 投注界面 -->
+      <!-- <model-bet :show='show' @close="close"></model-bet> -->
+    </div>
   </div>
-</div>
 </template>
 <script>
 import modelBet from "./modelBet";
 import { mapState, mapActions } from "vuex";
-import api from '../../../../api/betting'
 export default {
-  props: ['betNum'],
+  props: ["betNum"],
   data() {
     return {
       descriptions: "",
@@ -62,10 +71,10 @@ export default {
       tipShow: false,
       quotation: true,
       isTouzhuEnable: true,
-      money:'',
-      data:[],
-      odds:'',
-      result:['闲一','闲二','闲三','闲四','闲五'],
+      money: "",
+      data: [],
+      odds: "",
+      result: ["闲一", "闲二", "闲三", "闲四", "闲五"],
       toggle: false
     };
   },
@@ -74,70 +83,71 @@ export default {
   },
   methods: {
     ...mapActions([
-      'description',
-      'playSwitch',
-      'setBetNumber',
-      'setBetOdds',
-      'setBetUOdds',
-      'setBetOdd',
-      'setQishu',
-      'clearCart',
-      'setBetData',
-      'updatePrice'
+      "description",
+      "playSwitch",
+      "setBetNumber",
+      "setBetOdds",
+      "setBetUOdds",
+      "setBetOdd",
+      "setQishu",
+      "clearCart",
+      "setBetData",
+      "updatePrice"
     ]),
-    numbers(){
-      let num = []
+    numbers() {
+      const num = [];
       for (let i = 0; i < this.betNum.length; i++) {
-        num.push(this.result[this.betNum[i]-1])
+        num.push(this.result[this.betNum[i] - 1]);
       }
-      return num.join()
+      return num.join();
     },
-    betting(){
+    betting() {
       if (this.isLogin && this.isTouzhuEnable) {
-        if(this.betNum.length == 0){
-          this.$dialog.toast({mes: `请选择投注号码`})
-          return
+        if (this.betNum.length == 0) {
+          this.$dialog.toast({ mes: `请选择投注号码` });
+          return;
         }
-        if(this.money <= 0){
-          this.$dialog.toast({mes: `请输入投注金额`})
-          return
+        if (this.money <= 0) {
+          this.$dialog.toast({ mes: `请输入投注金额` });
+          return;
         }
-        this.data = []
+        this.data = [];
         for (let i = 0; i < this.betNum.length; i++) {
-          this.data.push('1#'+this.money+'#'+(this.betNum[i]-1))
+          this.data.push("1#" + this.money + "#" + (this.betNum[i] - 1));
         }
-        this.$ajax('request', {
-          ac: 'userSubmitTouzhu',
-          ver: 'v1.0.0',
+        this.$ajax("request", {
+          ac: "userSubmitTouzhu",
+          ver: "v1.0.0",
           client_type: 1,
           gameid: this.gameId,
           qishu: this.qishu,
-          data: JSON.stringify(this.data).replace('/\\/g', ''),
+          data: JSON.stringify(this.data).replace("/\\/g", ""),
           auto: 1,
           stop: 1,
           multiple: 1,
+          is_dj: 0 // 正常投注
         }).then(res => {
-          this.updatePrice(res.less)
+          this.updatePrice(res.less);
           this.$dialog.toast({
             mes: `投注成功,余额：${res.less}元`
-          })
-          this.money = ''
-          this.$emit('resetBetnum')
-        })
+          });
+          this.money = "";
+          this.$emit("resetBetnum");
+        });
       } else if (!this.isLogin) {
         this.$dialog.confirm({
-          title: '温馨提示',
-          mes: '您未登录，请先登录',
+          title: "温馨提示",
+          mes: "您未登录，请先登录",
           opts: () => {
             this.$router.push({
-              path: '/login',
+              path: "/login",
               query: { redirect: this.$route.fullPath }
-            })
+            });
           }
-        })
+        });
       }
     },
-    close(val) {
+    close() {
       this.show = false;
     },
     buy() {
@@ -148,15 +158,15 @@ export default {
       }
     },
     clearAction() {
-      this.money = ''
-      this.$emit('resetBetnum')
+      this.money = "";
+      this.$emit("resetBetnum");
     },
-    setprofit(){
-      let profit = 0
+    setprofit() {
+      let profit = 0;
       for (let i = 0; i < this.betNum.length; i++) {
-        profit += this.money*this.odd[this.betNum[i]-1]
+        profit += this.money * this.odd[this.betNum[i] - 1];
       }
-      return Math.floor(profit*100)/100 || 0
+      return Math.floor(profit * 100) / 100 || 0;
     },
     openConfrim() {
       this.$dialog.confirm({
@@ -164,19 +174,19 @@ export default {
         mes: this.descriptions,
         opts: [
           {
-            txt: '确定',
+            txt: "确定",
             color: true,
             stay: false
           }
         ]
-      })
-    },
+      });
+    }
   },
   watch: {
-    description: function(val) {
+    description(val) {
       this.descriptions = val;
     },
-    betNumber(val) {},
+    betNumber() {},
     isLogin(val) {
       if (val) this.tipShow = false;
     }
@@ -189,24 +199,24 @@ export default {
       gameId: state => state.betting.gameId,
       qishu: state => state.betting.qishu,
       isLogin: state => state.userinfo.isLogin,
-      odd: state => state.betting.odd,
+      odd: state => state.betting.odd
     }),
-    isTouzhuEnable(val) {
+    isTouzhuEnable() {
       return this.quotation && this.betNumber;
     }
   },
   components: {
     modelBet
   },
-  activated() {
-    
-  },
+  activated() {},
   deactivated() {
-    this.money = ''
+    this.money = "";
     this.show = false;
-    let confirmDom = document.querySelector('.yd-dialog-black-mask .yd-confirm-btn')
-    if(confirmDom) {
-      confirmDom.click()
+    const confirmDom = document.querySelector(
+      ".yd-dialog-black-mask .yd-confirm-btn"
+    );
+    if (confirmDom) {
+      confirmDom.click();
     }
   }
 };
@@ -241,7 +251,7 @@ export default {
     text-align: right;
     // width: 35%;
   }
-  >div {
+  > div {
     display: inline-block;
     // height:poTorem(50px);
     word-wrap: break-word;
@@ -331,7 +341,7 @@ export default {
       text-align: center;
       &:first-child {
         padding-left: poTorem(20px);
-        color: #ff7c34;
+        color: $mainColor;
         text-align: left;
       }
       &:nth-child(2) {

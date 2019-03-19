@@ -27,7 +27,10 @@ const state = {
   closeIsShow: true, // 是否能投注
   tzSelected: [], // 梯子选中的投注
   ncSelected: {}, // 农场选中的投注
-  curPlayItem: {} // 当前玩法
+  game: {}, // 当前彩种
+  curPlayItem: {}, // 当前玩法
+  betDetailParams: {}, // 投注详情参数
+  betMenu: null // 双面玩法设置左边的菜单项，用于再来一注
 }
 
 const actions = {
@@ -104,11 +107,24 @@ const actions = {
   },
   updateField({ commit }, item) {
     commit('UPDATE_FIELD', item)
+  },
+  setPlayItem({ commit }, item) {
+    commit(types.SET_PLAYITEM, item)
+  },
+  setGame({ commit }, game) {
+    commit(types.SET_GAME, game)
+  },
+  setBetDetailParams({ commit }, params) {
+    commit(types.SET_BETDETAILPARAMS, params)
+  },
+  // 双面玩法设置左边的菜单项，用于再来一注
+  setBetMenu({ commit }, item) {
+    commit(types.SET_BETMENU, item)
   }
 }
 
 const mutations = {
-  'UPDATE_FIELD'(state, item) {
+  UPDATE_FIELD(state, item) {
     Object.keys(item).map(k => state[k] = item[k])
   },
   [types.SET_CLOSE_BET](state, bool) {
@@ -168,14 +184,6 @@ const mutations = {
     // state.play_type = game.play_type ? game.play_type : '0'
   },
   [types.BET_SET_PLAYCONFIG](state, { config }) {
-    // if (!state.playConfigs.length) {
-    //   state.playConfigs.push(config)
-    // } else {
-    //   const item = state.playConfigs.find(x => x.gameId === config.gameId)
-    //   if (!item) {
-    //     state.playConfigs.push(config)
-    //   }
-    // }
     state.playConfigs = config
   },
   [types.BET_SET_QISHU](state, { qishu }) {
@@ -203,6 +211,19 @@ const mutations = {
     if (index > -1) {
       state.cart.splice(index, 1)
     }
+  },
+  [types.SET_PLAYITEM](state, item) {
+    state.curPlayItem = item
+  },
+  [types.SET_GAME](state, game) {
+    state.game = game
+  },
+  [types.SET_BETDETAILPARAMS](state, params) {
+    state.betDetailParams = params
+  },
+  // 双面玩法设置左边的菜单项，用于再来一注
+  [types.SET_BETMENU](state, item) {
+    state.betMenu = item
   }
 }
 

@@ -1,27 +1,31 @@
 <template>
-    <div class="heads">
-        <div class="heads_con">
-            <router-link to="/lottery">
-                <div class="icon"></div>
-            </router-link>
-            <div class="title">
-                <div class="center_box">
-                    {{listType.game_name}}
-                </div>
-            </div>
-            <div class="switch" @click="openOptions">
-                <i :class="[{'rotate_pos': isRotate}]"></i>
-                <span>彩种</span>
-            </div>
+  <div class="heads">
+    <div :class="[{'heads_con_pig': isfestival},'heads_con']">
+      <router-link to="/lottery">
+        <div class="icon"></div>
+      </router-link>
+      <div class="title">
+        <div class="center_box">
+          {{listType.game_name}}
         </div>
-        <select-game ref="kaijiangOptions" @afterSelectGame="switchKaiJiang" :gameId="$route.params.lotter_id"></select-game>
-        <lotteryHistory :listType="listType" ref="lotteryHis" iosKaijiang="true"></lotteryHistory>
-        <countdown :listType="listType"></countdown>
+      </div>
+      <div class="switch"
+           @click="openOptions">
+        <i :class="[{'rotate_pos': isRotate}]"></i>
+        <span>彩种</span>
+      </div>
     </div>
+    <select-game ref="kaijiangOptions"
+                 @afterSelectGame="switchKaiJiang"
+                 :gameId="$route.params.lotter_id"></select-game>
+    <lotteryHistory :listType="listType"
+                    ref="lotteryHis"
+                    iosKaijiang="true"></lotteryHistory>
+    <countdown :listType="listType"></countdown>
+  </div>
 </template>
 <script>
-import { user } from "../../../../api/index";
-import { mapActions, mapState } from "vuex";
+import { mapState } from 'vuex';
 import selectGame from "../../zouShi/components/selectGame";
 import lotteryHistory from "./lotteryHistory";
 import countdown from "./countdown";
@@ -36,15 +40,18 @@ export default {
       isRotate: false
     };
   },
+  computed: {
+    ...mapState(['isfestival']),
+  },
   components: {
     lotteryHistory,
     selectGame,
     countdown
   },
   activated() {
-    console.log(this.$route.params)
-    if(this.$route.params.lotter_id) {
-      this.getDataFromRoute()
+    console.log(this.$route.params);
+    if (this.$route.params.lotter_id) {
+      this.getDataFromRoute();
     }
   },
   // mounted() {
@@ -54,26 +61,29 @@ export default {
     getDataFromRoute() {
       this.routeList = this.$route.params;
       this.listType = {
-        lotter_id: this.routeList.lotter_id,
+        lotter_id: this.$route.params.lotter_id,
         js_tag: this.routeList.js_tag,
         name_tag: this.routeList.name_tag,
         game_name: this.routeList.game_name,
         speed: this.routeList.speed,
-        enable: this.routeList.enable
-      }
+        enable: this.routeList.enable,
+        yearid: this.routeList.yearid || 0
+      };
     },
     switchKaiJiang(game) {
       console.log(game);
       this.$refs.lotteryHis.activeIndex = 0;
-      if(game) {
+      if (game) {
         this.listType = {
           lotter_id: game.game_id,
           js_tag: game.js_tag,
           name_tag: game.tag,
           game_name: game.game_name,
           speed: game.speed,
-          enable: game.enable
-        }
+          enable: game.enable,
+          yearid: game.yearid || 0
+        };
+        this.$router.replace({ name: "kjxq", params: this.listType });
       }
       this.routeList.game_name = game.game_name;
       this.$refs.kaijiangOptions.self_show = false;
@@ -104,6 +114,9 @@ export default {
     position: relative;
     z-index: 1000 !important;
     top: 0;
+    &.heads_con_pig {
+      @include pigbg;
+    }
     a {
       position: relative;
       width: 20%;

@@ -1,13 +1,14 @@
 <template>
   <div class="pk10">
-    <heads :routes="routes" :type='1'></heads>
+    <heads :routes="routes"
+           :type='1'></heads>
     <pkten :routes="routes"></pkten>
   </div>
 </template>
 <script>
 import heads from "../head";
-import pkten from "./components/pk10";        
-import { mapActions, mapState } from "vuex";
+import pkten from "./components/pk10";
+
 export default {
   data() {
     return {
@@ -23,7 +24,7 @@ export default {
         JSON.stringify(this.$route.params)
       );
     } else {
-      let params = sessionStorage.getItem("betting_route_params");
+      const params = sessionStorage.getItem("betting_route_params");
       if (params.length) {
         this.routes = JSON.parse(params);
       }

@@ -33,21 +33,25 @@ const shopCar = () => import('~/views/gouCai/lottery/shopCar')
 const chase = () => import('~/views/gouCai/lottery/chase')
 const ssc = () => import('~/views/gouCai/lottery/shishicai/index.vue')
 const winList = () => import('~/views/winList/index')
+const chatRoom = () => import('~/views/chatRoom/index')
 // const youxi = () => import('~/views/youXi/index.vue')
 
 // import agent from './agent'
 import moreService from './moreService'
 import football from './football'
+import match from './match'
 import paper from '~/views/roadMap/index.vue'
+import grabhb from './grabhb'
 
 Vue.use(Router)
-// import test from './test'
 export default new Router({
   mode: 'history',
   routes: [
     // ...agent,
     ...football,
+    ...match,
     moreService,
+    grabhb,
 
     // {
     //   path: *,
@@ -169,7 +173,7 @@ export default new Router({
       }
     },
     {
-      path: '/kjxq',
+      path: '/kjxq/:lotter_id',
       name: 'kjxq',
       component: kjxq,
       meta: {
@@ -289,7 +293,8 @@ export default new Router({
         require(['~/views/gouCai/lottery/qxc/index.vue'], resolve),
       meta: {
         title: '七星彩'
-      } },
+      }
+    },
     {
       path: '/xync/:lotter_id',
       name: 'xync',
@@ -303,9 +308,7 @@ export default new Router({
       path: '/findPW',
       name: 'zhaohuimima',
       component: resolve =>
-        require([
-          '~/views/public/registe/components/findpw.vue'
-        ], resolve),
+        require(['~/views/public/registe/components/findpw.vue'], resolve),
       meta: {
         title: '找回密码'
       }
@@ -314,9 +317,7 @@ export default new Router({
       path: '/agreement',
       name: 'yonghuxieyi',
       component: resolve =>
-        require([
-          '~/views/public/registe/components/agreement.vue'
-        ], resolve),
+        require(['~/views/public/registe/components/agreement.vue'], resolve),
       meta: {
         title: '用户协议'
       }
@@ -338,6 +339,48 @@ export default new Router({
       meta: {
         title: '维护中···'
       }
+    },
+    {
+      path: '/forbiddenIP',
+      name: 'IPshouxian',
+      component: resolve =>
+        require(['~/views/forbiddenIP/forbiddenIP.vue'], resolve),
+      meta: {
+        title: 'IP受限'
+      }
+    },
+    {
+      path: '/chatRoom',
+      name: 'liaotianshi',
+      component: chatRoom,
+      meta: {
+        title: '聊天室',
+        keepAlive: false
+      }
+    },
+    {
+      path: '/plan',
+      name: 'plan',
+      component: resolve =>
+        require(['~/views/chatRoom/components/plan/index.vue'], resolve),
+      meta: {
+        title: '计划'
+      }
+    },
+    {
+      path: '/zixuanPaixu',
+      name: 'zixuanPaixu',
+      component: resolve => require(['~/views/zixuanPaixu/index.vue'], resolve),
+      meta: {
+        title: '自选排序'
+      }
     }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })

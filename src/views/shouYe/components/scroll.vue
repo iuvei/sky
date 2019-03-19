@@ -1,19 +1,55 @@
 <template>
   <div class="scroll">
+    <!--横向文字滚动-->
+    <div class="box_scroll">
+      <div class="notice_icon">
+        <img src="../../../img/shouye/notice.png"
+             alt="">
+      </div>
+      <div id="marquee_str"
+           ref="marquee_str"
+           v-show="sysNotice.length">
+        <ul @click="toNotice">
+          <!-- <li
+            v-for="(item, index) in sysNotice"
+            :key="index"
+          >
+            <div style="display:inline-block">{{decodeEvent(item.content)}}</div>
+          </li> -->
+          <li v-for="(item, index) in sysNotice"
+              :key="index"
+              style="margin-left:22.375rem;font-size:1rem" v-html="decodeEvent(item.content)"></li>
+          <!-- <li></li> -->
+          <li id="scroll_end"
+              ref="scroll_end"></li>
+        </ul>
+      </div>
+      <div v-show="!sysNotice.length"
+           class="no_content">
+        <ul>
+          <li>暂无公告</li>
+        </ul>
+      </div>
+      <div class="notice_more iconfont icon-icon"></div>
+    </div>
     <!--导航标题-->
     <div class="main_menu">
-      <div class="main_menu_item" @click="$router.push('/moreService/Nrecharge')">
+      <div class="main_menu_item"
+           @click="$router.push('/moreService/Nrecharge')">
         <div class="_menu_icon">
           <div class="phone_all_icon">
-            <img src="../../../img/shouye/recharge.png" alt="">
+            <img :src="require(`../../../img/${imgUrl}/recharge.png`)"
+                 alt="">
           </div>
         </div>
         <div class="title">在线充值</div>
       </div>
-      <div class="main_menu_item" @click="$router.push('/moreService/NgetCash')">
+      <div class="main_menu_item"
+           @click="$router.push('/moreService/NgetCash')">
         <div class="_menu_icon">
           <div class="phone_all_icon">
-            <img src="../../../img/shouye/get_cash.png" alt="">
+            <img :src="require(`../../../img/${imgUrl}/get_cash.png`)"
+                 alt="">
           </div>
         </div>
         <div class="title">在线提现</div>
@@ -23,68 +59,54 @@
           <div class="_menu_icon">
             <div class="phone_all_icon">
               <!-- <img v-if="userFlag.redGift" src="../../../img/shouye/sales_red_dot.png" alt=""> -->
-              <img src="../../../img/shouye/sales.png" alt="">
+              <img :src="require(`../../../img/${imgUrl}/sales.png`)" alt="">
             </div>
           </div>
           <div class="title">优惠活动</div>
         </router-link>
       </div>
-      <div class="main_menu_item" @click="openbigwin(sysinfo.service_url)">
+      <div class="main_menu_item"
+           @click="openbigwin(sysinfo.service_url)">
         <div class="_menu_icon">
           <div class="phone_all_icon">
-            <img src="../../../img/shouye/online_service.png" alt="">
+            <img :src="require(`../../../img/${imgUrl}/online_service.png`)"
+                 alt="">
           </div>
         </div>
         <div class="title">在线客服</div>
       </div>
     </div>
-    <!--横向文字滚动-->
-    <div class="box_scroll">
-      <div class="notice_icon">
-        <img src="../../../img/shouye/notice.png" alt="">
-      </div>
-      <div id="marquee_str" ref="marquee_str" v-show="sysNotice.length">
-        <ul @click="toNotice">
-          <li v-for="(item, index) in sysNotice" :key="index" style="margin-left:22.375rem;font-size:1rem">{{decodeEvent(item.content)}}</li>
-          <!-- <li></li> -->
-          <li id="scroll_end" ref="scroll_end"></li>
-        </ul>
-      </div>
-      <div v-show="!sysNotice.length" class="no_content">
-        <ul>
-          <li>暂无公告</li>
-        </ul>
-      </div>
-      <div class="notice_more iconfont icon-icon"></div>
-    </div>
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
-import decodeEvent from '../decode'
+import { mapState, mapActions } from "vuex";
+import decodeEvent from "../decode";
 export default {
   data() {
     return {
-      sysNotice: [],
+      sysNotice: []
     };
   },
   mixins: [decodeEvent],
   computed: {
-    ...mapState(["userFlag","sysinfo"])
+    ...mapState(["userFlag", "sysinfo", 'isfestival']),
+    imgUrl() {
+      return this.isfestival ? 'theme' : 'shouye'
+    }
   },
   mounted() {
     this.getNotice();
     this.Marquee();
   },
   methods: {
+    ...mapActions(["getServiceUrl"]),
     /** 文字横向滚动 */
     Marquee() {
-      let _this = this;
-      let marquee_str = _this.$refs.marquee_str;
-      let scroll_end = _this.$refs.scroll_end;
-      let test = 5;
+      const _this = this;
+      const marquee_str = _this.$refs.marquee_str;
+      const scroll_end = _this.$refs.scroll_end;
+      // const test = 5;
       function Marquees() {
-        // console.log(marquee_str.scrollLeft)
         if (scroll_end && marquee_str) {
           if (
             scroll_end &&
@@ -97,11 +119,11 @@ export default {
           }
         }
       }
-      let MyMar = setInterval(Marquees, 25);
+      setInterval(Marquees, 25);
     },
-    /**打开客服窗口 */
-    openbigwin(url) {
-      // console.log(54188)
+    /** 打开客服窗口 */
+    async openbigwin() {
+      const url = await this.getServiceUrl();
       window.location.href = url;
     },
     getNotice() {
@@ -110,7 +132,7 @@ export default {
         type: 0,
         ispage: 0
       }).then(res => {
-        this.sysNotice = res;
+        res.length && (this.sysNotice = res);
       });
     },
     toNotice() {
@@ -179,7 +201,7 @@ export default {
   }
   #marquee_str {
     font-size: 0.75rem;
-    width: poTorem(358px);
+    width: 100%;
     height: poTorem(30px);
     line-height: poTorem(30px);
     text-align: center;

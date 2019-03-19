@@ -15,6 +15,7 @@ export const SET_GUIDE_STATE = 'SET_GUIDE_STATE'
 export const SET_NESTED = 'SET_NESTED'
 export const SET_MAINTAINED = 'SET_MAINTAINED'
 export const SET_VCODE = 'SET_VCODE'
+export const SET_GAMES = 'SET_GAMES'
 // 购彩
 export const PLAY_DESCRIPTION = 'PLAY_DESCRIPTION'
 export const PLAY_SWITCH = 'PLAY_SWITCH'
@@ -45,6 +46,11 @@ export const SET_MODELBET = 'SET_MODELBET'
 export const CHANGE_OFFICIAL = 'CHANGE_OFFICIAL'
 export const SET_BETRECORDSTYPE = 'SET_BETRECORDSTYPE' // 设置投注记录类型
 export const SET_CLOSE_BET = 'SET_CLOSE_BET' // 设置是否封盘
+export const SET_PLAYITEM = 'SET_PLAYITEM' // 设置玩法
+export const SET_GAME = 'SET_GAME' // 设置彩种
+export const SET_BETDETAILPARAMS = 'SET_BETDETAILPARAMS' // 设置投注详情参数
+export const SET_BETMENU = 'SET_BETMENU' // 设置双面玩法当前菜单
+export const SET_HIDESUBMENU = 'SET_HIDESUBMENU'
 
 // 添加快捷键
 export const SAVE_QUICK = 'SAVE_QUICK'

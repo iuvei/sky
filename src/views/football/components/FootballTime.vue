@@ -1,5 +1,5 @@
 <template>
-  <div @click="click">{{second}}</div>
+  <i @click="click">{{second}}</i>
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
@@ -10,11 +10,11 @@ export default {
       second: 30,
       timer: 0,
       lockMark: false,
-      a: 2,
+      a: 2
     };
   },
   computed: {
-    ...mapState("football", ["timeCount"]),
+    ...mapState("football", ["timeCount"])
   },
   methods: {
     ...mapActions("football", ["queryComputed"]),
@@ -42,7 +42,7 @@ export default {
           this.second--;
         }
       }, 1000);
-    },
+    }
   },
   activated() {
     this.timeStart();
@@ -56,15 +56,14 @@ export default {
     this.click();
   },
   watch: {
-    "timeCount.reset": function(val, oldVal) {
+    "timeCount.reset"() {
       this.lockMark = false;
       this.second = this.timeCount.second;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
-
 </style>
 
 

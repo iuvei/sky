@@ -1,6 +1,6 @@
 <template>
   <div class="shop_car">
-    <div class="car_head">
+    <div :class="[{'car_head_pig':isfestival},'car_head']">
       <div @click="$router.back()">
         <span class="icon"></span>
       </div>
@@ -8,17 +8,22 @@
       <span></span>
     </div>
     <div class="con">
-      <count-down @activedData="getQishu" @toNextQi="showTips"></count-down>
+      <count-down @activedData="getQishu"
+                  @toNextQi="showTips"></count-down>
       <div class="chase">
-        <span class="chases" @click="$router.back()">
+        <span class="chases"
+              @click="$router.back()">
           <i class="icon_add"></i>
           <span>添加注单</span>
         </span>
-        <span class="chases" @click="addRandom">
+        <span class="chases"
+              @click="addRandom">
           <i class="icon_chose"></i>
           <span>机选1注</span>
         </span>
-        <span class="intelligent chases" @click="toChase" v-if="speed==1">
+        <span class="intelligent chases"
+              @click="toChase"
+              v-if="speed==1">
           <i class="icon_zhui"></i>
           <span>智能追号</span>
         </span>
@@ -31,10 +36,14 @@
             <li :key="index">
               <span class="title">{{item.wanfa}}</span>
               <div class="haoma">
-                <span v-html="item.formatedStr" @click="showDetail(item)">
+                <span v-html="item.formatedStr"
+                      @click="showDetail(item)">
                 </span>
                 <span class="unit-price">
-                  <input type="tel" v-model.number="item.unitPrice" v-digital maxlength="7"> 元
+                  <input type="tel"
+                         v-model.number="item.unitPrice"
+                         v-digital
+                         maxlength="7"> 元
                 </span>
               </div>
               <div class="odds">
@@ -42,18 +51,24 @@
                   <i>{{item.zhushu}}</i>注
                 </span>
                 <span>&nbsp;赔率：
-                  <i class="price" v-if="item.peilvType.toString() == 'Symbol(SSC)'">{{item.peilv}}</i>
-                  <i class="price" v-else>{{item.peilvStr}}</i>
+                  <i class="price"
+                     v-if="item.peilvType.toString() == 'Symbol(SSC)'">{{item.peilv}}</i>
+                  <i class="price"
+                     v-else>{{item.peilvStr}}</i>
                 </span>
               </div>
-              <span class="icon" @click="del(item)"></span>
+              <span class="icon"
+                    @click="del(item)"></span>
             </li>
           </template>
         </ul>
 
       </div>
       <div class="protocol">
-        <yd-checkbox class="checkbox" v-model="isAgree" @click.native.prevent="showAggrement($event)" color="#fff">我已阅读并同意
+        <yd-checkbox class="checkbox"
+                     v-model="isAgree"
+                     @click.native.prevent="showAggrement($event)"
+                     color="#fff">我已阅读并同意
           <span>《{{sysinfo.web_title}}服务协议》</span>
         </yd-checkbox>
       </div>
@@ -62,42 +77,69 @@
       <div class="chase_rows">
         <p v-if="speed == 1">
           <span>追</span>
-          <input type="number" @click="zhuiqi($event)" v-model="auto" v-numberOnly @blur="inputblur">
+          <input type="number"
+                 @click="zhuiqi($event)"
+                 v-model="auto"
+                 v-numberOnly
+                 @blur="inputblur">
           <span>期</span>
         </p>
         <p>
           <span>投</span>
-          <input type="number" @click="toubei" v-model="chaseBeiShu" v-numberOnly @blur="inputblur">
+          <input type="number"
+                 @click="toubei"
+                 v-model="chaseBeiShu"
+                 v-numberOnly
+                 @blur="inputblur">
           <span>倍</span>
         </p>
       </div>
-      <div class="chase_options" v-show="showSecond && optionIsShow">
-        <p v-for="(item, index) in qishuOption" :key="index" :class="{'qishu_choosed': index==qishuVal}" @click="chooseQishu(item, index)">{{item}}期</p>
+      <div class="chase_options"
+           v-show="showSecond && optionIsShow">
+        <p v-for="(item, index) in qishuOption"
+           :key="index"
+           :class="{'qishu_choosed': index==qishuVal}"
+           @click="chooseQishu(item, index)">{{item}}期</p>
       </div>
-      <div class="chase_options" v-show="showSecond && !optionIsShow">
-        <p v-for="(item, index) in beishuOption" :key="index" :class="{'qishu_choosed': index==beishuVal}" @click="chooseBeishu(item, index)">{{item}}倍</p>
+      <div class="chase_options"
+           v-show="showSecond && !optionIsShow">
+        <p v-for="(item, index) in beishuOption"
+           :key="index"
+           :class="{'qishu_choosed': index==beishuVal}"
+           @click="chooseBeishu(item, index)">{{item}}倍</p>
       </div>
-      <div style="padding-top:0.9rem" class="hahaha" v-show="showSecond">
-        <yd-checkbox class="checkbox" v-model="isStop" color="#fff">中奖后停止追号</yd-checkbox>
+      <div style="padding-top:0.9rem"
+           class="hahaha"
+           v-show="showSecond">
+        <yd-checkbox class="checkbox"
+                     v-model="isStop"
+                     color="#fff">中奖后停止追号</yd-checkbox>
       </div>
     </div>
-    <div class="shop_bottom" v-show="showBottom">
+    <div class="shop_bottom"
+         v-show="showBottom">
       <div class="left">
         <span @click="clearAction">
           <i class="icon"></i>清空</span>
-        <div class="total-price" :class="{'line':Number(totalPrice).toFixed(2).length > 8}">
+        <div class="total-price"
+             :class="{'line':Number(totalPrice).toFixed(2).length > 8}">
           <div>共
             <i>{{zhushu}}</i> 注</div>
           <div>
             <i>{{totalPrice}}</i>元</div>
         </div>
       </div>
-      <div class="right" @click="submitBetting" :class="{disable: submitting}">
+      <div class="right"
+           @click="submitBetting"
+           :class="{disable: submitting}">
         {{submitting?'正在提交':'确认投注'}}
       </div>
     </div>
 
-    <yd-popup v-model="showWindow" position="center" width="90%" v-if="detail.wanfa">
+    <yd-popup v-model="showWindow"
+              position="center"
+              width="90%"
+              v-if="detail.wanfa">
       <div class="pop">
         <h2>{{detail.wanfa}}</h2>
         <div class="content">
@@ -109,13 +151,31 @@
         </div>
       </div>
     </yd-popup>
-    <keyboard :key="key1" @doAction="submitBetting" :relative="true" :title="qsTitle" :num="auto" @keyboardPressed="keyboardPressed1" :hide="hideKeyboard1" @hideKeyboard="hideKeyboardHandle1">
-      <span :class="{grey: submitting}" @click="submitBetting">{{submitting ? "正在提交": "确认投注"}}</span>
+    <keyboard :key="key1"
+              @doAction="submitBetting"
+              :relative="true"
+              :title="qsTitle"
+              :num="auto"
+              @keyboardPressed="keyboardPressed1"
+              :hide="hideKeyboard1"
+              @hideKeyboard="hideKeyboardHandle1">
+      <span :class="{grey: submitting}"
+            @click="submitBetting">{{submitting ? "正在提交": "确认投注"}}</span>
     </keyboard>
-    <keyboard :key="key2" @doAction="submitBetting" :relative="true" :title="bsTitle" :num="chaseBeiShu" @keyboardPressed="keyboardPressed2" :hide="hideKeyboard2" @hideKeyboard="hideKeyboardHandle2">
-      <span :class="{grey: submitting}" @click="submitBetting">{{submitting ? "正在提交": "确认投注"}}</span>
+    <keyboard :key="key2"
+              @doAction="submitBetting"
+              :relative="true"
+              :title="bsTitle"
+              :num="chaseBeiShu"
+              @keyboardPressed="keyboardPressed2"
+              :hide="hideKeyboard2"
+              @hideKeyboard="hideKeyboardHandle2">
+      <span :class="{grey: submitting}"
+            @click="submitBetting">{{submitting ? "正在提交": "确认投注"}}</span>
     </keyboard>
-    <yd-popup v-model="tipShow" position="center" width="80%">
+    <yd-popup v-model="tipShow"
+              position="center"
+              width="80%">
       <div class="tips_r">
         <p>温馨提示</p>
         <p>当期已截止投注，是否保留到下一期？</p>
@@ -129,27 +189,27 @@
 
 </template>
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
-import { RenderTypes } from '~/js/touzhu/commonTypes'
-import { randomBet } from '~/js/random/randomBet'
-import countDown from './countDown'
-import cartMixin from './cartMixin'
-import { sscUtil } from '~/js/touzhu/touzhu.random.ssc.util'
-import { k3Util } from '~/js/touzhu/touzhu.random.k3.util'
-import { pcddUtil } from '~/js/touzhu/touzhu.random.pcdd.util'
-import { elevenx5Util } from '~/js/touzhu/touzhu.random.11x5.util'
-import { threeDUtil } from '~/js/touzhu/touzhu.random.3d.util'
-import { lhcUtil } from '~/js/touzhu/touzhu.random.lhc.util'
-import { pk10Util } from '~/js/touzhu/touzhu.random.pk10.util'
-import { QXCUtil } from '~/js/touzhu/touzhu.random.qxc.util'
-import { xypkUtil } from '~/js/touzhu/touzhu.random.xypk.util'
-import api from '../../../../api/betting'
-import { to } from '~/js/functions'
-import danshiUtil from '~/js/touzhu/danshi.util'
-import keyboard from '../components/keyboard'
-import { randomFormtoken } from '~/js/user/gsfunc'
-import { setTimeout } from 'timers'
-const tags = ['ssc', 'k3', '3d', 'pcdd', '11x5', 'lhc', 'pk10', 'qxc', 'xypk']
+import { mapState, mapActions } from "vuex";
+import { RenderTypes } from "~/js/touzhu/commonTypes";
+import { randomBet } from "~/js/random/randomBet";
+import countDown from "./countDown";
+import cartMixin from "./cartMixin";
+import { sscUtil } from "~/js/touzhu/touzhu.random.ssc.util";
+import { k3Util } from "~/js/touzhu/touzhu.random.k3.util";
+import { pcddUtil } from "~/js/touzhu/touzhu.random.pcdd.util";
+import { elevenx5Util } from "~/js/touzhu/touzhu.random.11x5.util";
+import { threeDUtil } from "~/js/touzhu/touzhu.random.3d.util";
+import { lhcUtil } from "~/js/touzhu/touzhu.random.lhc.util";
+import { pk10Util } from "~/js/touzhu/touzhu.random.pk10.util";
+import { QXCUtil } from "~/js/touzhu/touzhu.random.qxc.util";
+import { xypkUtil } from "~/js/touzhu/touzhu.random.xypk.util";
+import api from "../../../../api/betting";
+import { to } from "~/js/functions";
+import danshiUtil from "~/js/touzhu/danshi.util";
+import keyboard from "../components/keyboard";
+import { randomFormtoken } from "~/js/user/gsfunc";
+
+const tags = ["ssc", "k3", "3d", "pcdd", "11x5", "lhc", "pk10", "qxc", "xypk"];
 const utils = [
   sscUtil,
   k3Util,
@@ -160,10 +220,10 @@ const utils = [
   pk10Util,
   QXCUtil,
   xypkUtil
-]
+];
 
 export default {
-  name: 'shopCar',
+  name: "shopCar",
   components: {
     countDown,
     keyboard
@@ -184,8 +244,8 @@ export default {
       detail: {},
       auto: 1,
       stop: 1,
-      multiple: '',
-      ver: 'v1.0.0',
+      multiple: "",
+      ver: "v1.0.0",
       isStop: true,
       cart: [],
       qishuOption: [5, 8, 10, 15, 20],
@@ -197,248 +257,246 @@ export default {
       submitting: false,
       hideKeyboard1: true,
       hideKeyboard2: true,
-      key1: 'key1',
-      key2: 'key2',
-      qsTitle: '请输入追期数',
-      bsTitle: '请输入倍数',
-      newestQishu: '',
+      key1: "key1",
+      key2: "key2",
+      qsTitle: "请输入追期数",
+      bsTitle: "请输入倍数",
+      newestQishu: "",
       inputMaxL: 7
-    }
+    };
   },
   methods: {
     clearAndClose() {
-      this.tipShow = false
-      this.clearCart()
+      this.tipShow = false;
+      this.clearCart();
     },
     saveToNext() {
-      this.tipShow = false
-      this.setQishu(this.newestQishu)
-      this.$dialog.toast({ mes: '已成功保留到下一期' })
+      this.tipShow = false;
+      this.setQishu(this.newestQishu);
+      this.$dialog.toast({ mes: "已成功保留到下一期" });
     },
     inputblur() {
-      document.activeElement.blur()
-      let isSafari = navigator.userAgent.toLowerCase().includes('safari')
+      document.activeElement.blur();
+      const isSafari = navigator.userAgent.toLowerCase().includes("safari");
       if (isSafari) {
-        this.showBottom = true
+        this.showBottom = true;
       }
     },
     resizeHandle() {
-      this.resizeThrottler(this)
+      this.resizeThrottler(this);
     },
     resizeThrottler(_this) {
       if (!_this.resizeTimeout) {
-        _this.resizeTimeout = window.setTimeout(function() {
-          _this.resizeTimeout = null
+        _this.resizeTimeout = window.setTimeout(() => {
+          _this.resizeTimeout = null;
           if (
             _this.showBottom === false &&
             window.innerHeight === _this.sourceHeight
           ) {
-            _this.showBottom = true
+            _this.showBottom = true;
           }
           // The actualResizeHandler will execute at a rate of 15fps
-        }, 66)
+        }, 66);
       }
     },
     hideKeyboard() {
-      this.showBottom = true
-      this.hideKeyboard1 = true
-      this.hideKeyboard2 = true
+      this.showBottom = true;
+      this.hideKeyboard1 = true;
+      this.hideKeyboard2 = true;
     },
     addRandom() {
-      let obj = Object.assign({}, this.betData)
-      obj.dataSource = JSON.parse(JSON.stringify(obj.dataSource))
-      var randomData = randomBet(obj)
-      let randomBetData = {}
+      const obj = Object.assign({}, this.betData);
+      obj.dataSource = JSON.parse(JSON.stringify(obj.dataSource));
+      const randomData = randomBet(obj);
+      let randomBetData = {};
 
       if (tags.includes(this.betData.js_tag)) {
-        let index = tags.findIndex(x => x === this.betData.js_tag)
+        const index = tags.findIndex(x => x === this.betData.js_tag);
         if (index > -1) {
-          randomBetData = utils[index].getDataSource(randomData, this.betData)
+          randomBetData = utils[index].getDataSource(randomData, this.betData);
         }
       }
       // 梯子 幸运农场 随机一注
-      if(['tzyx', 'xync'].includes(this.betData.js_tag)){
-        let idx_2 = '' 
-        if(this.betData.js_tag === 'tzyx'){
+      if (["tzyx", "xync"].includes(this.betData.js_tag)) {
+        let idx_2 = "";
+        if (this.betData.js_tag === "tzyx") {
           // let tzSelected = this.$store.state.betting.tzSelected
-          idx_2 = Math.floor(Math.random()*10)
-          this.updateField({tzSelected: [idx_2]})
-        }
-        else if(this.betData.js_tag === 'xync'){
-          const playId = this.betData.playid
-          let ncSelected = this.$store.state.betting.ncSelected[playId] || []
-          ncSelected = JSON.parse(JSON.stringify(ncSelected))
-          let maxNum = this.betData.dataSource[0].data.length
-          const idx = Math.floor(Math.random() * maxNum)
-          idx_2 = Math.floor(Math.random() * maxNum)
-          let rowValue = ncSelected[playId === 1 ? idx : 0]
-          ncSelected[playId === 1 ? idx : 0] = idx_2 + '' // rowValue + '|'+ idx_2
-          
+          idx_2 = Math.floor(Math.random() * 10);
+          this.updateField({ tzSelected: [idx_2] });
+        } else if (this.betData.js_tag === "xync") {
+          const playId = this.betData.playid;
+          let ncSelected = this.$store.state.betting.ncSelected[playId] || [];
+          ncSelected = JSON.parse(JSON.stringify(ncSelected));
+          const maxNum = this.betData.dataSource[0].data.length;
+          const idx = Math.floor(Math.random() * maxNum);
+          idx_2 = Math.floor(Math.random() * maxNum);
+
+          ncSelected[playId === 1 ? idx : 0] = idx_2 + ""; // rowValue + '|'+ idx_2
+
           // 只要一注
-          ncSelected.fill('')[playId === 1 ? idx : 0] = idx_2 + ''
+          ncSelected.fill("")[playId === 1 ? idx : 0] = idx_2 + "";
           // console.error('随机一注', ncSelected)
 
-          this.updateField({ncSelected: {[playId]:ncSelected}})
+          this.updateField({ ncSelected: { [playId]: ncSelected } });
         }
-        return this.$nextTick(()=>{
-          let _betData = Object.assign({}, this.betData)
-          this.betDataToCart(this.getCalcBetData(_betData))
-        })
+        return this.$nextTick(() => {
+          const _betData = Object.assign({}, this.betData);
+          this.betDataToCart(this.getCalcBetData(_betData));
+        });
       }
-      let _betData = this.getCalcBetData(randomBetData)
-      this.betDataToCart(_betData)
+      const _betData = this.getCalcBetData(randomBetData);
+      this.betDataToCart(_betData);
     },
     toChase() {
       if (!this.cart || !this.cart.length) {
-        this.$dialog.toast({ mes: '您的购物车空空如也' })
-        return false
+        this.$dialog.toast({ mes: "您的购物车空空如也" });
+        return false;
       }
-      this.$router.push('/chase')
+      this.$router.push("/chase");
     },
     getCart(val) {
-      let _cart = Object.assign([], val)
-      _cart.forEach((x, index) => (x.id = index))
-      this.cart = _cart.reverse()
+      const _cart = Object.assign([], val);
+      _cart.forEach((x, index) => (x.id = index));
+      this.cart = _cart.reverse();
     },
-    zhuiqi(e) {
-      document.activeElement.blur()
-      this.showSecond = true
-      this.showBottom = false
-      this.optionIsShow = true
-      this.qishuVal = -1
+    zhuiqi() {
+      document.activeElement.blur();
+      this.showSecond = true;
+      this.showBottom = false;
+      this.optionIsShow = true;
+      this.qishuVal = -1;
       if (!this.showBottom) {
-        this.hideKeyboard1 = false
-        this.hideKeyboard2 = true
+        this.hideKeyboard1 = false;
+        this.hideKeyboard2 = true;
       }
     },
     toubei() {
-      document.activeElement.blur()
-      this.showSecond = true
-      this.showBottom = false
-      this.optionIsShow = false
-      this.beishuVal = -1
+      document.activeElement.blur();
+      this.showSecond = true;
+      this.showBottom = false;
+      this.optionIsShow = false;
+      this.beishuVal = -1;
       if (!this.showBottom) {
-        this.hideKeyboard2 = false
-        this.hideKeyboard1 = true
+        this.hideKeyboard2 = false;
+        this.hideKeyboard1 = true;
       }
     },
     chooseQishu(n, i) {
-      console.log(n)
-      this.qishuVal = i
-      this.auto = n
+      console.log(n);
+      this.qishuVal = i;
+      this.auto = n;
     },
     chooseBeishu(n, i) {
-      this.beishuVal = i
-      this.chaseBeiShu = n
+      this.beishuVal = i;
+      this.chaseBeiShu = n;
     },
     getQishu(qishu) {
       // this.setQishu(qishu)
-      this.newestQishu = qishu
+      this.newestQishu = qishu;
     },
     showTips() {
       if (this.cart.length > 0) {
-        this.tipShow = true
+        this.tipShow = true;
       }
     },
     showDetail(item) {
-      this.detail = item
-      this.showWindow = !this.showWindow
+      this.detail = item;
+      this.showWindow = !this.showWindow;
     },
     checkCartData() {
       if (!this.cart || !this.cart.length) {
-        this.$dialog.toast({ mes: '您的购物车空空如也' })
-        return false
+        this.$dialog.toast({ mes: "您的购物车空空如也" });
+        return false;
       }
       if (!this.isAgree) {
-        this.$dialog.alert({ mes: '请先阅读并同意服务协议' })
-        return false
+        this.$dialog.alert({ mes: "请先阅读并同意服务协议" });
+        return false;
       }
       for (let i = 0, len = this.cart.length; i < len; i++) {
-        let _cartitem = this.cart[i]
+        const _cartitem = this.cart[i];
         if (
-          typeof _cartitem.totalPrice === 'string' &&
+          typeof _cartitem.totalPrice === "string" &&
           !_cartitem.totalPrice.length
         ) {
-          this.$dialog.alert({ mes: '请输入正确的金额' })
-          return false
-          break
+          this.$dialog.alert({ mes: "请输入正确的金额" });
+          return false;
         }
       }
       if (isNaN(this.auto) || !(this.auto >= 1 && this.auto <= 20)) {
-        this.$dialog.alert({ mes: '请输入正确的期数' })
-        return false
+        this.$dialog.alert({ mes: "请输入正确的期数" });
+        return false;
       }
       if (
         isNaN(this.chaseBeiShu) ||
         !(this.chaseBeiShu >= 1 && this.chaseBeiShu <= 5000)
       ) {
-        this.$dialog.alert({ mes: '请输入正确的倍数' })
-        return false
+        this.$dialog.alert({ mes: "请输入正确的倍数" });
+        return false;
       }
-      return true
+      return true;
     },
     // submitPrepare() {
 
     // },
     async submitBetting() {
       if (this.newestQishu != this.qishu) {
-        this.tipShow = true
-        return
+        this.tipShow = true;
+        return;
       }
       if (this.submitting) {
-        return false
+        return false;
       }
       if (!this.checkCartData()) {
-        return false
+        return false;
       }
-      let data = this.getSubmitData()
-      console.log(data)
+      const data = this.getSubmitData();
+      console.log(data);
       if (!data || !data.data || !data.data.length) {
-        this.$dialog.toast({ mes: '您的购物车空空如也' })
-        this.submitting = false
-        return false
+        this.$dialog.toast({ mes: "您的购物车空空如也" });
+        this.submitting = false;
+        return false;
       }
       if (this.userBalance * 1 < this.totalPrice) {
-        this.submitting = false
+        this.submitting = false;
         this.$dialog.confirm({
-          mes: '余额不足，是否立即充值？',
+          mes: "余额不足，是否立即充值？",
           opts: () => {
-            this.$router.push('/moreService/Nrecharge')
+            this.$router.push("/moreService/Nrecharge");
           }
-        })
-        return false
+        });
+        return false;
       }
-      let [err, result] = await to(
+      const [err, result] = await to(
         api.userSubmitBet({
           gameid: data.gameid,
           qishu: data.qishu,
-          data: JSON.stringify(data.data).replace('/\\/g', ''),
+          data: JSON.stringify(data.data).replace("/\\/g", ""),
           auto: data.auto,
           stop: data.stop,
           multiple: data.multiple,
           form_unique_token: randomFormtoken()
         })
-      )
+      );
       if (err || result) {
-        this.submitting = false
+        this.submitting = false;
       }
 
       if (result && result.take) {
-        this.auto = 1
-        this.stop = 1
-        this.chaseBeiShu = 1
+        this.auto = 1;
+        this.stop = 1;
+        this.chaseBeiShu = 1;
 
-        this.updatePrice(result.less)
-        this.clearCart()
+        this.updatePrice(result.less);
+        this.clearCart();
         this.$dialog.toast({
           mes: `投注成功,余额：${result.less}元`
-        })
-        this.$router.back()
+        });
+        this.$router.back();
       }
     },
     getSubmitData() {
-      this.submitting = true
-      let data = {
+      this.submitting = true;
+      const data = {
         gameid: this.cart[0].gameid,
         qishu: this.qishu,
         auto: Number.isNaN(this.auto) ? 1 : this.auto,
@@ -446,131 +504,131 @@ export default {
         stop: Number(this.isStop),
         ver: this.ver,
         data: []
-      }
-      this.cart.forEach((item, index) => {
+      };
+      this.cart.forEach(item => {
         if (danshiUtil.isSingleMode(item.js_tag, item.playid)) {
-          this.processDanshi(item, data.data)
+          this.processDanshi(item, data.data);
         } else if (item.peilvType == RenderTypes.SSC) {
-          this.processSSCData(item, data.data)
+          this.processSSCData(item, data.data);
         } else if (item.peilvType == RenderTypes.LHC) {
-          this.processLHCData(item, data.data)
+          this.processLHCData(item, data.data);
         } else if (item.peilvType === RenderTypes.SINGLE_ROW_SINGLE_PEILV) {
           item.arr2.forEach(x => {
             if (x.length) {
-              let values = x.split('|')
-              let str = `${item.playid}#${item.unitPrice}#${values.join('+')}`
-              data.data.push(str)
+              const values = x.split("|");
+              const str = `${item.playid}#${item.unitPrice}#${values.join(
+                "+"
+              )}`;
+              data.data.push(str);
             }
-          })
+          });
         } else if (
           item.peilvType === RenderTypes.MUTI_ROW_MUTI_PEILV ||
           item.peilvType === RenderTypes.SINGLE_ROW_MUTI_PEILV
         ) {
           item.arr2
-            .filter(x => (typeof x === 'string' ? x.length : x > -1))
+            .filter(x => (typeof x === "string" ? x.length : x > -1))
             .map(x => x.toString())
             .forEach(x =>
-              x.split('|').forEach(y => {
-                let str = `${item.playid}#${item.unitPrice}#${y}`
-                data.data.push(str)
+              x.split("|").forEach(y => {
+                const str = `${item.playid}#${item.unitPrice}#${y}`;
+                data.data.push(str);
               })
-            )
+            );
         } else {
           // 多行
-          let values = item.arr2.filter(x => x.length).join('+')
+          let values = item.arr2.filter(x => x.length).join("+");
           // 定位胆
           if (item.peilvType === RenderTypes.DWD) {
-            values = item.dwdValuesArr.filter(x => x.length).join('+')
+            values = item.dwdValuesArr.filter(x => x.length).join("+");
           }
-          let str = `${item.playid}#${item.unitPrice}#${values}`
-          data.data.push(str)
+          const str = `${item.playid}#${item.unitPrice}#${values}`;
+          data.data.push(str);
         }
         // playid#单价unitprice#  行用加号分隔，每个号用竖线分隔
-      })
-      return data
+      });
+      return data;
     },
     processDanshi(item, container) {
       if (item.danshiExcl && item.danshiExcl.length) {
-        let data = Array.isArray(item.arr2) ? item.arr2[0] : item.arr2
-        data = data.includes(' ') ? data.split(' ').join('|') : data
-        container.push(`${item.playid}#${item.totalPrice}#${data}`)
+        let data = Array.isArray(item.arr2) ? item.arr2[0] : item.arr2;
+        data = data.includes(" ") ? data.split(" ").join("|") : data;
+        container.push(`${item.playid}#${item.totalPrice}#${data}`);
       }
     },
     processSSCData(item, container) {
-      //单式
+      // 单式
       if (item.danshiExcl && item.danshiExcl.length) {
-        let data = Array.isArray(item.arr2) ? item.arr2[0] : item.arr2
-        data = data.includes(' ') ? data.split(' ').join('|') : data
-        container.push(`${item.playid}#${item.unitPrice}#${data}`)
+        let data = Array.isArray(item.arr2) ? item.arr2[0] : item.arr2;
+        data = data.includes(" ") ? data.split(" ").join("|") : data;
+        container.push(`${item.playid}#${item.unitPrice}#${data}`);
       } else if (item.arr2.length === 1) {
-        //单行
-        let values = []
+        // 单行
+        const values = [];
         item.arr2.forEach(x => {
-          x.includes('|')
-            ? values.push.apply(values, x.split('|'))
-            : values.push(x)
-        })
-        container.push(`${item.playid}#${item.unitPrice}#${values.join('+')}`)
+          x.includes("|") ? values.push(...x.split("|")) : values.push(x);
+        });
+        container.push(`${item.playid}#${item.unitPrice}#${values.join("+")}`);
       } else {
-        //多行
-        let values = item.arr2.join('+')
+        // 多行
+        let values = item.arr2.join("+");
         // 定位胆
         if (item.peilvType === RenderTypes.DWD) {
-          values = item.dwdValuesArr.filter(x => x.length).join('+')
+          values = item.dwdValuesArr.filter(x => x.length).join("+");
         }
-        let str = `${item.playid}#${item.unitPrice}#${values}`
-        container.push(str)
+        const str = `${item.playid}#${item.unitPrice}#${values}`;
+        container.push(str);
       }
     },
     // 处理六合彩数据
     processLHCData(item, container) {
       if ([8, 21].includes(item.playid)) {
-        let str = `${item.playid}#${item.unitPrice}#${item.arr2[0]
-          .split('|')
-          .join('+')}`
-        container.push(str)
+        const str = `${item.playid}#${item.unitPrice}#${item.arr2[0]
+          .split("|")
+          .join("+")}`;
+        container.push(str);
       } else {
-        let str = `${item.playid}#${item.unitPrice}#${item.arr2}`
-        console.log(str)
-        container.push(str)
+        const str = `${item.playid}#${item.unitPrice}#${item.arr2}`;
+        console.log(str);
+        container.push(str);
       }
     },
     showAggrement(event) {
       if (event.x > document.body.clientWidth / 2) {
-        this.$router.push('/agreement')
+        this.$router.push("/agreement");
       } else {
-        this.isAgree = !this.isAgree
+        this.isAgree = !this.isAgree;
       }
     },
     del(item) {
-      this.deleteItemFromCart(item)
+      this.deleteItemFromCart(item);
     },
     clearAction() {
       if (this.cart.length) {
         this.$dialog.confirm({
-          title: '确认清除',
-          mes: '请问是否确认清空购物车？',
+          title: "确认清除",
+          mes: "请问是否确认清空购物车？",
           opts: () => {
-            this.clearCart()
+            this.clearCart();
           }
-        })
+        });
       }
     },
     getBeishu(num) {
       if (Number.isNaN(num)) {
-        this.$dialog.alert({ mes: '请输入数字' })
-        return false
+        this.$dialog.alert({ mes: "请输入数字" });
+        return false;
       }
-      let str = ''
+      let str = "";
       for (let i = 1; i <= this.auto; i++) {
-        str += num
-        if (i < this.auto) str += '|'
+        str += num;
+        if (i < this.auto) str += "|";
       }
-      return str
+      return str;
     },
 
     numberKeydown(e) {
-      let val = e.target.value
+      const val = e.target.value;
       // if (e.keyCode >= 65 && e.keyCode <= 90) {
       //   console.log(e.key, e.keyCode)
       //   e.target.value = val.replace(/[a-zA-z]+/g, '')
@@ -579,24 +637,24 @@ export default {
       // }
 
       if (e.keyCode === 8 || e.keyCode === 46) {
-        return true
+        return true;
       }
       // if (e.key === 'e' || e.key === 'E') {
       //   e.target.value = val.replace(/[a-zA-z]+/g, '')
       //   console.log(e.target.value)
       //   return false
       // }
-      if (e.key === '.') {
-        console.log(val)
-        if (val.includes('.')) {
-          return false
+      if (e.key === ".") {
+        console.log(val);
+        if (val.includes(".")) {
+          return false;
         }
-        return true
+        return true;
       }
       if (isNaN(e.key)) {
-        e.target.value = val.replace(/[a-zA-z]+/g, '')
-        console.log(e.target.value)
-        return false
+        e.target.value = val.replace(/[a-zA-z]+/g, "");
+        console.log(e.target.value);
+        return false;
       }
 
       // if (val.includes('.')) {
@@ -607,76 +665,78 @@ export default {
       //   } else return true
       // }
       // return true
-      ///^\d+(.\d(\d)?)?$/
+      // /^\d+(.\d(\d)?)?$/
       // if ((val = Number(val.toString().match(/^\d+(?:\.\d{0,2})?/)))) {
 
-      console.log(val)
-      if ((val = Number(val.toString().match(/^\d+(\.|(\.\d(\d)?)?)$/)))) {
-        return true
+      console.log(val);
+      if (val === Number(val.toString().match(/^\d+(\.|(\.\d(\d)?)?)$/))) {
+        return true;
       }
-      return false
+      return false;
     },
     ...mapActions([
-      'setCartNumber',
-      'clearCart',
-      'deleteItemFromCart',
-      'addToCart',
-      'flushPrice',
-      'setQishu',
-      'updatePrice',
-      'updateField'
+      "setCartNumber",
+      "clearCart",
+      "deleteItemFromCart",
+      "addToCart",
+      "flushPrice",
+      "setQishu",
+      "updatePrice",
+      "updateField"
     ])
   },
   activated() {
-    //this.sourceHeight = window.innerHeight;
-    this.submitting = false
-    this.newestQishu = this.qishu
-    this.hideKeyboard1 = true
-    this.hideKeyboard2 = true
-    this.showAgg = false
-    if (Number.isNaN(this.auto)) this.auto = 1
-    if (Number.isNaN(this.stop)) this.stop = 1
+    // this.sourceHeight = window.innerHeight;
+    this.submitting = false;
+    this.newestQishu = this.qishu;
+    this.hideKeyboard1 = true;
+    this.hideKeyboard2 = true;
+    this.showAgg = false;
+    this.auto = 1;
+    this.chaseBeiShu = 1;
+    // if (Number.isNaN(this.auto)) this.auto = 1
+    // if (Number.isNaN(this.stop)) this.stop = 1
     if (!this.cart.length) {
-      this.getCart(this.$store.state.betting.cart)
+      this.getCart(this.$store.state.betting.cart);
     }
-    this.optionIsShow = false
-    this.showSecond = false
-    this.showBottom = true
-    this.sourceHeight = window.innerHeight
-    window.addEventListener('resize', this.resizeHandle, false)
+    this.optionIsShow = false;
+    this.showSecond = false;
+    this.showBottom = true;
+    this.sourceHeight = window.innerHeight;
+    window.addEventListener("resize", this.resizeHandle, false);
     if (isNaN(this.auto) || !(this.auto >= 1 && this.auto <= 20)) {
-      this.auto = 1
+      this.auto = 1;
     }
     if (
       isNaN(this.chaseBeiShu) ||
       !(this.chaseBeiShu >= 1 && this.chaseBeiShu <= 5000)
     ) {
-      this.chaseBeiShu = 1
+      this.chaseBeiShu = 1;
     }
   },
   deactivated() {
-    this.showAgg = false
-    //window.removeEventListener("resize");
-    window.removeEventListener('resize', this.resizeHandle, false)
+    this.showAgg = false;
+    // window.removeEventListener("resize");
+    window.removeEventListener("resize", this.resizeHandle, false);
   },
   watch: {
     chaseBeiShu(val) {
       if (val > 5000) {
-        this.$dialog.alert({ mes: '最多追加5000倍' })
-        this.chaseBeiShu = 5000
+        this.$dialog.alert({ mes: "最多追加5000倍" });
+        this.chaseBeiShu = 5000;
       }
     },
     auto(val) {
       if (val > 20) {
-        this.$dialog.alert({ mes: '最多追号20期' })
-        this.auto = 20
+        this.$dialog.alert({ mes: "最多追号20期" });
+        this.auto = 20;
       }
     },
     isStop(val) {
-      this.stop = Number(val)
-      console.log(this.stop)
+      this.stop = Number(val);
+      console.log(this.stop);
     },
-    '$store.state.betting.cart': 'getCart'
+    "$store.state.betting.cart": "getCart"
   },
   computed: {
     ...mapState({
@@ -686,69 +746,70 @@ export default {
       speed: state => state.betting.speed,
       userBalance: state => state.userinfo.accountInfo.price
     }),
+    ...mapState(['isfestival']),
     zhushu() {
       if (this.cart.length) {
-        let c = 0
+        let c = 0;
         this.cart.forEach(x => {
-          c += x.zhushu
-        })
-        this.setCartNumber(c)
-        return c * (Number.isNaN(this.auto) ? 1 : Number(this.auto))
+          c += x.zhushu;
+        });
+        this.setCartNumber(c);
+        return c * (Number.isNaN(this.auto) ? 1 : Number(this.auto));
       } else {
-        this.setCartNumber(0)
-        return 0
+        this.setCartNumber(0);
+        return 0;
       }
     },
     totalPrice() {
       if (this.cart.length) {
-        let c = 0
+        let c = 0;
         this.cart.forEach(x => {
-          let _totalPrice =
+          const _totalPrice =
             x.zhushu *
-            Number(x.unitPrice.toString().match(/^\d+(?:\.\d{0,2})?/)) //x.unitPrice
-          x.totalPrice = _totalPrice
-          c += _totalPrice * this.auto * this.chaseBeiShu
-        })
-        return c.toFixed(2)
-      } else return 0
+            Number(x.unitPrice.toString().match(/^\d+(?:\.\d{0,2})?/)); // x.unitPrice
+          x.totalPrice = _totalPrice;
+          c += _totalPrice * this.auto * this.chaseBeiShu;
+        });
+        return c.toFixed(2);
+      } else return 0;
     }
   },
   directives: {
     numberOnly: {
-      bind: function(el) {
+      bind(el) {
         el.handler = function() {
-          let c = Number(el.value.replace(/\D+/, ''))
+          let c = Number(el.value.replace(/\D+/, ""));
           if (c > 1000000) {
-            c = Number((c + '').substring(0, 5))
+            c = Number((c + "").substring(0, 5));
           }
-          el.value = c
-        }
-        el.addEventListener('input', el.handler)
+          el.value = c;
+        };
+        el.addEventListener("input", el.handler);
       },
-      unbind: function(el) {
-        el.removeEventListener('input', el.handler)
+      unbind(el) {
+        el.removeEventListener("input", el.handler);
       }
     },
     digital: {
-      bind: function(el) {
-        el.handler = function(event) {
-          let _val = el.value
-          _val = _val.toString().match(/^\d+(?:\.\d{0,2})?/)
-          el.value = _val
-        }
-        el.addEventListener('input', el.handler)
+      bind(el) {
+        el.handler = function() {
+          let _val = el.value;
+          _val = _val.toString().match(/^\d+(?:\.\d{0,2})?/);
+          el.value = _val;
+        };
+        el.addEventListener("input", el.handler);
       },
       // update(el) {
       //   // el.value = Number(el.value.toString().match(/^\d+(?:\.\d{0,2})?/))
       //   // el.value = Number(el.value.toString().match(/^\d+(\.|(\.\d(\d)?)?)$/))
       // },
-      unbind: function(el) {
-        el.removeEventListener('input', el.handler)
+      unbind(el) {
+        el.removeEventListener("input", el.handler);
       }
     }
   },
   mixins: [cartMixin]
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";
@@ -765,6 +826,9 @@ export default {
     background: url(~img/shouye/nav_bg.png) no-repeat;
     background-size: cover;
     @include between;
+    &.car_head_pig {
+      @include pigbg;
+    }
     span {
       @include center;
       width: poTorem(90px);

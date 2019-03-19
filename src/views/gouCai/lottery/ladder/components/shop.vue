@@ -1,6 +1,7 @@
 <template>
   <div class="shop">
-    <div class="clear" @click="clearAction">
+    <div class="clear"
+         @click="clearAction">
       <i class="icon"></i>
       <span>清空</span>
     </div>
@@ -12,13 +13,16 @@
       <i class="icon"></i>
       <span @click="openConfrim">玩法说明</span>
     </div>
-    <div :class="[{'active': !isTouzhuEnable},'bet']" @click="buy">
+    <div :class="[{'active': !isTouzhuEnable},'bet']"
+         @click="buy">
       <i class="icon"></i>
       <span>
         <span>{{quotation ? "下注" : "已封盘"}}</span>
       </span>
     </div>
-    <yd-popup v-model="tipShow" position="center" width="60%">
+    <yd-popup v-model="tipShow"
+              position="center"
+              width="60%">
       <div class="tips">
         <p>温馨提示</p>
         <p>您尚未登录！！</p>
@@ -29,14 +33,15 @@
       </div>
     </yd-popup>
     <!-- 投注界面 -->
-    <model-bet :show='modelShow' @close="close"></model-bet>
+    <model-bet :show='modelShow'
+               @close="close"></model-bet>
   </div>
 </template>
 <script>
 import modelBet from "../../modelBet";
 import { mapState, mapActions } from "vuex";
 export default {
-  name:'ladder_shop',
+  name: "ladder_shop",
   props: ["quotation"],
   data() {
     return {
@@ -49,7 +54,7 @@ export default {
     this.descriptions = "";
   },
   methods: {
-    ...mapActions(['modelBetShow']),
+    ...mapActions(["modelBetShow"]),
     openConfrim() {
       this.$dialog.confirm({
         // title: "", //"玩法说明",
@@ -63,13 +68,13 @@ export default {
         ]
       });
     },
-    close(val) {
+    close() {
       // this.show = false;
-      this.modelBetShow(false)
+      this.modelBetShow(false);
     },
     buy() {
       if (this.isLogin && this.isTouzhuEnable) {
-        this.modelBetShow(true)
+        this.modelBetShow(true);
       } else if (!this.isLogin) {
         this.tipShow = true;
       }
@@ -79,10 +84,10 @@ export default {
     }
   },
   watch: {
-    description: function(val) {
+    description(val) {
       this.descriptions = val;
     },
-    betNumber(val) {},
+    betNumber() {},
     isLogin(val) {
       if (val) this.tipShow = false;
     }
@@ -96,7 +101,7 @@ export default {
       isLogin: state => state.userinfo.isLogin,
       modelShow: state => state.betting.modelShow
     }),
-    isTouzhuEnable(val) {
+    isTouzhuEnable() {
       return this.quotation && this.betNumber;
     }
   },
@@ -106,10 +111,12 @@ export default {
   activated() {},
   deactivated() {
     // this.show = false;
-    this.modelBetShow(false)
-    let confirmDom = document.querySelector('.yd-dialog-black-mask .yd-confirm-btn')
-    if(confirmDom) {
-      confirmDom.click()
+    this.modelBetShow(false);
+    const confirmDom = document.querySelector(
+      ".yd-dialog-black-mask .yd-confirm-btn"
+    );
+    if (confirmDom) {
+      confirmDom.click();
     }
   }
 };
@@ -200,7 +207,7 @@ export default {
       text-align: center;
       &:first-child {
         padding-left: poTorem(20px);
-        color: #ff7c34;
+        color: $mainColor;
         text-align: left;
       }
       &:nth-child(2) {

@@ -4,13 +4,18 @@ import * as types from './mutation-type'
 import trend from './modules/trend'
 import betting from './modules/betting'
 import quick from './modules/quick'
+import zixuanPaixu from './modules/zixuanPaixu'
 import youxi from './modules/youxi'
 import football from './modules/football'
+import chat from './modules/chat'
+import match from './modules/match'
 import userCenter from './userCenter/index'
 // import ResLoader from '../../server/resLoader'
-import http from '../../server/http'
-import ajaxs from '../../server/ajax'
+import http from '../../server/fetch'
 import ReqLoader from '../../server/reqLoader'
+import decompress from '~/js/decompress'
+import clientCache from '../../server/clientCache'
+// import { satisfies } from 'semver';
 Vue.use(Vuex)
 
 let timeI
@@ -21,29 +26,37 @@ export default new Vuex.Store({
     betting,
     trend,
     football,
+    match,
     quick,
     youxi,
+    chat,
+    zixuanPaixu,
     ...userCenter
   },
   state: {
     // 预加载所有媒体资源
-    resources: [
-      'https://avatars1.githubusercontent.com/u/6128107?v=4'
-      // 'http://static.ydcss.com/uploads/ydui/1.jpg',
-      // 'http://static.ydcss.com/uploads/ydui/2.jpg',
-      // 'http://static.ydcss.com/uploads/ydui/3.jpg'
-    ],
+    resources: ['https://avatars1.githubusercontent.com/u/6128107?v=4'],
     loader: {
       percent: 0,
       total: 0,
       percentComplete: false,
       errText: null
     },
+    defautHeadPicture: '/assets/head_icon.png',
+    chatRoom: {
+      talk_on: 0,
+      talk_delay: 10,
+      head: '',
+      show: false,
+      room: '',
+      isHall: true
+    },
     userinfo: {
       accountInfo: {},
       isLogin: false
     },
     // 系统的基本信息
+    isfestival: true, // 是否应用节日主题
     sysinfo: {},
     //  系统提示信息的状态
     sysState: false,
@@ -73,9 +86,24 @@ export default new Vuex.Store({
       qq: 0
     },
     betRecordsType: 0,
-    vcode: '' // 验证码
+    vcode: '', // 验证码,
+    sportItem: {},
+    dzyxItem: {},
+    grabhbrule: {}, // 抢红包规则
+    games: [] // 游戏列表
   },
-  // getters,
+  getters: {
+    games: state => {
+      let games = []
+      if (Array.isArray(state.games) && state.games.length) {
+        games = state.games
+      } else {
+        // clientCache.getItem('getGameListAtin') != null
+        games = clientCache.getItem('getGameListAtin') || []
+      }
+      return games.filter(x => x.type === 1 && x.enable === 1)
+    }
+  },
   mutations: {
     [types.REQ_LOADER](state, requests) {
       const loader = new ReqLoader({
@@ -96,28 +124,9 @@ export default new Vuex.Store({
       })
       loader.start()
     },
-    /**
-     * 页面预加载
-     */
-    // [types.RES_LOADER](state) {
-    //   const loader = new ResLoader({
-    //     resources: state.resources,
-    //     onStart(total) {
-    //       console.log('start:' + total)
-    //     },
-    //     onProgress(current, total) {
-    //       const percent = current / total
-    //       state.loader.percent = percent
-    //     },
-    //     onComplete(boolen) {
-    //       state.loader.total = boolen
-    //     },
-    //     onErr(err) {
-    //       state.loader.errText = err
-    //     }
-    //   })
-    //   loader.start()
-    // },
+    setGrabhbrule(state, rule) {
+      state.grabhbrule = rule
+    },
     /** 储存用户信息 */
     [types.GET_USERINFO](state, anyData) {
       const arr = ['last_get_price', 'price']
@@ -196,6 +205,7 @@ export default new Vuex.Store({
     //  储存系统信息
     [types.SET_SYSINFO](state, sys) {
       state.sysinfo = sys
+      state.isfestival = sys.holiday_skin * 1
     },
     // 修改系统信息弹窗提示
     [types.SET_SYSSTATE](state, sysState) {
@@ -219,7 +229,16 @@ export default new Vuex.Store({
     },
     // 修改用户信息
     MODIFY_USER_FIELD(state, obj) {
-      Object.keys(obj).map(k => state.userinfo.accountInfo[k] = obj[k])
+      Object.keys(obj).forEach(k => {
+        state.userinfo.accountInfo[k] = obj[k]
+      })
+    },
+    // 修改信息
+    MODIFY_CHAT_FIELD(state, obj) {
+      Object.keys(obj).forEach(k => {
+        state.chatRoom[k] = obj[k]
+      })
+      // Object.keys(obj).map(k => (state.userinfo.accountInfo[k] = obj[k]))
     },
     // 修改维护状态
     [types.SET_MAINTAINED](state, main) {
@@ -231,9 +250,31 @@ export default new Vuex.Store({
     },
     [types.SET_VCODE](state, code) {
       state.vcode = code
+    },
+    [types.SET_GAMES](state, games) {
+      if (Array.isArray(games) && games.length) {
+        state.games = games.filter(x => x.enable === 1 && x.type === 1)
+      }
     }
   },
   actions: {
+    async getServiceUrl({ state }) {
+      const ac = state.userinfo.isLogin ? 'getLoginServiceUrl' : 'getServiceUrl'
+      const ret = await http({
+        ac
+      })
+      if (ret.service_line) {
+        return (
+          ret.service_wap_url
+            .replace(/\\\\u0026/g, '&')
+            .replace(/\&amp\;/g, '&') + ret.service_data
+        )
+      } else {
+        return ret.service_host_url
+          .replace(/\\\\u0026/g, '&')
+          .replace(/\&amp\;/g, '&')
+      }
+    },
     // 设置投注记录类型
     async setBetRecordsType({ commit }, data) {
       commit(types.SET_BETRECORDSTYPE, data)
@@ -249,7 +290,7 @@ export default new Vuex.Store({
       commit(types.SET_BALANCE, str)
     },
     // 账号登录
-    async userLogin({ commit, dispatch }, { encodeUserStr, request }) {
+    async userLogin({ commit }, { encodeUserStr, request }) {
       const res = await http({ ac: 'userLogin', ...request })
       commit('GET_USERINFO', {
         accountInfo: res,
@@ -266,6 +307,7 @@ export default new Vuex.Store({
       // 登陆后显示引导图
       const it = JSON.parse(localStorage.getItem('guide'))
       commit('SET_GUIDE_STATE', it !== null ? it : true)
+
       return true
       // return dispatch('flushPrice')
     },
@@ -290,6 +332,36 @@ export default new Vuex.Store({
       localStorage.setItem('userIndex', res.uid)
       return dispatch('encodeLogin')
     },
+    // 获取聊天室信息
+    async isIntoChatRoom({ commit, state }, input) {
+      console.log(input)
+      let res,
+        room = state.chatRoom.isHall ? '' : input
+      if (state.userinfo.isLogin) {
+        res = await http({
+          ac: 'getTalkingInfoByLogin',
+          room
+        })
+        if (res.msg === 20028) {
+          return { state: false, param: res.param }
+        }
+        res.username = state.userinfo.accountInfo.username
+        commit('MODIFY_CHAT_FIELD', res)
+        return { state: true }
+      } else {
+        res = await http({
+          ac: 'getTalkingInfoNotLogin',
+          room
+        })
+        if (res.msg === 20030) {
+          return { state: false, param: res.param }
+        } else {
+          commit('MODIFY_CHAT_FIELD', res)
+          return { state: true }
+        }
+      }
+    },
+
     // 自动登录
     async encodeLogin({ commit, dispatch }) {
       const res = await http({
@@ -305,18 +377,21 @@ export default new Vuex.Store({
       } else {
         return
       }
+
       // 开启余额定时刷新
       dispatch('flushPrice')
       return true
     },
     // 自动刷新余额和消息状态
-    async flushPrice({ commit }) {
+    async flushPrice({ commit }, param) {
+      // async flushPrice({ commit }) {
       // if (timeI) {
       //   clearTimeout(timeI)
       // }
-      const res = await ajaxs(
+      const res = await http(
         {
-          ac: 'flushPrice'
+          ac: 'flushPrice',
+          ...param
         },
         false
       ).catch(() => {
@@ -338,6 +413,22 @@ export default new Vuex.Store({
       // }, 10000)
       return true
     },
+    // 强制刷新
+    async manualFlushprice({ commit }, param) {
+      const res = await http({
+        ac: 'ForceRunPrice',
+        ...param
+      })
+      // if (!res || !res.hasOwnProperty('price')) {
+      //   return false
+      // }
+      // 刷新金额
+      commit('MODIFY_USER_FIELD', {
+        price: Number(res.price).toFixed(2)
+      })
+      return res
+    },
+
     // 更新余额
     async updatePrice({ commit }, price) {
       console.log('updatePrice1', price)
@@ -372,6 +463,28 @@ export default new Vuex.Store({
     // 写入验证码
     async setVcode({ commit }, code) {
       commit(types.SET_VCODE, code)
+    },
+    // 红包规则
+    async RobEventGiftIndex({ commit }) {
+      const grabhbrule =
+        (await http({
+          ac: 'RobEventGiftIndex'
+        })) || {}
+      let { detail } = grabhbrule
+
+      if (detail) {
+        const decodedStr = decompress(detail)
+        let newDiv = window.document.createElement('div')
+        const c = decodeURIComponent(escape(unescape(decodedStr)))
+        newDiv.innerHTML = c.replace(/\\u0026/g, '&')
+        detail = newDiv.innerText || newDiv.textContent
+        newDiv = null
+      }
+      grabhbrule.detail = detail
+      commit('setGrabhbrule', grabhbrule)
+    },
+    async SetGames({ commit }, games) {
+      commit(types.SET_GAMES, games)
     }
   }
 })

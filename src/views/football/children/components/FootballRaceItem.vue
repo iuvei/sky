@@ -1,8 +1,10 @@
 <template>
-  <li class="item" :style="change.style">
+  <li class="item"
+      :style="change.style">
     <div class="game-time">{{date}} </div>
     <div class="game-info">
-      <div v-if="change.txt" class="txt">{{change.txt}}</div>
+      <div v-if="change.txt"
+           class="txt">{{change.txt}}</div>
       <div class="game-info-team">
         <span class="name">{{data.h}}</span>
         <span class="tg">{{data.result_data.SC.H.TG}}</span>
@@ -28,7 +30,6 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
 export default {
   name: "FootballRaceItem",
   props: ["data", "league"],
@@ -50,22 +51,22 @@ export default {
       if (txt) {
         return {
           txt,
-          style: { height: "7rem" },
+          style: { height: "7rem" }
         };
       }
       return {};
-    },
+    }
   },
 
   methods: {
     goInfo() {
       this.$router.push({
         name: "footballRaceInfo",
-        params: { data: this.data, league: this.league },
+        params: { data: this.data, league: this.league }
       });
-    },
+    }
   },
-  mounted() {},
+  mounted() {}
 };
 </script>
 

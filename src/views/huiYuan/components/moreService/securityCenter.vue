@@ -1,13 +1,19 @@
 <template>
   <div class="securityCenter_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="main_body">
       <span></span>
-      <yd-grids-group :rows="3" class="func_part">
-        <yd-grids-item v-for="(item, index) in gridsData" :key="index">
-          <router-link :to="item.path" class="pieces_content" slot="else">
+      <yd-grids-group :rows="3"
+                      class="func_part">
+        <yd-grids-item v-for="(item, index) in gridsData"
+                       :key="index">
+          <router-link :to="item.path"
+                       class="pieces_content"
+                       slot="else">
             <i :class="{'flag-mark':userFlag[item.class]}"></i>
-            <img :src="item.src" alt="">
+            <img :src="item.src"
+                 alt="">
             <div class="word">
               <p>{{item.text1}}</p>
               <!-- <p>{{item.text2}}</p> -->
@@ -17,10 +23,16 @@
       </yd-grids-group>
       <div class="default_bank">
         <p>默认提现银行卡</p>
-        <div :class="[{'bank_card' : hasDefault}, 'bg_wall']" @click="$router.push('/moreService/bankcardManage')">
-          <img :src="defaultSrc" alt="">
-          <img class="default_mark" src="../../../../img/security_center/default_mark.png" alt="" v-show="hasDefault">
-          <div v-show="elseIsShow" class="else_bank">
+        <div :class="[{'bank_card' : hasDefault}, 'bg_wall']"
+             @click="$router.push('/moreService/bankcardManage')">
+          <img :src="defaultSrc"
+               alt="">
+          <img class="default_mark"
+               src="../../../../img/security_center/default_mark.png"
+               alt=""
+               v-show="hasDefault">
+          <div v-show="elseIsShow"
+               class="else_bank">
             <p>{{bankName}}</p>
             <p>储蓄卡</p>
           </div>
@@ -35,7 +47,7 @@ import publicHead from "./publicHead";
 import { mapState } from "vuex";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   data() {
     return {
@@ -48,13 +60,13 @@ export default {
           text2: "立即修改",
           path: "/moreService/correctDealPW",
           src: require("../../../../img/security_center/correct_deal_pw.png"),
-          class: 'jymm'
+          class: "jymm"
         },
         {
           text1: "修改登录密码",
           text2: "立即修改",
           path: "/moreService/correctLoginPW",
-          src: require("../../../../img/security_center/correct_login_pw.png"),
+          src: require("../../../../img/security_center/correct_login_pw.png")
         },
         {
           text1: "绑定银行卡",
@@ -62,14 +74,14 @@ export default {
           text3: "已绑定",
           path: "/moreService/bankcardManage",
           src: require("../../../../img/security_center/binding_bankcard.png"),
-          class: 'yhk'
+          class: "yhk"
         },
         {
           text1: "设置真实姓名",
           text2: "立即修改",
           path: "/moreService/correctRealName",
           src: require("../../../../img/security_center/correct_real_name.png"),
-          class: 'zsxm'
+          class: "zsxm"
         },
         {
           text1: "设置密保问题",
@@ -77,7 +89,7 @@ export default {
           text3: "已设置",
           path: "/moreService/correctQuestion",
           src: require("../../../../img/security_center/set_question.png"),
-          class: 'mbwt'
+          class: "mbwt"
         },
         {
           text1: "绑定邮箱",
@@ -85,7 +97,7 @@ export default {
           text3: "已绑定",
           path: "/moreService/bindingEmail",
           src: require("../../../../img/security_center/binding_email.png"),
-          class: 'yx'
+          class: "yx"
         },
         {
           text1: "绑定手机",
@@ -93,7 +105,7 @@ export default {
           text3: "已绑定",
           path: "/moreService/bindingCellphone",
           src: require("../../../../img/security_center/binding_cellphone.png"),
-          class: 'sj'
+          class: "sj"
         },
         {
           text1: "绑定微信",
@@ -101,7 +113,7 @@ export default {
           text3: "已绑定",
           path: "/moreService/bindingWechat",
           src: require("../../../../img/security_center/binding_wetchat.png"),
-          class: 'wx'
+          class: "wx"
         },
         {
           text1: "绑定QQ",
@@ -109,49 +121,49 @@ export default {
           text3: "已绑定",
           path: "/moreService/bindingQQ",
           src: require("../../../../img/security_center/binding_QQ.png"),
-          class: 'qq'
-        },
+          class: "qq"
+        }
       ],
       cardNum: 0,
-      bankName: '',
+      bankName: "",
       elseIsShow: false
     };
   },
   activated() {
-    this.elseIsShow = false
+    this.elseIsShow = false;
     // console.log(this.$store.state.userinfo.accountInfo)
     if (this.$store.state.userinfo.accountInfo.tkpass_ok != 0) {
-      this.gridsData[0].text1 = '修改交易密码';
+      this.gridsData[0].text1 = "修改交易密码";
     }
-    if (this.$store.state.userinfo.accountInfo.real_name !== '') {
-      this.gridsData[3].text1 = '修改真实姓名';
+    if (this.$store.state.userinfo.accountInfo.real_name !== "") {
+      this.gridsData[3].text1 = "修改真实姓名";
     }
-    if (this.$store.state.userinfo.accountInfo.question_1 !== '0') {
-      this.gridsData[4].text1 = '修改密保问题';
+    if (this.$store.state.userinfo.accountInfo.question_1 !== "0") {
+      this.gridsData[4].text1 = "修改密保问题";
     }
-    if (this.$store.state.userinfo.accountInfo.phone !== '') {
-      this.gridsData[6].text1 = '修改手机';
+    if (this.$store.state.userinfo.accountInfo.phone !== "") {
+      this.gridsData[6].text1 = "修改手机";
     }
-    if (this.$store.state.userinfo.accountInfo.qq !== '') {
-      this.gridsData[8].text1 = '修改QQ';
+    if (this.$store.state.userinfo.accountInfo.qq !== "") {
+      this.gridsData[8].text1 = "修改QQ";
     }
-    if (this.$store.state.userinfo.accountInfo.email !== '') {
-      this.gridsData[5].text1 = '修改邮箱';
+    if (this.$store.state.userinfo.accountInfo.email !== "") {
+      this.gridsData[5].text1 = "修改邮箱";
     }
-    if (this.$store.state.userinfo.accountInfo.wechat !== '') {
-      this.gridsData[7].text1 = '修改微信';
+    if (this.$store.state.userinfo.accountInfo.wechat !== "") {
+      this.gridsData[7].text1 = "修改微信";
     }
     // this.$store.state.userinfo.accountInfo.question_1
     this.getData();
   },
   computed: {
-    ...mapState(["userFlag"]),
+    ...mapState(["userFlag"])
   },
   methods: {
     getData() {
       this.$dialog.loading.open(" ");
       this.$ajax("request", {
-        ac: "getUserBankCard",
+        ac: "getUserBankCard"
       }).then(res => {
         if (res && res.length) {
           res.forEach(item => {
@@ -160,23 +172,26 @@ export default {
                 item.bank_type
               }.png`;
               this.hasDefault = true;
-              this.cardNum = item.card_num.substr(0, 4) + " **** **** " + item.card_num.substr(-4);
-              if(item.bank_type === -1) {
-                this.elseIsShow = true
-                this.bankName = item.bank_typename
+              this.cardNum =
+                item.card_num.substr(0, 4) +
+                " **** **** " +
+                item.card_num.substr(-4);
+              if (item.bank_type === -1) {
+                this.elseIsShow = true;
+                this.bankName = item.bank_typename;
               }
             }
           });
         } else {
-          this.defaultSrc = require("../../../../img/security_center/plus.png")
-          this.hasDefault = false
+          this.defaultSrc = require("../../../../img/security_center/plus.png");
+          this.hasDefault = false;
           this.cardNum = "";
         }
 
         this.$dialog.loading.close();
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -208,23 +223,23 @@ export default {
           }
         }
         .flag-mark {
-        position: absolute;
-        right: poTorem(48px);
-        top: poTorem(15px);
-        display: inline-block;
-        height: poTorem(6px);
-        width: poTorem(6px);
-        background-color: rgb(224,27,57);
-        border: poTorem(5px) solid rgb(224,27,57);
-        border-radius: poTorem(6px);
-      }
+          position: absolute;
+          right: poTorem(48px);
+          top: poTorem(15px);
+          display: inline-block;
+          height: poTorem(6px);
+          width: poTorem(6px);
+          background-color: rgb(224, 27, 57);
+          border: poTorem(5px) solid rgb(224, 27, 57);
+          border-radius: poTorem(6px);
+        }
       }
     }
     .default_bank {
       margin-top: poTorem(20px);
       padding: poTorem(20px);
       background-color: #fff;
-      >p {
+      > p {
         font-size: poTorem(15px);
         color: #4d4d4c;
         text-align: center;
@@ -240,10 +255,10 @@ export default {
         @include center;
         // background: #fff url(~img/security_center/plus.png) no-repeat center;
         // background-size: poTorem(30px) poTorem(30px);
-        >img {
+        > img {
           width: poTorem(30px);
         }
-        >p {
+        > p {
           position: absolute;
           right: poTorem(20px);
           top: poTorem(40px);
@@ -253,9 +268,11 @@ export default {
       }
       .bank_card {
         position: relative;
-        background: transparent url('../../../../img/security_center/default_mark.png') no-repeat right top;
+        background: transparent
+          url("../../../../img/security_center/default_mark.png") no-repeat
+          right top;
         background-size: poTorem(30px) poTorem(30px);
-        >img {
+        > img {
           &:first-child {
             width: 100%;
             height: 100%;
@@ -269,7 +286,8 @@ export default {
           }
         }
         .else_bank {
-          background: url('~img/security_center/else_bank.png') no-repeat left top;
+          background: url("~img/security_center/else_bank.png") no-repeat left
+            top;
           background-size: 1.5rem 1.5rem;
           width: 6rem;
           height: 3rem;

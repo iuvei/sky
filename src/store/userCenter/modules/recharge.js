@@ -1,4 +1,4 @@
-import http from '../../../../server/http'
+import http from '../../../../server/fetch'
 import { GET_DEFAULT_TIPS } from '../mutation-type'
 
 const state = {

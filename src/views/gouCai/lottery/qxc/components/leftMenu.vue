@@ -8,7 +8,7 @@
     <div @click="clickCart" style="display:flex">
       <div class="qxc_drag">
         <i class="spots" v-show="cartNumber>0">
-          {{cartNumber}}
+          {{cartNumber > 99 ? '99+' : cartNumber}}
         </i>
       </div>
     </div>
@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
-  name: 'qxc_leftmenu',
-  props: ['switchs', 'menuList'],
+  name: "qxc_leftmenu",
+  props: ["switchs", "menuList"],
   data() {
     return {
       activedMenu: null
-    }
+    };
   },
   computed: {
     ...mapState({
@@ -33,22 +33,22 @@ export default {
   },
   methods: {
     clickMenu(item, index) {
-      this.activedMenu = item
-      this.$emit('clickMenu', item, index)
+      this.activedMenu = item;
+      this.$emit("clickMenu", item, index);
     },
     clickCart() {
       // this.$emit('clickCart')
       if (this.cart.length) {
-        this.$router.push('/shopCart')
+        this.$router.push("/shopCart");
       } else {
-        this.$dialog.toast({ mes: '您的购物车空空如也' })
+        this.$dialog.toast({ mes: "您的购物车空空如也" });
       }
     }
   },
   created() {
-    this.activedMenu = this.menuList[0]
+    this.activedMenu = this.menuList[0];
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -69,15 +69,15 @@ export default {
     .spots {
       position: absolute;
       @include center;
-      width: poTorem(18px);
-      height: poTorem(18px);
+      width: poTorem(24px);
+      height: poTorem(24px);
       background: #e03a3a;
       display: flex;
       border-radius: 50%;
       font-weight: bolder;
       color: #fff;
-      right: poTorem(8px);
-      top: poTorem(8px);
+      right: 0;
+      top: 0;
     }
   }
   ul {

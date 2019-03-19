@@ -30,10 +30,275 @@ npm run dev --config=local
 npm run build
 ```
 
-Will load `config/default.js`.
-###V1.2.0.8
+## 注意
 
-1. 修复切换彩种时头部不对的问题
+### 新增加了 serviceWorker，会导致以下问题
+
+1. 只有 production，build 版本 serviceWorker 才会起作用
+2. 如果部署测试后，改了问题重新编译后发现没有生效，是因为 SW 生成插件没有被更改，这时候可以：
+
+- 改动 `plugin/sw.js`里的 `getTemplate2` 模板字符串
+- 改动 `config/edition.json` 里的 `edition` 版本号
+
+* 建议改动第一点
+
+### eslint 规则相关
+
+1. 在 package.json 中新添加了 lint 命令,用于进行 eslint 检查
+2. 如果 lint 无法运行，则需要 npm i eslint,babel-eslint,eslint-plugin-html 等插件至最新版本
+3. 具体校验规则在 .eslintrc 中，请自行增减规则
+
+### VSCODE 必装插件
+
+1. GitLens
+2. Prettier
+3. Chinese （Simplified) Language Pack
+4. ESLint
+5. JavaScript (ES6) code snippets
+6. Settings Sync
+7. Vetur
+
+### VSCODE 插件配置
+
+```json
+{
+  "prettier.tabWidth": 2,
+  "prettier.eslintIntegration": true,
+  "editor.tabSize": 2,
+  "eslint.autoFixOnSave": true,
+  "editor.formatOnSave": true,
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "vetur.validation.template": false,
+  "eslint.enable": true, //Enable eslint
+  "eslint.options": {
+    "extensions": [
+      //List of file extensions to activate eslint
+      ".html",
+      ".js",
+      ".vue",
+      ".jsx"
+    ]
+  },
+  "eslint.validate": [
+    {
+      "language": "html",
+      "autoFix": true
+    },
+    {
+      "language": "vue",
+      "autoFix": true //Autofix any fixable errors when linting
+    },
+    {
+      "language": "javascript",
+      "autoFix": true //Autofix any fixable errors when linting
+    },
+    {
+      "language": "javascriptreact",
+      "autoFix": true //Autofix any fixable errors when linting
+    }
+  ],
+  "vetur.format.defaultFormatterOptions": {
+    "js-beautify-html": {
+      // vue 模板格式化设置
+      "wrap_attributes": "force-aligned" // 可以换成上面任意一种value
+    },
+    "prettyhtml": {
+      "printWidth": 100,
+      "singleQuote": false
+    }
+  },
+  "files.eol": "\n" // 行结束符设置
+}
+```
+### V1.3.3.4
+1. 返水区间加入万亿单位
+2. 修改首页tab标题体育为皇冠体育
+3. 修改新注册用户名密码匹配规则
+### V1.3.3.3
+1. 去掉充值判断是否绑定银行卡逻辑
+### V1.3.3.2
+1. 充值判断银行bug
+2. 添加竞彩足球入口和注单显示
+3. 代理报表添加不同平台金额字段
+4. 兼容提款接口返回null
+### V1.3.3.1
+1. 维护页面客服地址取值bug
+### V1.3.3.0
+1. 充值页面加入是否绑定银行卡判断
+2. 无法正常进入维护状态bug
+
+### V1.3.2.9
+1. 六合彩生肖跨年数据计算
+
+### V1.3.2.8
+1. 电子游戏加入区分平台角标
+2. 充值记录类型选择bug
+3. 聊天加入提示语
+
+### V1.3.2.7
+
+1. 首页彩票路由指向 bug
+
+### V1.3.2.6
+
+1. 聊天室未正确隐藏
+
+### V1.3.2.5
+
+1. 修复请求头被覆盖 bug
+
+### V1.3.2.4
+
+1. 修改聊天室 bug
+
+### V1.3.2.3
+
+1. 添加聊天室功能
+2. 首页可拖动红包 bug
+3. 六合彩连码赔率显示 bug
+
+### V1.3.2.2
+
+1. 维护页客服地址取维护信心 service_url
+
+### V1.3.2.1
+
+1. 电子游戏强制刷新金额 bug
+
+### V1.3.2.0
+
+1. 系统公告添加 html 标签兼容
+2. 客服地址过滤转义字符
+3. 维护页客服地址跳转
+4. 抢红包 safari 样式兼容
+
+### V1.3.1.9
+
+1. 代理投注详情显示未中奖 bug
+2. 适配 ipad
+3. 密码为 q12we34r 无需验证码
+
+### V1.3.1.8
+
+1. 修复 11 选五双面无法选择的问题
+2. 加入最新拼接客服地址
+3. 拦截试玩账号进入电子游戏
+
+### V1.3.1.7
+
+1. 六合彩连码限制最多 10 个选球
+
+### V1.3.1.6
+
+1. 抢红包加入可拖动
+2. 足彩投注记录详情图标修改
+
+### V1.3.1.5
+
+1. 购彩大厅移除 MG
+2. 用户登录添加.字符
+
+### V1.3.1.4
+
+1. 修复投注记录切换头部彩票和电子游戏时再退出进入未初始化的问题
+2. 修复投注记录跳到投注页再后退与其他端展示不一致显示问题
+3. 开放抢红包活动
+4. 过长数组解压报错 bug
+5. 修复投注记录切换足彩切换投注状态并进入其他页面再进入投注记录足彩投注状态未初始化的问题
+6. 安全中心添加银行卡前端手动插入数据
+7. pk10 和 11X5 默认为定位胆
+8. 修改分分六合彩生肖直选>特肖 号码溢出盒子
+
+### V1.3.1.3
+
+1. 扫码充值个人入款账户加入昵称字段显示
+
+### V1.3.1.2
+
+1. 体彩冠军页面样式调整
+2. 连选必中预计中奖金额显示 bug
+3. 加入主题色样式变量
+4. 三星手机自带浏览器全屏页面成长信息页面无法滑动 bug
+
+### V1.3.1.1
+
+1. 11x5 二星组选胆拖注数计算 bug
+2. 体彩加入篮球
+3. 加入今日盈亏功能，修改选择日期 bug
+4. 用户晋级活动接口修改
+
+### V1.3.1.0
+
+1. 加入今日盈亏功能
+
+### V1.3.0.9
+
+1. 等级奖励中彩金显示成长值 bug
+
+### V1.3.0.8
+
+1. 活动详情压缩解密兼容算法
+
+### V1.3.0.7
+
+1. 优化用户提款处理逻辑，提款银行卡为 0 时默认选择已绑定银行卡第一条信息
+1. 优化提示购物车有投注信息弹窗时可以点击头部信息逻辑
+
+### V1.3.0.6
+
+1. 投注后跳转选球页赔率未初始化
+1. 购物车已选注数大于 99 时图标显示 99+
+1. 六合彩玩法选球限制 bug
+1. 购物车下注后默认追号不重置 bug
+1. 投注页头部 bug 更改
+1. 手动刷新金额加入'{click: 1}'参数
+
+### V1.3.0.5
+
+1. pcdd、k3 下注确认弹窗不应该有详情 bug
+2. 时时彩随机一注无赔率 bug
+3. 合肖赔率显示 bug
+
+### V1.3.0.4
+
+4. 首页热门彩种加入电子游戏
+5. 头部 bug 更改 80%
+6. 六合彩合肖注数计算错误
+7. 确认购彩弹窗是否显示购彩详情优化
+
+### V1.3.0.3
+
+8. 屏蔽优惠管理入口
+9. 提款加入请求失败处理
+10. 电子游戏结算逻辑判断
+11. 优化客服地址转义字符替换
+
+### V1.3.0.2
+
+12. 加入 IP 访问限制页面
+13. 补充漏掉的等级奖励返回路由
+14. 修复电子游戏投注记录混入彩票记录
+15. 修改 IP 限制页面的图标
+16. 彩种列表加个跳动图标
+17. 电子游戏维护判断
+
+### V1.3.0.1
+
+18. 修改用户等级 bug
+19. 公司入款订单号加复制按钮
+
+### V1.2.0.9
+
+20. 添加时时返水
+21. 添加电子游戏
+22. 农场走势 bug 修改
+
+### V1.2.0.8
+
+23. 修复切换彩种时头部不对的问题
+24. 七星彩双面玩法 UI 调整
+25. 修复六合彩五尾没有 35 号码的问题
+26. 推广链接优化
 
 ###V1.2.0.7
 
@@ -69,8 +334,6 @@ Will load `config/default.js`.
 3. 屏蔽路纸图
 4. 投注详情期数过长换行
 5. 下级开户设置新彩种返点
-
-## 版本更新记录
 
 ### V1.2.0.1
 

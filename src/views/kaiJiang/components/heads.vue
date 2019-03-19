@@ -1,6 +1,6 @@
 <template>
   <div class="heads">
-    <div class="phone_header">
+    <div :class="[{'phone_header_pig':isfestival},'phone_header']">
       <div class="pull_title">
         <span>开奖大厅</span>
       </div>
@@ -8,21 +8,22 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
-import {user} from  '../../../../api'
+import { mapState } from 'vuex';
 export default {
   data() {
     return {
       data: []
     };
   },
-  mounted() {
-  }
+  computed: {
+    ...mapState(['isfestival'])
+  },
+  mounted() {}
 };
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";
-.heads{
+.heads {
   height: poTorem(48px);
 }
 .phone_header {
@@ -34,7 +35,10 @@ export default {
   top: 0;
   left: 0;
   z-index: 21;
-  .pull_title{
+  &.phone_header_pig {
+    @include pigbg;
+  }
+  .pull_title {
     width: 33.3%;
     @include end;
     font-size: poTorem(18px);

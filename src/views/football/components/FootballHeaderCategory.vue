@@ -1,7 +1,14 @@
 <template>
-  <AppModel :show="show" @close="()=>{this.$emit('close')}">
-    <ul class="group" v-show="show">
-      <li v-for="(item, key) in data" :key="key" :class="{active: key==active}" @click="switchs(key,item)">
+  <AppModel :show="show"
+            @close="()=>{this.$emit('close')}">
+    <ul class="group"
+        v-show="show">
+      <li v-html="renderStr"
+          @click="userBalanceClick"></li>
+      <li v-for="(item, key) in data"
+          :key="key"
+          :class="{active: key==active}"
+          @click="switchs(key,item)">
         <i :class="item.class"></i> {{item.label}}
       </li>
     </ul>
@@ -18,21 +25,35 @@ export default {
     return {
       active: "",
       data: [
-        { label: "按联盟排序", class: "league", value: 1 },
-        { label: "按时间排序", class: "time", value: 0 },
+        // { label: "按联盟排序", class: "league", value: 1 },
+        // { label: "按时间排序", class: "time", value: 0 },
         { label: "筛选联赛", class: "sift" },
         { label: "投注记录", class: "record" },
         { label: "体育规则", class: "rule" },
-        { label: "比赛结果", class: "race" },
-      ],
+        { label: "比赛结果", class: "race" }
+      ]
     };
   },
-
+  computed: {
+    ...mapState({
+      isLogin: state => state.userinfo.isLogin,
+      userBalance: state => state.userinfo.accountInfo.price
+    }),
+    renderStr() {
+      let s = "余额:";
+      if (!this.isLogin) {
+        s += '请<span class="color-red clickArea">[登录]</span>';
+        return s;
+      }
+      s += `<span class="color-red clickArea">￥${this.userBalance}</span>`;
+      return s;
+    }
+  },
   methods: {
     ...mapActions("football", [
       "changeTitle",
       "modifyFootballField",
-      "queryComputed",
+      "queryComputed"
     ]),
     ...mapActions(["setBetRecordsType"]),
     switchs(key, item) {
@@ -53,8 +74,8 @@ export default {
           this.$router.push("/football/league");
           break;
         case "record":
-          this.setBetRecordsType(1)
-          this.$router.push({name: 'goucaijilu'});
+          this.setBetRecordsType(1);
+          this.$router.push({ name: "goucaijilu" });
           break;
         case "rule":
           this.$router.push("/football/rule");
@@ -66,30 +87,51 @@ export default {
         default:
           break;
       }
-      console.log(item);
+      // console.log(item);
       return;
-      this.changeTitle(item);
+      // this.changeTitle(item);
     },
-  },
+    userBalanceClick({ target }) {
+      if (target.classList.contains("clickArea")) {
+        if (!this.isLogin) {
+          return this.$router.push({
+            path: "/login",
+            query: { redirect: this.$route.fullPath }
+          });
+        }
+
+        this.isShowPrice = !this.isShowPrice;
+      }
+    }
+  }
 };
 </script>
 
+<style>
+.color-red {
+  color: #eb3349;
+}
+.color-blue {
+  color: #54baea;
+}
+</style>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";
 @mixin bgurl($url) {
   background: url("~img/football/"+$url) no-repeat;
   background-size: poTorem(25px) poTorem(20px);
 }
+
 .group {
   position: fixed;
-  width: poTorem(160px);
+  min-width: 10rem;
   right: 0;
   background: #fff;
   z-index: 21;
   li {
     @include start;
     height: poTorem(50px);
-    padding-left: poTorem(16px);
+    padding-left: 0.7rem;
     margin: 0 poTorem(4px);
     border-bottom: 1px solid #ddd;
     background: #fff;

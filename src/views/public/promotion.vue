@@ -1,8 +1,9 @@
 <template>
   <div class="promotion">
-    <div class="heads">
+    <div :class="[{'heads_pig': isfestival},'heads']">
       <!-- <router-link to="/home"> -->
-      <span class="iconfont icon-fanhui" @click="goBack"></span>
+      <span class="iconfont icon-fanhui"
+            @click="goBack"></span>
       <!-- </router-link> -->
       <span class="title">
         优惠活动
@@ -11,83 +12,98 @@
     </div>
 
     <div class="other-block">
-      <div class="content" v-show="isShow">
+      <div class="content"
+           v-show="isShow">
         <ul>
-          <li v-for="(item, index) in activities" :key="index" @click="activitiesShow(item)">
-            <img :src="item.phone_head" alt="">
+          <li v-for="(item, index) in activities"
+              :key="index"
+              @click="activitiesShow(item)">
+            <img :src="item.phone_head"
+                 alt="">
           </li>
         </ul>
       </div>
-      <div v-show="!isShow" class="activities_detail">
+      <div v-show="!isShow"
+           class="activities_detail">
         <div class="activities_title">
           <p>{{imgData.event_title}}</p>
           <p>{{imgData.begin_time}}</p>
         </div>
-        <div v-html="params" class="get_from_response"></div>
+        <div v-html="params"
+             class="get_from_response"></div>
       </div>
     </div>
 
   </div>
 </template>
 <script>
-import decodeFunc from '../shouYe/decode.js'
+import decodeFunc from "../shouYe/decode.js";
+import decompress from "../../js/decompress.js";
+import { mapState } from 'vuex';
 export default {
   data() {
     return {
       activities: [],
       isShow: true,
-      params: '',
-      imgData: ''
-    }
+      params: "",
+      imgData: ""
+    };
   },
-  mounted() {
-    this.getBaseData()
+  computed: {
+    ...mapState(['isfestival'])
+  },
+  activated() {
+    this.getBaseData();
   },
   mixins: [decodeFunc],
   methods: {
     getBaseData() {
-      this.$dialog.loading.open('')
-      this.$ajax('request', {
-        ac: 'getGameEventList'
+      this.$dialog.loading.open("");
+      this.$ajax("request", {
+        ac: "getGameEventList"
       }).then(res => {
-        this.activities = res
-        this.$dialog.loading.close()
-      })
+        this.activities = res;
+        this.$dialog.loading.close();
+      });
     },
     goBack() {
       if (this.isShow) {
-        this.$router.back()
+        this.$router.back();
       } else {
-        this.isShow = true
+        this.isShow = true;
       }
     },
     async activitiesShow(n) {
-      let needData = ''
+      let needData = "";
       if (n.event_detail) {
-        needData = n.event_detail
+        needData = n.event_detail;
       } else {
-        this.$dialog.loading.open(' ')
-        needData = await this.$ajax('request', {
-          ac: 'getEventContent',
+        this.$dialog.loading.open(" ");
+        needData = await this.$ajax("request", {
+          ac: "getEventContent",
           eid: n.event_id,
           etype: n.type,
           wtype: 1
-        })
-        this.$dialog.loading.close()
+        });
+        this.$dialog.loading.close();
       }
       // res = res.slice(34, -2)
-      this.isShow = false
-      this.imgData = n
-      var temp = document.createElement('div')
-      // temp.innerHTML = event;
-      // temp.innerHTML = n.event_detail
-      temp.innerHTML = this.decodeEvent(needData)
-      var output = temp.innerText || temp.textContent
-      temp = null
-      this.params = output
+      this.isShow = false;
+      this.imgData = n;
+      let temp = document.createElement("div");
+      const isNew = needData.slice(0, 2) === "GZ";
+      if (isNew) {
+        needData = needData.substring(2);
+        temp.innerHTML = decodeURIComponent(escape(decompress(needData)));
+      } else {
+        temp.innerHTML = this.decodeEvent(needData);
+      }
+      const output = temp.innerText || temp.textContent;
+      temp = null;
+      this.params = output;
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../css/resources.scss";
@@ -103,6 +119,9 @@ export default {
     height: poTorem(48px);
     width: 100%;
     background: #fff url(../../img/phone_header.png) CENTER TOP;
+    &.heads_pig {
+      @include pigbg;
+    }
     .iconfont {
       font-size: poTorem(30px);
       padding-left: poTorem(10px);

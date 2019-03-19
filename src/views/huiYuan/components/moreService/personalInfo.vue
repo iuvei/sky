@@ -1,15 +1,23 @@
 <template>
   <div class="personalInfo_main_body">
-    <publicHead :title="funcName" :type="3" @changeTab="changePage" v-if="isAdvance"></publicHead>
-    <publicHead :title="name" :type="5" v-else></publicHead>
+    <publicHead :title="funcName"
+                :type="3"
+                @changeTab="changePage"
+                v-if="isAdvance"
+                ref="pageHead"></publicHead>
+    <publicHead :title="name"
+                :type="5"
+                v-else></publicHead>
     <div class="main_content">
       <div v-show="tabNum==0">
         <div class="person_info">
           <span>头像</span>
           <div @click="isShowOptions=true">
             <!-- <div @click="aaa"> -->
-            <img :src="head_icon" alt="">
-            <img :src="img" alt="">
+            <img :src="head_icon"
+                 alt="">
+            <img :src="img"
+                 alt="">
           </div>
         </div>
         <yd-cell-group class="personal_info_form">
@@ -37,7 +45,8 @@
       </div>
       <div v-show="tabNum==1">
         <div class="user_info">
-          <img :src="head_icon" alt="">
+          <img :src="head_icon"
+               alt="">
           <div>
             <p class="userInfo">
               <span style="vertical-align:-webkit-baseline-middle">{{username}}</span>
@@ -47,40 +56,55 @@
               </span> -->
             </p>
             <p class="userInfo">
-              <span>等级：<i class="vip_degree" style="font-style: italic;font-weight:600">LV.{{data.prevVip}}</i>&nbsp;&nbsp;成长值：<i class="vip_degree">{{data.exp}}</i></span>
+              <span>等级：<i class="vip_degree"
+                   style="font-style: italic;font-weight:600">LV.{{data.prevVip}}</i>&nbsp;&nbsp;成长值：<i class="vip_degree">{{data.exp}}</i></span>
               <!-- <span class="vip_degree">成长值：{{data.exp}}分</span> -->
             </p>
           </div>
           <p class="degree_detail">距离下一级还需要 {{data.nextExp - data.exp}} 成长值</p>
           <div class="degree_line_box">
             <span>LV.{{data.prevVip}}</span>
-            <yd-progressbar type="line" :progress="progress" trail-width="6" stroke-width="6" trail-color="#FFA800" stroke-color="#ccc" class="degree_line"></yd-progressbar>
+            <yd-progressbar type="line"
+                            :progress="progress"
+                            trail-width="6"
+                            stroke-width="6"
+                            trail-color="#FFA800"
+                            stroke-color="#ccc"
+                            class="degree_line"></yd-progressbar>
             <span class="speed">{{parseInt(progress * 100)}}%</span>
             <span>LV.{{data.nextVip}}</span>
           </div>
         </div>
-        <div class="one_tag" @click="$router.push('/moreService/growinginfo')">
+        <div class="one_tag"
+             @click="$router.push('/moreService/growinginfo')">
           <span>成长明细及规则</span>
           <span></span>
         </div>
         <div class="reward">
           <p>您共获得的奖励：</p>
           <div class="info">
-            <span v-for="(i,key) in riselist" :key="key">{{i.info}} <i>{{i.reward}}</i></span>
+            <span v-for="(i,key) in riselist"
+                  :key="key">{{i.info}} <i>{{i.reward}}</i></span>
             <!-- <span>等级彩金 <i>30</i></span><span>周俸禄 <i>0</i></span><span>月俸禄 <i>10</i></span> -->
           </div>
-          <div class="one_tag" @click="$router.push('/moreService/personalgrade')">
+          <div class="one_tag"
+               @click="$router.push('/moreService/personalgrade')">
             <span>等级奖励记录</span>
             <span></span>
           </div>
         </div>
         <div class="gift">
-          <div class="one_tag" @click="$router.push('/moreService/personaltask')">
+          <div class="one_tag"
+               @click="$router.push('/moreService/personaltask')">
             <span>任务礼包</span>
             <span></span>
             <span>查看全部</span>
           </div>
-          <div class="item" v-for="(i,key) in data.task_list" :key="key" v-if="key<2"  @click="tofulfil(i.tag,i.status)">
+          <div class="item"
+               v-for="(i,key) in data.task_list"
+               :key="key"
+               v-if="key<2"
+               @click="tofulfil(i.tag,i.status)">
             <i></i>
             <p>{{i.title}}</p>
             <p>+{{i.addexp}} 成长值</p>
@@ -111,97 +135,139 @@
         </div> -->
       </div>
     </div>
-    <yd-actionsheet :items="personalOptions" v-model="isShowOptions" class="personal_options" cancel="取消"></yd-actionsheet>
-    <input type="file" @change="getHeadImage" id="call_camera" v-show="false" accept="image/*">
+    <yd-actionsheet :items="personalOptions"
+                    v-model="isShowOptions"
+                    class="personal_options"
+                    cancel="取消"></yd-actionsheet>
+    <input type="file"
+           @change="getHeadImage"
+           id="call_camera"
+           v-show="false"
+           accept="image/*"
+           capture="environment">
+    <input type="file"
+           @change="getHeadImage"
+           id="call_folder"
+           v-show="false"
+           accept="image/*">
   </div>
 </template>
 <script>
+const filterArr = [
+  "/moreService/growinginfo",
+  "/moreService/personalgrade",
+  "/moreService/personalInfo",
+  "/moreService/personaltask",
+  "/moreService/signIn"
+];
 import publicHead from "../moreService/publicHead";
 import { mapState, mapActions, mapMutations } from "vuex";
-import { createImg, createNewB64 } from "~/js/user/gsfunc";
-import { to } from '~/js/functions'
+import { createNewB64 } from "~/js/user/gsfunc";
+
 export default {
+  name: "huiyuanxinxi",
   components: {
-    publicHead,
+    publicHead
   },
   computed: {
     ...mapState({
       userInfo: state => state.userinfo,
       username: state => state.userinfo.accountInfo.username,
+      isAdvance: state => state.sysinfo.event_rise,
       // head_icon: store => store.userinfo.accountInfo.head_icon,
       tkpass() {
         return this.$store.state.userinfo.accountInfo.tkpass_ok;
       },
       bank() {
         return this.$store.state.userinfo.accountInfo.bank_typename != "";
-      },
+      }
     }),
     head_icon() {
-      let iconUrl = this.$store.state.userinfo.accountInfo.head_icon
-      if(iconUrl !== '') {
-        return iconUrl
+      const iconUrl = this.$store.state.userinfo.accountInfo.head_icon;
+      if (iconUrl !== "") {
+        return iconUrl;
       } else {
-        let defaultIcon = require("../../../../img/head_icon.png")
-        return defaultIcon
+        const defaultIcon = require("../../../../img/head_icon.png");
+        return defaultIcon;
       }
     }
   },
   data() {
     return {
-      name:"个人信息",
+      name: "个人信息",
       funcName: {
         l: "个人信息",
-        r: "等级头衔",
+        r: "等级头衔"
       },
-      data:[],
-      riselist:[],
+      data: [],
+      riselist: [],
       progress: 0,
       tabNum: 0,
       img: require("../../../../img/bet_record/arrow.png"),
       headImg: "",
       isShowOptions: false,
-      isAdvance: true,
       personalOptions: [
         {
           label: "拍照",
           callback: () => {
-            let el = document.getElementById("call_camera");
-            el.captrue = "camera";
+            const el = document.getElementById("call_camera");
             el.click();
-          },
+          }
         },
         {
           label: "从相册选择",
           callback: () => {
-            let el = document.getElementById("call_camera");
+            const el = document.getElementById("call_folder");
             el.click();
-          },
-        },
-      ],
+          }
+        }
+      ]
     };
   },
+  watch: {
+    $route: "fetchData"
+  },
+  mounted() {
+    this.$nextTick(() => {
+      if (this.$route.params.direct) {
+        this.$refs.pageHead.isActive = 1;
+        this.tabNum = 1;
+      } else {
+        this.$refs.pageHead.isActive = 0;
+        this.tabNum = 0;
+      }
+      // this.getData()
+    });
+  },
   activated() {
-    this.isAdvance = this.$store.state.sysinfo.event_rise == 1 ? true : false //判断用户晋级活动是否开放
-    if(this.$route.params.direct) {
-      this.tabNum = 1
-    } else {
-      this.tabNum = 0
-    }
-    this.getData()
+    this.$nextTick(() => {
+      this.getData();
+    });
   },
   methods: {
     ...mapActions("member", ["UploadUserHeadIconByBase64", "updateUserInfo"]),
     ...mapMutations(["SET_USERINFO_FIELD"]),
+    fetchData(to, from) {
+      if (!filterArr.includes(from.path)) {
+        if (this.$route.params.direct) {
+          this.$refs.pageHead.isActive = 1;
+          this.tabNum = 1;
+        } else {
+          this.$refs.pageHead.isActive = 0;
+          this.tabNum = 0;
+        }
+      }
+    },
     aaa() {
-      let el = document.getElementById("call_camera");
+      const el = document.getElementById("call_camera");
       el.captrue = "camera";
       el.click();
     },
     changePage(i) {
       this.tabNum = i;
     },
-    compares (prop) {
-      return function (obj1, obj2) {
+    compares(prop) {
+      return function(obj1, obj2) {
         let val1 = obj1[prop];
         let val2 = obj2[prop];
         if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
@@ -214,41 +280,42 @@ export default {
           return 1;
         } else {
           return 0;
-        }            
-      } 
+        }
+      };
     },
     // 用户晋级活动数据
-    getData (){
-      if(!this.isAdvance) return
+    getData() {
+      if (this.isAdvance != 1) return;
       this.$dialog.loading.open(" ");
       this.$ajax("request", {
-        ac: "GetUserEventRiseInfo",
+        ac: "GetUserEventRiseInfo"
       }).then(res => {
-        console.log(res)
-        this.data = res
-        this.riselist = res.rise_list && res.rise_list.length ? res.rise_list.sort(this.compares('stor')) : []
-        console.log(this.riselist)
-        this.progress = (res.exp/res.nextExp).toFixed(2)
+        console.log(res);
+        this.data = res;
+        this.riselist =
+          res.rise_list && res.rise_list.length
+            ? res.rise_list.sort(this.compares("stor"))
+            : [];
+        console.log(this.riselist);
+        this.progress = (res.exp / res.nextExp).toFixed(2);
         this.$dialog.loading.close();
       });
     },
     // 上传头像后返回文件名，需前端再调用用户信息
     uploadHeadImg(base64) {
-      let imgurl;
       this.UploadUserHeadIconByBase64({
-        img: base64,
+        img: base64
       })
         .then(res => {
-          imgurl = res;
-          let request = {
+          const request = {
             type: 8,
-            icon: res,
+            icon: res
           };
           return this.updateUserInfo(request);
         })
         .then(res => {
-          this.$dialog.loading.close()
-          this["SET_USERINFO_FIELD"]({ key: "head_icon", value: res });
+          this.$dialog.loading.close();
+          this.SET_USERINFO_FIELD({ key: "head_icon", value: res });
           this.$dialog.alert({ mes: "上传头像成功" });
         });
     },
@@ -264,18 +331,19 @@ export default {
       );
     },
     getHeadImage(val) {
-      this.$dialog.loading.open(" ")
-      let files = val.target.files;
+      this.$dialog.loading.open(" ");
+      const files = val.target.files;
       if (files.length !== 1) {
-        if (files.length > 1)
+        if (files.length > 1) {
           this.$dialog.alert({ mes: "一次只能上传一张图片" });
-          this.$dialog.loading.close()
+        }
+        this.$dialog.loading.close();
         return;
       }
       // console.log(val, files[0]);
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.readAsDataURL(files[0]);
-      reader.onloadend = e => {
+      reader.onloadend = () => {
         if (files[0].size < 200 * 1024) {
           this.uploadHeadImg("data-png-" + reader.result.split("base64,")[1]);
         } else {
@@ -283,29 +351,29 @@ export default {
         }
       };
     },
-    tofulfil(tag,i){
-      if(i == 1) {
-        return
+    tofulfil(tag, i) {
+      if (i == 1) {
+        return;
       }
-      if(tag == 'sign'){
-        this.$router.push('/moreService/signIn')
-      }else if(tag == 'realname'){
-        this.$router.push('/moreService/correctRealName')
-      }else if(tag == 'wechat'){
-        this.$router.push('/moreService/bindingWechat')
-      }else if(tag == 'qq'){
-        this.$router.push('/moreService/bindingQQ')
-      }else if(tag == 'email'){
-        this.$router.push('/moreService/bindingEmail')
-      }else if(tag == 'question'){
-        this.$router.push('/moreService/correctQuestion')
-      }else if(tag == 'bank'){
-        this.$router.push('/moreService/bankcardManage')
-      } else if(tag == 'phone'){
-        this.$router.push('/moreService/bindingCellphone')
+      if (tag == "sign") {
+        this.$router.push("/moreService/signIn");
+      } else if (tag == "realname") {
+        this.$router.push("/moreService/correctRealName");
+      } else if (tag == "wechat") {
+        this.$router.push("/moreService/bindingWechat");
+      } else if (tag == "qq") {
+        this.$router.push("/moreService/bindingQQ");
+      } else if (tag == "email") {
+        this.$router.push("/moreService/bindingEmail");
+      } else if (tag == "question") {
+        this.$router.push("/moreService/correctQuestion");
+      } else if (tag == "bank") {
+        this.$router.push("/moreService/bankcardManage");
+      } else if (tag == "phone") {
+        this.$router.push("/moreService/bindingCellphone");
       }
     }
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -375,7 +443,7 @@ export default {
           position: absolute;
           top: 45%;
           left: 50%;
-          transform: translate(-50%,-50%);
+          transform: translate(-50%, -50%);
           font-size: 0.8rem;
         }
       }
@@ -387,18 +455,18 @@ export default {
       background-color: #fff;
       line-height: poTorem(40px);
       padding: 0 poTorem(20px);
-      span{
+      span {
         display: inline-block;
         color: #626367;
-        &:nth-child(2){
-          background: url('../../../../img/grade_r.png') no-repeat;
+        &:nth-child(2) {
+          background: url("../../../../img/grade_r.png") no-repeat;
           background-size: 100%;
           margin-top: poTorem(12px);
           width: poTorem(15px);
           height: poTorem(15px);
           float: right;
         }
-        &:nth-child(3){
+        &:nth-child(3) {
           float: right;
           margin-right: poTorem(5px);
         }
@@ -428,14 +496,14 @@ export default {
         span {
           display: inline-block;
           line-height: poTorem(40px);
-          &:nth-child(2){
+          &:nth-child(2) {
             text-align: center;
           }
-          &:nth-child(3){
+          &:nth-child(3) {
             text-align: right;
           }
           i {
-            color: #E34141;
+            color: #e34141;
           }
         }
       }
@@ -459,7 +527,7 @@ export default {
           display: inline-block;
           width: poTorem(25px);
           height: poTorem(25px);
-          background: url('../../../../img/grade_gift.png') no-repeat;
+          background: url("../../../../img/grade_gift.png") no-repeat;
           background-size: 100%;
           position: absolute;
           top: 50%;
@@ -479,9 +547,9 @@ export default {
           transform: translateY(-50%);
           border-radius: poTorem(5px);
         }
-        p{
+        p {
           line-height: poTorem(25px);
-          &:nth-child(3){
+          &:nth-child(3) {
             color: #959595;
           }
         }

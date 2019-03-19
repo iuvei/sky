@@ -15,8 +15,22 @@
       <div class="grids_box">
         <div class="grids_pieces">
           <p>{{baseData.tz_price}}</p>
-          <p>投注金额</p>
+          <p>投注总额</p>
         </div>
+
+        <div class="grids_pieces">
+          <p>{{baseData.cp_tz_price}}</p>
+          <p>彩票投注金额</p>
+        </div>
+        <div class="grids_pieces">
+          <p>{{baseData.ty_tz_price}}</p>
+          <p>体育投注金额</p>
+        </div>
+        <div class="grids_pieces">
+          <p>{{baseData.dz_tz_price}}</p>
+          <p>电子投注金额</p>
+        </div>
+
         <div class="grids_pieces">
           <p>{{baseData.win_price}}</p>
           <p>中奖金额</p>
@@ -76,7 +90,7 @@
 </template>
 <script>
 import publicHead from '../../huiYuan/components/moreService/publicHead'
-import { getDate, getMonday, getMonth } from '../../../js/agencyDate'
+
 import { mapActions, mapState } from 'vuex'
 export default {
   components: {
@@ -134,17 +148,15 @@ export default {
       this.getBaseData(this.type)
     },
     initTimeData() {
-      this.timeOptions = Array.from(this.st_timeData).map(v => {
-        return {
-          val: v[0],
-          label: v[1],
-          callback: item => {
-            this.chooseTimeText = item.label
-            this.type = item.val
-            this.getBaseData()
-          }
+      this.timeOptions = Array.from(this.st_timeData).map(v => ({
+        val: v[0],
+        label: v[1],
+        callback: item => {
+          this.chooseTimeText = item.label
+          this.type = item.val
+          this.getBaseData()
         }
-      })
+      }))
     },
     chooseType(n) {
       if (n == 2) {
@@ -167,7 +179,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "../../../css/resources.scss";
+@import '../../../css/resources.scss';
 .agencyStatement_main_body {
   height: 100%;
   width: 100%;
@@ -214,7 +226,7 @@ export default {
           text-overflow: ellipsis;
           white-space: nowrap;
           &:first-child {
-            color: #ff7c34;
+            color: $mainColor;
             line-height: poTorem(40px);
           }
           &:last-child {

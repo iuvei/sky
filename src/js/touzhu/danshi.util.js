@@ -27,7 +27,9 @@ export default {
         116,
         120
       ].includes(playid)
-    ) { return true } else if (jstag === 'pk10' && [3, 5].includes(playid)) {
+    ) {
+      return true
+    } else if (jstag === 'pk10' && [3, 5].includes(playid)) {
       return true
     } else if (jstag === '3d' && [2].includes(playid)) {
       return true

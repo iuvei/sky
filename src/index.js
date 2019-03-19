@@ -1,111 +1,94 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import axios from '../server/axios.js'
-import EXIF from 'exif-js'
-window.EXIF = EXIF
-import './components'
-import sha1 from 'node-sha1'
-import './verdor'
-// import VueSocketio from 'vue-socket.io'
-import AlloyFinger from 'alloyfinger/alloy_finger'
-import AlloyFingerVue from 'alloyfinger/vue/alloy_finger.vue'
-import 'vue-event-calendar/dist/style.css'
-import vueEventCalendar from 'vue-event-calendar'
-import VueClipboard from 'vue-clipboard2' // 剪贴板工具
-// import FastClick from 'fastclick'
-Vue.use(VueClipboard)
-Vue.use(vueEventCalendar, { locale: 'zh' })
+// import './registerServiceWorker'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import axios from '../server/axios.js';
+import EXIF from 'exif-js';
+window.EXIF = EXIF;
+import './components';
+import sha1 from 'node-sha1';
+import './verdor';
+import AlloyFinger from 'alloyfinger/alloy_finger';
+import AlloyFingerVue from 'alloyfinger/vue/alloy_finger.vue';
+import 'vue-event-calendar/dist/style.css';
+import vueEventCalendar from 'vue-event-calendar';
+import VueClipboard from 'vue-clipboard2'; // 剪贴板工具
 
-// 引导插件
-// import VueIntro from 'vue-introjs'
-// Vue.use(VueIntro, {
-//   waitTimeout: 400
-// })
-// import 'intro.js/introjs.css'
+import $ws from '../server/websocket';
+
+Vue.use(VueClipboard);
+Vue.use(vueEventCalendar, { locale: 'zh' });
 
 // 实现拖拽
 // import vueDrag from 'vue-dragging'
 // Vue.use(vueDrag)
 // 弹窗
-import { Popup } from 'mint-ui'
-Vue.component(Popup.name, Popup)
+import { Popup } from 'mint-ui';
+Vue.component(Popup.name, Popup);
 
 // 弹窗
-require('animate.css')
-require('./font/iconfont.css')
-require('../server/unitl')
+require('animate.css');
+require('./font/iconfont.css');
+require('../server/unitl');
 Vue.use(AlloyFingerVue, {
   AlloyFinger
-})
+});
 
-Vue.prototype.$ajax = axios
-Vue.prototype.$sha1 = sha1
-Vue.prototype.bus = new Vue()
-// Vue.use(VueSocketio, 'ws://52.199.184.45:5000')
+Vue.prototype.$ajax = axios;
+Vue.prototype.$sha1 = sha1;
+Vue.prototype.$ws = $ws;
+Vue.prototype.bus = new Vue();
 /**
  * 创建指令
  * 拖动
  */
 Vue.directive('drag', {
   bind(el) {
-    const oDiv = el // 当前元素
+    const oDiv = el; // 当前元素
     // const self = this  // 上下文
     oDiv.addEventListener('touchstart', e => {
       // 判断默认行为是否可以被禁用
-      e.cancelBubble = true
+      e.cancelBubble = true;
       // 鼠标按下，计算当前元素距离可视区的距离
-      const disX = e.changedTouches[0].clientX - oDiv.offsetLeft
-      const disY = e.changedTouches[0].clientY - oDiv.offsetTop
+      const disX = e.changedTouches[0].clientX - oDiv.offsetLeft;
+      const disY = e.changedTouches[0].clientY - oDiv.offsetTop;
       oDiv.addEventListener('touchmove', e => {
-        e.cancelBubble = true
+        e.cancelBubble = true;
         // 通过事件委托，计算移动的距离
-        const l = e.changedTouches[0].clientX - disX
-        const t = e.changedTouches[0].clientY - disY
+        const l = e.changedTouches[0].clientX - disX;
+        const t = e.changedTouches[0].clientY - disY;
         if (t > 570) {
-          return
+          return;
         } else {
           // 移动当前元素
-          oDiv.style.left = l + 'px'
-          oDiv.style.top = t + 'px'
+          oDiv.style.left = l + 'px';
+          oDiv.style.top = t + 'px';
           // 将此时的位置传出去
           // binding.value({ x: e.pageX, y: e.pageY })
-          window._thisPositionX = e.pageX
-          window._thisPositionY = e.pageY
+          window._thisPositionX = e.pageX;
+          window._thisPositionY = e.pageY;
         }
-      })
+      });
       oDiv.addEventListener('touchend', e => {
-        e.cancelBubble = true
-        oDiv.ontouchend = null
-        oDiv.ontouchmove = null
-      })
-    })
+        e.cancelBubble = true;
+        oDiv.ontouchend = null;
+        oDiv.ontouchmove = null;
+      });
+    });
   }
-})
+});
 
 function needTest(store, to) {
   if (to.meta.testIdentifie) {
-    window.vue.$dialog.toast({ mes: '试玩账号不可以进行此操作！' })
-    return false
+    window.vue.$dialog.toast({ mes: '试玩账号不可以进行此操作！' });
+    return false;
   }
-  return true
+  return true;
 }
 
-// function bindBankCard(store, to, next) {
-//   if (to.meta.realName &&
-//     !(store.state.userinfo.accountInfo.real_name &&
-//       store.state.userinfo.accountInfo.bind_bank_id)) {
-//     next({
-//       path: 'moreService/bindingBankcard'
-//     })
-//     return true
-//   }
-//   return false
-// }
-
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || document.title
+  document.title = to.meta.title || document.title;
   if (to.meta.requireAuth) {
     // 判断该路由是否需要登录权限
     if (store.state.userinfo.isLogin) {
@@ -130,10 +113,10 @@ router.beforeEach((to, from, next) => {
       // }
       if (store.state.userinfo.accountInfo.test === 2) {
         if (needTest(store, to)) {
-          next()
+          next();
         }
       } else {
-        next()
+        next();
       }
     } else {
       window.vue.$dialog.confirm({
@@ -143,29 +126,21 @@ router.beforeEach((to, from, next) => {
           next({
             path: '/login',
             query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-          })
+          });
         }
-      })
+      });
     }
   } else {
-    next()
+    next();
   }
-})
+});
 window.vue = new Vue({
   el: '#app',
   store,
   router,
-  // render: h => h(App)
   template: '<App/>',
-  components: { App }
-})
-
-// document.addEventListener(
-//   'DOMContentLoaded',
-//   () => {
-//     FastClick.attach(document.body)
-//   },
-//   false
-// )
-
-// tset
+  components: { App },
+  data: {
+    Bus: new Vue()
+  }
+});

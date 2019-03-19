@@ -10,7 +10,6 @@
 // import heads from "./components/header";
 import lottery from "./components/lottery";
 
-import { mapActions } from "vuex";
 export default {
   name: "goucai",
   data() {
@@ -33,37 +32,37 @@ export default {
 }
 </style>
 <style lang="scss">
-  .heads_bottom{
-    .yd-accordion-head {
-      display: none;
-    }
-    .color-red {
-      color: #eb3349;
-    }
-    .color-blue{
-      color: #54BAEA;
-    }
-    .times {
-      display: flex;
-      .haoma {
-        span {
-          height: poTorem(25px);
-          // background: url(~img/goucai/timestamp.png) no-repeat;
-          background-size: 5.4rem poTorem(25px);
-          color: #eb3349;
-          line-height: poTorem(25px);
-          text-align: center;
-          letter-spacing: poTorem(2px);
-          // text-indent: poTorem(3px);
-        }
-        i {
-          margin: 0 poTorem(2px);
-        }
+.heads_bottom {
+  .yd-accordion-head {
+    display: none;
+  }
+  .color-red {
+    color: #eb3349;
+  }
+  .color-blue {
+    color: #54baea;
+  }
+  .times {
+    display: flex;
+    .haoma {
+      span {
+        height: poTorem(25px);
+        // background: url(~img/goucai/timestamp.png) no-repeat;
+        background-size: 5.4rem poTorem(25px);
+        color: #eb3349;
+        line-height: poTorem(25px);
+        text-align: center;
+        letter-spacing: poTorem(2px);
+        // text-indent: poTorem(3px);
       }
-      .haoma:last-child{
-        flex:1;
-        text-align: right;
+      i {
+        margin: 0 poTorem(2px);
       }
+    }
+    .haoma:last-child {
+      flex: 1;
+      text-align: right;
     }
   }
+}
 </style>

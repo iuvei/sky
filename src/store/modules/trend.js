@@ -59,6 +59,7 @@ const mutations = {
     state.js_tag = game.js_tag
     state.name_tag = game.tag
     state.speed = game.speed
+    state.yearid = game.yearid
   },
   // 设置当前彩种位数
   [types.TREND_SET_DIGIT](state, { digits }) {

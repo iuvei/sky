@@ -1,11 +1,19 @@
 <template>
   <div class="registe">
-    <registe v-show="visible==0" @listenVal="sendVal"></registe>
-    <transition name="animate-enter" mode="out-in">
+    <registe
+      v-show="visible==0"
+      @listenVal="sendVal"
+    ></registe>
+    <transition
+      name="animate-enter"
+      mode="out-in"
+    >
       <demo-account v-if="visible==1"></demo-account>
     </transition>
-    <transition name="animate-enter" mode="out-in">
-      <!-- <demo-account v-if="!visible"></demo-account> -->
+    <transition
+      name="animate-enter"
+      mode="out-in"
+    >
       <success v-if="visible==2"></success>
     </transition>
   </div>
@@ -14,22 +22,21 @@
 import registe from "./components/registe";
 import success from "./components/success";
 import demoAccount from "./components/demoAccount";
-import { getCPLogInfo_get } from "../../../../api/user/index";
 export default {
   data() {
     return {
       // 0 注册页面 1试玩页面 2成功页面
       visible: 0,
-      success: false,
+      success: false
     };
   },
   watch: {
-    $route: "change",
+    $route: "change"
   },
   components: {
     registe,
     demoAccount,
-    success,
+    success
   },
   methods: {
     sendVal(type) {
@@ -42,7 +49,7 @@ export default {
     },
     change() {
       this.visible = 0;
-    },
+    }
   },
   beforeRouteEnter: (to, from, next) => {
     next(vm => {
@@ -50,7 +57,7 @@ export default {
         vm.visible = 1;
       }
     });
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>

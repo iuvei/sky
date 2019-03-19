@@ -1,37 +1,51 @@
 <template>
   <yd-layout class="multi-play">
-    <yd-pullrefresh :callback="refreshData" :show-init-tip="false" ref="pullrefresh_ref" class="refresh">
-      <yd-infinitescroll :callback="loadMore" ref="loadMore_ref">
 
-        <yd-accordion accordion class="yd-list" slot="list">
+    <AppEmpty v-if="!gameList.length && showList"></AppEmpty>
 
-          <AppEmpty v-if="!gameList.length"></AppEmpty>
-          <yd-accordion-item v-for="(league, league_index) in gameList" :key="league_index" :title="league.league_name">
+    <yd-flexbox v-if="showList"
+                v-for="(league, league_index) in gameList"
+                :key="league_index"
+                @click.native="gotoPlay(league)"
+                class="game-item">
+      <yd-flexbox-item class="league-name">{{league.league_name}}</yd-flexbox-item>
+      <div class="schedule-num">{{league.game_cnt}}</div>
+    </yd-flexbox>
 
-            <betting :gameKey="game_index" :game="game" v-for="(game, game_index) in league.schedule" :key="game_index + '-' + game.schedule_id"></betting>
+    <yd-navbar v-if="!showList"
+               slot="navbar"
+               :title="cur_league_name"
+               class="one-league-name"
+               style="height:3rem">
+      <div slot="right"
+           @click="modifyFootballField({showList:true})">
+        <img src="~img/football/more-game.png"
+             alt=""
+             style="width: .8rem;transform: rotateZ(180deg);">
+      </div>
+    </yd-navbar>
+    <oneLeague v-if="!showList"
+               :leagueId="league_id"></oneLeague>
 
-          </yd-accordion-item>
-
-        </yd-accordion>
-
-        <span slot="doneTip">啦啦啦，啦啦啦，没有数据啦~~</span>
-      </yd-infinitescroll>
-    </yd-pullrefresh>
   </yd-layout>
 </template>
 
 <script>
 import debounce from "lodash/debounce";
+import oneLeague from "./components/oneLeague";
 import betting from "./components/footballTypeMultiItem";
 import { mapActions, mapState } from "vuex";
 
 export default {
   name: "footballTypeMulti",
   components: {
+    oneLeague,
     betting
   },
   data() {
     return {
+      league_id: "",
+      cur_league_name: "",
       pullRefresh: true, // 标识符： 刷新  加载下一页
       next_time: "", // 时间分页
       league_id_current: "", // 联赛id多个以逗号隔开
@@ -40,8 +54,11 @@ export default {
   },
   computed: {
     ...mapState("football", [
+      "render_one_league",
+      "showList",
       "footer",
       "gameType",
+      "playType",
       "timeCount",
       "zhgg_preview",
       "bet_data",
@@ -58,10 +75,15 @@ export default {
   watch: {
     gameType() {
       // 清除下注
-      this.pullRefresh = true;
+      // this.pullRefresh = true;
       this.modifyFootballField({ footer: false, multiSelected: [] });
       this.gameList = [];
       this.league_id_current = "";
+      this.getGameList();
+    },
+    playType() {
+      this.modifyFootballField({ footer: false, multiSelected: [] });
+      this.gameList = [];
       this.getGameList();
     },
     // selectedKey  bet_data  保持一致
@@ -73,10 +95,10 @@ export default {
         });
         return;
       }
-      let multiSelected = JSON.parse(JSON.stringify(this.multiSelected));
+      const multiSelected = JSON.parse(JSON.stringify(this.multiSelected));
       if (bet_data.length !== multiSelected.length) {
         multiSelected.map((el, index) => {
-          let flag = bet_data.some(
+          const flag = bet_data.some(
             item => el.includes(item.schedule_id) || el.is_all_method
           );
           if (!flag) {
@@ -88,13 +110,9 @@ export default {
         this.modifyFootballField({ multiSelected });
       }
     },
-    // 当前的联盟
-    gameList(gameList) {
-      let data = gameList.map(e => e.league_id);
-      this.league_id_current = data.join(",");
-    },
+
     "timeCount.getData"() {
-      if (this.zhgg_preview) {
+      if (this.zhgg_preview && this.showList) {
         this.pullRefresh = true;
         this.getGameList();
       }
@@ -104,8 +122,17 @@ export default {
     ...mapActions("football", [
       "modifyFootballField",
       "queryComputed",
-      "getSportMobileGameList"
+      "getSportMobileGameList",
+      "getSportLeagueList2"
     ]),
+    gotoPlay({ league_id, league_name }) {
+      this.league_id = league_id;
+      this.cur_league_name = league_name;
+      this.modifyFootballField({
+        render_one_league: league_id,
+        showList: false
+      });
+    },
     refreshData() {
       this.pullRefresh = true;
       this.getGameList();
@@ -115,7 +142,7 @@ export default {
       this.getGameList();
     },
     getGameList: debounce(async function() {
-      let params = {};
+      const params = {};
       if (this.pullRefresh) {
         params.league_id = this.league_id_current;
         params.start_time = "";
@@ -127,32 +154,69 @@ export default {
       // t: u d e  赔率:  涨  跌  平
       // 1X2 : 独赢    HC:让球  GL：大小   TGOE：单双
       // 对应半场，前面+H
-      let data = (await this.getSportMobileGameList(params)) || {};
-      this.next_time = data.next_time;
-      let gameList = data.result || [];
+      const data = (await this.getSportLeagueList2(params)) || {};
+      // this.next_time = data.next_time;
+      const gameList = data.result || [];
       // console.error(gameList);
-      if (this.pullRefresh) {
-        this.$refs.pullrefresh_ref &&
-          this.$refs.pullrefresh_ref.$emit("ydui.pullrefresh.finishLoad");
-        this.$refs.loadMore_ref &&
-          this.$refs.loadMore_ref.$emit("ydui.infinitescroll.reInit");
-      } else {
-        this.$refs.loadMore_ref.$emit("ydui.infinitescroll.finishLoad");
-        if (!gameList.length)
-          this.$refs.loadMore_ref.$emit("ydui.infinitescroll.loadedDone");
-        gameList = [...this.gameList, ...gameList];
-      }
 
       this.gameList = gameList;
       this.queryComputed(["reset"]);
-    }, 500)
+    }, 300)
   }
 };
 </script>
 
 <style lang="scss">
+@import "~css/resources.scss";
 .multi-play {
   background-color: #fff;
+  .game-item {
+    border-radius: 0.3rem;
+    background-color: #f5f2f0;
+    color: #453c35;
+    margin: 0.7rem;
+    padding-left: 0.7rem;
+    line-height: 3rem;
+  }
+  .league-name {
+    height: 3rem;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    /* autoprefixer: off */
+    // -webkit-box-orient: vertical;
+    /* autoprefixer: on */
+  }
+  .one-league-name {
+    line-height: 3rem;
+    background-color: #f5f5f5;
+    // border-bottom: 1px solid #d2d2d2;
+    padding: 0 1rem;
+    background-color: #f5f5f5 !important;
+    .yd-navbar-center-box {
+      flex: 1;
+      text-align: left;
+      height: 3rem !important;
+      margin-left: 0 !important;
+      line-height: 3rem;
+    }
+    .yd-navbar-center {
+      justify-content: flex-start;
+    }
+    .yd-navbar-center-title {
+      font-size: 1rem !important;
+      color: #000 !important;
+    }
+  }
+  .schedule-num {
+    width: 4rem;
+    color: #453c35;
+    background: rgba(233, 228, 226, 0.4);
+    text-align: center;
+    font-weight: 600;
+  }
   .yd-list-loading svg {
     width: 2rem;
     height: 2rem;
@@ -174,97 +238,8 @@ export default {
     color: #000000;
   }
   .bage-active {
-    background-color: #ff7c34;
+    background-color: $mainColor;
     color: #fff;
-  }
-  .yd-accordion-head {
-    padding: 0.5rem 0.5rem 0.5rem 1rem;
-    background-color: #f6f6f6;
-    .yd-accordion-title {
-      color: #000000;
-      font-size: 1.2rem;
-    }
-  }
-  .one-game {
-    border: 1px solid #d2d2d2;
-    border-radius: 0.3rem;
-    margin: 1rem 0.5rem 0;
-    text-align: center;
-    &:last-child {
-      margin: 1rem 0.5rem;
-    }
-    .one-game-header {
-      color: #313131;
-      padding: 0.3rem 0;
-      background-color: #f6f6f6;
-      .one-game-header-title {
-        font-size: 1rem;
-      }
-      .one-game-header-time {
-        font-size: 0.8rem;
-      }
-    }
-    .one-table {
-      font-size: 1rem;
-      border-top: 1px solid #d2d2d2;
-      & > .yd-flexbox-item:before,
-      .one-table-left:before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        top: 0;
-        right: 0;
-        height: 100%;
-        border-right: 1px solid #d9d9d9;
-        -webkit-transform-origin: 0 0;
-        transform-origin: 0 0;
-      }
-      .one-table-left {
-        position: relative;
-        width: 5rem;
-        height: 3rem;
-        line-height: 3rem;
-      }
-      .one-table-right {
-        position: relative;
-        width: 5rem;
-        height: 3rem;
-        line-height: 3rem;
-        & .border-bottom-no {
-          position: absolute;
-          left: -1px;
-          right: 0;
-          border-bottom: 4px solid #fff;
-        }
-        & .border-bottom-no.more-game-open {
-          background-color: #ffffff;
-          line-height: 1.5rem;
-          bottom: -2.8rem;
-        }
-      }
-      .select-btn {
-        position: relative;
-        width: 100%;
-        height: 3rem;
-        line-height: 1.5rem;
-        font-size: 0.9rem;
-        border-left: 1px solid transparent;
-        border-right: 1px solid transparent;
-      }
-      .select-btn.selected {
-        color: #e33939;
-        border-color: #e33939;
-        border-top: 1px solid #e33939;
-        border-bottom: 1px solid #e33939;
-        left: -1px;
-      }
-      .pv {
-        width: 0.6rem;
-        position: absolute;
-        right: 0.2rem;
-        top: 1.2rem;
-      }
-    }
   }
 }
 </style>

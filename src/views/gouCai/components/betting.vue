@@ -55,12 +55,18 @@
             <lottery-content v-else-if="this.actives ==='其他'" :datas="other" class="animtes"></lottery-content>
           </div>
         </yd-tab-panel>
-        <yd-tab-panel label="体育彩">
+        <yd-tab-panel label="皇冠体育">
           <lottery-content :datas="sport" class="animtes"></lottery-content>
         </yd-tab-panel>
-        <!-- <yd-tab-panel label="电子游戏">
-          <lotteryYouxilist></lotteryYouxilist>
-        </yd-tab-panel> -->
+        <yd-tab-panel label="电子">
+          <lotteryYouxilist :dataDzPt='dataDzPt'></lotteryYouxilist>
+        </yd-tab-panel>
+        <yd-tab-panel label="棋牌">
+          <lotteryYouxiQp :dataQpPt='dataQpPt'></lotteryYouxiQp>
+        </yd-tab-panel>
+        <yd-tab-panel label="捕鱼">
+          <lotteryYouxiBy :dataByPt='dataByPt'></lotteryYouxiBy>
+        </yd-tab-panel>
       </yd-tab>
 
     </div>
@@ -70,12 +76,18 @@
 import lotteryContent from "./lotteryList";
 import publicHead from "../../huiYuan/components/moreService/publicHead";
 import lotteryYouxilist from "../../youXi/components/lotteryYouxilist";
-import api from '../../../../api/game'
+import lotteryYouxiQp from "../../youXi/components/lotteryYouxiQp";
+import lotteryYouxiBy from "../../youXi/components/lotteryYouxiBy";
+import api from "../../../../api/game";
+import { mapActions } from "vuex";
 export default {
+  // props: ["dataDzPt", "dataQpPt", "dataByPt"],
   components: {
     publicHead,
     lotteryContent,
-    lotteryYouxilist
+    lotteryYouxilist,
+    lotteryYouxiQp,
+    lotteryYouxiBy
   },
   data() {
     return {
@@ -100,15 +112,36 @@ export default {
         "六合彩",
         "PC蛋蛋",
         "其他"
-      ]
+      ],
+      dataDzPt: [],
+      dataQpPt: [],
+      dataByPt: []
     };
   },
   mounted() {
     this.actives = this.gList[0];
     this.getData();
+    this.getYouxiData();
   },
   methods: {
-    changeListli: function(item) {
+    ...mapActions("youxi", ["GetIndexWebgame"]),
+    // 游戏平台
+    async getYouxiData() {
+      const resListPt = await this.GetIndexWebgame();
+      resListPt.map(item => {
+        if (item.type == 3) {
+          this.dataByPt.push(item); // 捕鱼
+        } else {
+          if ((item.class_type & (1 << (1 - 1))) > 0) {
+            this.dataDzPt.push(item); // 电子
+          }
+          if ((item.class_type & (1 << (2 - 1))) > 0) {
+            this.dataQpPt.push(item); // 棋牌
+          }
+        }
+      });
+    },
+    changeListli(item) {
       this.actives = item;
     },
     // scrollToShow(e) {
@@ -123,8 +156,9 @@ export default {
     async getData() {
       this.$dialog.loading.open("正在加载中···");
       await api.getGameList().then(res => {
-        res.map((item, index) => {
-          this.dataList.push(item);
+        const temp = res.filter(i => i.game_id != 3000);
+        temp.map(item => {
+          // this.dataList.push(item);
           switch (item.js_tag) {
             case "pcdd":
               this.pcdd.push(item);
@@ -148,10 +182,11 @@ export default {
               this.lhc.push(item);
               break;
             case "sport_key":
+            case "jingcai_key":
               this.sport.push(item);
               break;
             default:
-              this.other.push(item)
+              this.other.push(item);
               break;
           }
         });

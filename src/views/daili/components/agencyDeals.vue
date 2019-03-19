@@ -1,23 +1,40 @@
 <template>
   <div class="agencyDeals_main_body">
-    <publicHead :title="funcName" :type="1" :timeText="chooseTimeText" @chooseTimeShow="changeState" @pullDown="optionsShow"></publicHead>
-    <div class="account_type" v-show="bgIsShow">
+    <publicHead :title="funcName"
+                :type="1"
+                :timeText="chooseTimeText"
+                @chooseTimeShow="changeState"
+                @pullDown="optionsShow"></publicHead>
+    <div class="account_type"
+         v-show="bgIsShow">
       <div :class="[{options_is_show: optionsIsShow}, defaultClass2]">
-        <p v-for="(item, index) in accountOptions" :key="index" @click="chooseType(item, index)" :class="{active: choosed==index}">{{item.text}}</p>
+        <p v-for="(item, index) in accountOptions"
+           :key="index"
+           @click="chooseType(item, index)"
+           :class="{active: choosed==index}">{{item.text}}</p>
       </div>
     </div>
     <div class="agencyDeals_main_content">
       <div class="search_ipt">
-        <input type="text" placeholder="账号查询" v-model="account">
-        <img src="../../../img/daili/search.png" alt="" @click="controllerRequest()">
+        <input type="text"
+               placeholder="账号查询"
+               v-model="account">
+        <img src="../../../img/daili/search.png"
+             alt=""
+             @click="controllerRequest()">
       </div>
       <div class="betRecord">
-        <div class="empty" v-show="allData.length==0">
-          <img src="../../../img/bet_record/noRecords.png" alt="">
+        <div class="empty"
+             v-show="allData.length==0">
+          <img src="../../../img/bet_record/noRecords.png"
+               alt="">
           <p>暂无记录</p>
         </div>
         <div v-if="pageIndex===0&&allData.length>0">
-          <div class="hasContent" @click="toDetails(item)" v-for="(item, index) in allData" :key="index">
+          <div class="hasContent"
+               @click="toDetails(item)"
+               v-for="(item, index) in allData"
+               :key="index">
             <div class="left">
               <div>
                 <p>{{item.username}}</p>
@@ -34,10 +51,14 @@
             </div>
           </div>
         </div>
-        <p class="else_word" v-show="allData!=0" @click="togetChildTradLog">{{hasPage?'查看更多':'已显示全部数据'}}</p>
+        <p class="else_word"
+           v-show="allData!=0"
+           @click="togetChildTradLog">{{hasPage?'查看更多':'已显示全部数据'}}</p>
       </div>
     </div>
-    <yd-actionsheet :items="timeOptions" v-model="choosedTime" class="changePeriod"></yd-actionsheet>
+    <yd-actionsheet :items="timeOptions"
+                    v-model="choosedTime"
+                    class="changePeriod"></yd-actionsheet>
   </div>
 </template>
 <script>
@@ -46,10 +67,10 @@ import { mapActions, mapState } from "vuex";
 // import { getDate, getMonday, getMonth } from "../../../js/agencyDate";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   computed: {
-    ...mapState("member", ["st_timeData"]),
+    ...mapState("member", ["st_timeData"])
   },
   data() {
     return {
@@ -62,23 +83,29 @@ export default {
       hasPage: true,
       account: "",
       allData: [],
-      allData: [],
-      allData: [],
       choosedTime: false,
       userID: "",
       timeOptions: [],
       accountOptions: [
-        {text: '全部', type: 0},{text: '公司入款', type: 1}, {text: '线上入款', type: 2},
-        {text: '人工入款', type: 3}, {text: '活动优惠', type: 4}, {text: '投注退款', type: 5},
-        {text: '提款退还', type: 6}, {text: '代理返点', type: 7}, {text: '中奖派送', type: 9},
-        {text: '提款记录', type: 50}, {text: '投注记录', type: 51}, {text: '现金交易', type: 52}
+        { text: "全部", type: 0 },
+        { text: "公司入款", type: 1 },
+        { text: "线上入款", type: 2 },
+        { text: "人工入款", type: 3 },
+        { text: "活动优惠", type: 4 },
+        { text: "投注退款", type: 5 },
+        { text: "提款退还", type: 6 },
+        { text: "代理返点", type: 7 },
+        { text: "中奖派送", type: 9 },
+        { text: "提款记录", type: 50 },
+        { text: "投注记录", type: 51 },
+        { text: "现金交易", type: 52 }
       ],
       bgIsShow: false,
       optionsIsShow: false,
-      defaultClass2: 'type_options',
+      defaultClass2: "type_options",
       choosed: 0,
       choosedType: 0,
-      type:0
+      type: 0
     };
   },
   mounted() {
@@ -93,7 +120,7 @@ export default {
     ...mapActions("agent", [
       "getChildTradLog",
       "getNextPayPriceList",
-      "getNextGetPriceList",
+      "getNextGetPriceList"
     ]),
     dealData(res) {
       // 有返回数据
@@ -119,37 +146,37 @@ export default {
         }
       }
     },
-    async togetChildTradLog(lasttime = 0) {
+    async togetChildTradLog() {
       if (!this.hasPage) return;
-      let res = await this.getChildTradLog({
+      const res = await this.getChildTradLog({
         username: this.account,
         pageid: this.pageid,
         lasttime: this.lastTime,
-        tradtype:this.type
+        tradtype: this.type
       });
       this.dealData(res);
       // console.log(123);
       this.$dialog.loading.close();
     },
-    async togetNextGetPriceList(lasttime = 0) {
+    async togetNextGetPriceList() {
       if (!this.hasPage) return;
-      let res = await this.getNextGetPriceList({
+      const res = await this.getNextGetPriceList({
         username: this.account,
         pageid: this.pageid,
         lasttime: this.lastTime,
-        tradtype:this.type
+        tradtype: this.type
       });
       this.dealData(res);
       // if (res) this.allData = res;
       this.$dialog.loading.close();
     },
-    async togetNextPayPriceList(lasttime = 0) {
+    async togetNextPayPriceList() {
       if (!this.hasPage) return;
-      let res = await this.getNextPayPriceList({
+      const res = await this.getNextPayPriceList({
         username: this.account,
         pageid: this.pageid,
         lasttime: this.lastTime,
-        tradtype:this.type
+        tradtype: this.type
       });
       this.dealData(res);
       // if (res) this.allData = res;
@@ -181,17 +208,15 @@ export default {
       }
     },
     initTimeData() {
-      this.timeOptions = Array.from(this.st_timeData).map(v => {
-        return {
-          val: v[0],
-          label: v[1],
-          callback: item => {
-            this.chooseTimeText = item.label;
-            this.lastTime = item.val;
-            this.controllerRequest();
-          },
-        };
-      });
+      this.timeOptions = Array.from(this.st_timeData).map(v => ({
+        val: v[0],
+        label: v[1],
+        callback: item => {
+          this.chooseTimeText = item.label;
+          this.lastTime = item.val;
+          this.controllerRequest();
+        }
+      }));
     },
     toDetailsData(item) {
       switch (this.pageIndex) {
@@ -205,10 +230,10 @@ export default {
               { label: "手续费：", value: item.price_take },
               { label: "实际出款：", value: item.shiji_price },
               { label: "出款状态：", value: item.status, class: "red" },
-              { label: "出款时间：", value: item.time, class: "red" },
-            ],
+              { label: "出款时间：", value: item.time, class: "red" }
+            ]
           };
-          break;
+
         case 1:
           return {
             title: "出款详情",
@@ -219,10 +244,10 @@ export default {
               { label: "手续费：", value: item.price_take },
               { label: "实际出款：", value: item.shiji_price },
               { label: "出款状态：", value: item.status, class: "red" },
-              { label: "出款时间：", value: item.time, class: "red" },
-            ],
+              { label: "出款时间：", value: item.time, class: "red" }
+            ]
           };
-          break;
+
         case 2:
           item.price_end = item.price + item.price_first + item.price_odd;
           return {
@@ -234,42 +259,41 @@ export default {
               { label: "最终存入:", value: item.price_end.toFixed(2) },
               { label: "存入状态:", value: item.status_str, class: "red" },
               { label: "存入时间:", value: item.time, class: "red" },
-              { label: "备注:", value: item.index_mark },
-            ],
+              { label: "备注:", value: item.index_mark }
+            ]
           };
-          break;
 
         default:
           break;
       }
     },
-    toDetails(item) {
+    toDetails() {
       return;
       // this.$router.push("/moreService/betRecordDetails");
       // console.log(item);
-      this.$router.push({
-        name: "agentListDetail",
-        params: this.toDetailsData(item),
-      });
+      // this.$router.push({
+      //   name: "agentListDetail",
+      //   params: this.toDetailsData(item)
+      // });
     },
     chooseType(i, n) {
-      this.type = i.type
-      this.controllerRequest()
-      this.choosed = n
-      this.choosedType = i.type
-      this.optionsIsShow = false
+      this.type = i.type;
+      this.controllerRequest();
+      this.choosed = n;
+      this.choosedType = i.type;
+      this.optionsIsShow = false;
       setTimeout(() => {
-        this.bgIsShow = false
-      }, 300)
-      this.funcName = i.text
+        this.bgIsShow = false;
+      }, 300);
+      this.funcName = i.text;
     },
     optionsShow() {
-      this.bgIsShow = !this.bgIsShow
+      this.bgIsShow = !this.bgIsShow;
       setTimeout(() => {
-        this.optionsIsShow = true
-      }, 0)
-    },
-  },
+        this.optionsIsShow = true;
+      }, 0);
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -340,7 +364,7 @@ export default {
         .left {
           width: 40%;
           @include column;
-          >div {
+          > div {
             width: 80%;
             p {
               &:first-child {
@@ -361,7 +385,7 @@ export default {
         .right {
           width: 40%;
           @include column;
-          >div {
+          > div {
             width: 80%;
             // float: left;
             // height: poTorem(37px);
@@ -418,7 +442,7 @@ export default {
       background-color: #fff;
       height: 0;
       overflow: hidden;
-      transition: all .3s ease-out;
+      transition: all 0.3s ease-out;
       p {
         width: poTorem(91px);
         height: poTorem(29px);
@@ -428,12 +452,13 @@ export default {
         text-align: center;
         border-radius: poTorem(3px);
         margin-top: poTorem(20px);
-        &:nth-child(n+9) {
+        &:nth-child(n + 9) {
           margin-bottom: poTorem(20px);
         }
       }
       .active {
-        background: url(../../../img/account/choosed.png) no-repeat poTorem(70px) poTorem(8px);
+        background: url(../../../img/account/choosed.png) no-repeat
+          poTorem(70px) poTorem(8px);
         background-size: poTorem(20px) poTorem(20px);
         border-color: #e33939;
       }

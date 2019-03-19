@@ -1,12 +1,15 @@
 <template>
   <div class="agencyIntro_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="agencyIntro_main_content">
       <div class="head_img">
-        <img src="../../../img/daili/agency_intro_bg.jpg" alt="">
+        <img src="../../../img/daili/agency_intro_bg.jpg"
+             alt="">
       </div>
-      <div class="intro_word" v-html="agentIntro">
-      <!-- <div class="intro_word">
+      <div class="intro_word"
+           v-html="agentIntro">
+        <!-- <div class="intro_word">
         <h5>当您能看到这个页面，说明您的账号即是玩家账号也是代理账号，既可以自己投注，也可以发展下级玩家，赚取返点佣金</h5>
         <p class="title">如何赚取返点？</p>
         <p>可获得的返点，等于自身返点与下级返点的差值，如自身返点5，下级返点3，你将能获得下级投注金额2%的返点 ，如下级投注100元，你将会获得2元。点击下级开户，可查看自身返点，也可为下级设置返点。</p>
@@ -22,44 +25,44 @@
   </div>
 </template>
 <script>
-import publicHead from '../../huiYuan/components/moreService/publicHead'
-import { mapActions } from 'vuex';
+import publicHead from "../../huiYuan/components/moreService/publicHead";
+import { mapActions } from "vuex";
 // import { decode } from 'punycode';
-import decodeFunc from '../../shouYe/decode.js'
+import decodeFunc from "../../shouYe/decode.js";
 // import { constants } from 'http2';
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '代理介绍',
-      agentIntro:""
-    }
+      funcName: "代理介绍",
+      agentIntro: ""
+    };
   },
   mixins: [decodeFunc],
-  activated(){
+  activated() {
     this.getAgencyIntro();
   },
-  methods:{
+  methods: {
     ...mapActions("agent", ["getAgentInfo"]),
-    async getAgencyIntro(){
-      this.$dialog.loading.open(' ')
-      let res = await this.getAgentInfo();
-      console.log(res)
-      this.$dialog.loading.close()
+    async getAgencyIntro() {
+      this.$dialog.loading.open(" ");
+      const res = await this.getAgentInfo();
+      console.log(res);
+      this.$dialog.loading.close();
       // this.agentInto = res;
       this.funcName = res.title;
-      var temp = document.createElement("div");
-        // temp.innerHTML = res.content;
-        temp.innerHTML = this.decodeEvent(res.content)
-        var output = temp.innerText || temp.textContent;
-        temp = null;
+      let temp = document.createElement("div");
+      // temp.innerHTML = res.content;
+      temp.innerHTML = this.decodeEvent(res.content);
+      const output = temp.innerText || temp.textContent;
+      temp = null;
       this.agentIntro = output;
       console.log(this.agentInto);
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";
@@ -80,7 +83,7 @@ export default {
       line-height: poTorem(24px);
       .title {
         text-align: center;
-        color: #ff7c34;
+        color: $mainColor;
         font-size: poTorem(17px);
         text-indent: 0;
         line-height: poTorem(50px);

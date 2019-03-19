@@ -7,7 +7,12 @@
         &nbsp;期投注截止:
       </div>
       <div class="haoma">
-        <yd-countdown ref="openless" :time="openless" timetype="second" format="{%h}:{%m}:{%s}" done-text="正在开奖" :callback="getData"></yd-countdown>
+        <yd-countdown ref="openless"
+                      :time="openless"
+                      timetype="second"
+                      format="{%h}:{%m}:{%s}"
+                      done-text="正在开奖"
+                      :callback="getData"></yd-countdown>
       </div>
       <div class="rapid_betting">
         <div @click="toBetting">
@@ -18,20 +23,19 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import { mapActions, mapState } from "vuex";
 // import countDownkj from "./countDownkj";
 export default {
   props: ["listType"],
   data() {
     return {
-      openless: '',
+      openless: "",
       routeLists: {},
       nexts: [],
       timer: Function,
       closeIsShow: true,
       val: "",
-      qishu: ''
+      qishu: ""
     };
   },
   components: {},
@@ -45,18 +49,18 @@ export default {
     })
   },
   activated() {
-    this.getData()
+    this.getData();
   },
   deactivated() {
-    clearInterval(this.$refs.openless.timer)
+    clearInterval(this.$refs.openless.timer);
   },
   watch: {
-    listType(val) {
+    listType() {
       this.getData();
     }
   },
   methods: {
-    ...mapActions(['setBetCurent']),
+    ...mapActions(["setBetCurent"]),
     toBetting() {
       if (this.listType.enable == 2) {
         this.$dialog.toast({ mes: "该彩种正在维护中···" });
@@ -71,26 +75,27 @@ export default {
           js_tag: this.listType.js_tag,
           isHome: true,
           play_type: this.listType.play_type,
-          speed: this.listType.speed
+          speed: this.listType.speed,
+          yearid: this.listType.yearid || 0
         }
       });
     },
     getData() {
-      clearInterval(this.$refs.openless.timer)
+      clearInterval(this.$refs.openless.timer);
       this.$ajax("request", {
         ac: "getCplogList",
         tag: this.listType.name_tag
       }).then(res => {
-        this.qishu = res[0].next[0].qishu
-        if(res[0].next[0].stopless > 0) {
-          this.openless = res[0].next[0].stopless
+        this.qishu = res[0].next[0].qishu;
+        if (res[0].next[0].stopless > 0) {
+          this.openless = res[0].next[0].stopless;
         } else {
-          this.openless = res[0].next[1].stopless
+          this.openless = res[0].next[1].stopless;
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";

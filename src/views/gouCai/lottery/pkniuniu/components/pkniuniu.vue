@@ -2,29 +2,51 @@
   <div class="bullfight_body">
     <div class="cont">
       <!-- 赛车 -->
-      <div class="racing" :class="isbg?'beg':''" v-show="!isOver">
-        <img class="start" src="../../../../../img/game/car/start.png" alt="" :style="{transform:'translateX(' + bgPositionX + 'rem)'}">
-        <img class="end" src="../../../../../img/game/car/end.png" alt="" :style="{transform:'translateX(' + endPositionX + 'rem)'}">
+      <div class="racing"
+           :class="isbg?'beg':''"
+           v-show="!isOver">
+        <img class="start"
+             src="../../../../../img/game/car/start.png"
+             alt=""
+             :style="{transform:'translateX(' + bgPositionX + 'rem)'}">
+        <img class="end"
+             src="../../../../../img/game/car/end.png"
+             alt=""
+             :style="{transform:'translateX(' + endPositionX + 'rem)'}">
         <ul class="carbox">
-          <li class="car" :id="key+1" :class="item.speed?'speed c'+(key-0+1):'c'+(key-0+1)" v-for="(item,key) in carArr" :key="key" :style="{top:(3.3+key*0.52)+'rem',right:item.Eright+'rem'}">
-            <span class="l_tyre" :class="isStart?'tyre':''"></span>
-            <span class="r_tyre" :class="isStart?'tyre':''"></span>
+          <li class="car"
+              :id="key+1"
+              :class="item.speed?'speed c'+(key-0+1):'c'+(key-0+1)"
+              v-for="(item,key) in carArr"
+              :key="key"
+              :style="{top:(3.3+key*0.52)+'rem',right:item.Eright+'rem'}">
+            <span class="l_tyre"
+                  :class="isStart?'tyre':''"></span>
+            <span class="r_tyre"
+                  :class="isStart?'tyre':''"></span>
           </li>
         </ul>
-        <div class="count" v-show="!isStart">{{count}}</div>
+        <div class="count"
+             v-show="!isStart">{{count}}</div>
         <div class="light">
-          <img src="../../../../../img/game/car/red_light.png" v-if="!isStart">
-          <img src="../../../../../img/game/car/green_light.png" v-else>
+          <img src="../../../../../img/game/car/red_light.png"
+               v-if="!isStart">
+          <img src="../../../../../img/game/car/green_light.png"
+               v-else>
         </div>
       </div>
-      <div class="champion" :class="isOver?'show':''">
+      <div class="champion"
+           :class="isOver?'show':''">
         <div class="num1"></div>
         <div class="num2"></div>
         <div class="num3"></div>
         <div class="sort">
-          <div :class="isOver?'scale'+(key+1)+ ' sort'+item+' st'+(key+1):'sort'+item+' st'+(key+1)" v-for="(item,key) in sortData" :key="key"></div>
+          <div :class="isOver?'scale'+(key+1)+ ' sort'+item+' st'+(key+1):'sort'+item+' st'+(key+1)"
+               v-for="(item,key) in sortData"
+               :key="key"></div>
         </div>
-        <div class="colour" :class="isOver?'land':''"></div>
+        <div class="colour"
+             :class="isOver?'land':''"></div>
         <div class="lamp">
           <div class="lamp_1"></div>
           <div class="lamp_2"></div>
@@ -47,18 +69,22 @@
         </div>
         <div class="balls">
           <ul>
-            <li v-for="(i,key) in data" :key="key" :style="{'backgroundColor': getColor(i*1)}">{{i*1}}</li>
+            <li v-for="(i,key) in data"
+                :key="key"
+                :style="{'backgroundColor': getColor(i*1)}">{{i*1}}</li>
           </ul>
           <div @click="openHistory">
             <span>历史开奖</span>
-            <span class="icon" :class="{'slidedown': isOpen}"></span>
+            <span class="icon"
+                  :class="{'slidedown': isOpen}"></span>
           </div>
         </div>
       </div>
       <!-- 历史开奖 -->
       <div class="heads_bottom">
         <yd-accordion>
-          <yd-accordion-item ref="accor" :auto="false">
+          <yd-accordion-item ref="accor"
+                             :auto="false">
             <div class="history">
               <ul>
                 <li class="title">
@@ -71,7 +97,8 @@
                   <span>闲四</span>
                   <span>闲五</span>
                 </li>
-                <li v-for="(item,key) in kjBalls" :key="key">
+                <li v-for="(item,key) in kjBalls"
+                    :key="key">
                   <span>{{item.qishu.toString().slice(-4)}}</span>
                   <span class="kaijiang">{{item.balls.length ==10 ? item.balls.join(',') : '正在开奖'}}</span>
                   <span>{{item.balls.length ? niuniu(item.balls,0) : '-'}}</span>
@@ -92,52 +119,74 @@
             <i>{{nextQishu}}</i>期{{closeIsShow?'截止时间':'已封盘'}}:
           </div>
           <div class="haoma">
-            <app-count-down ref="openless" v-model="openless_leftTime" :time="openless" timetype="second" done-text="正在开奖" format="{%h}:{%m}:{%s}" :callback="_openCallback"></app-count-down>
+            <app-count-down ref="openless"
+                            v-model="openless_leftTime"
+                            :time="openless"
+                            timetype="second"
+                            done-text="正在开奖"
+                            format="{%h}:{%m}:{%s}"
+                            :callback="_openCallback"></app-count-down>
           </div>
-          <div class="haoma" v-html="renderStr" @click="userBalanceClick"></div>
+          <div class="haoma"
+               v-html="renderStr"
+               @click="userBalanceClick"></div>
         </div>
       </div>
-      <canvas id="canvas" :width="canvasWidth" :height="canvasHeight" style="margin-top:1.875rem" @click="sele()"></canvas>
-      <div class="niuniu" :style="'height:'+canvasHeight*0.67+'px'">
-        <div class="box" :class="items.class" v-for="(items,key) in resultList" :key="key" @click="canvas(key)" :style="'height:'+(canvasHeight*items.h)+'px'">
+      <canvas id="canvas"
+              :width="canvasWidth"
+              :height="canvasHeight"
+              style="margin-top:1.875rem"
+              @click="sele()"></canvas>
+      <div class="niuniu"
+           :style="'height:'+canvasHeight*0.67+'px'">
+        <div class="box"
+             :class="items.class"
+             v-for="(items,key) in resultList"
+             :key="key"
+             @click="canvas(key)"
+             :style="'height:'+(canvasHeight*items.h)+'px'">
           <p>{{items.title}}</p>
           <div class="poker">
-            <div class="item" :class="isOver?'sy':''" v-for="(item,key) in items.data" :key="key">
+            <div class="item"
+                 :class="isOver?'sy':''"
+                 v-for="(item,key) in items.data"
+                 :key="key">
               <!-- <span :class="'poker'+item+'-'+ (key==4?'4':key+1)"></span> -->
               <span :class="'poker'+item+'-'+items.color[key]"></span>
-              <img src="../../../../../img/game/brand.png" alt="">
+              <img src="../../../../../img/game/brand.png"
+                   alt="">
             </div>
-            <span class="niu" :class="'niu'+items.niu+'_'+items.result" v-show="isOver"></span>
-            <span class="res" :class="isOver?'show res_'+items.result:'res_'+items.result" v-if="!key==0"></span>
+            <span class="niu"
+                  :class="'niu'+items.niu+'_'+items.result"
+                  v-show="isOver"></span>
+            <span class="res"
+                  :class="isOver?'show res_'+items.result:'res_'+items.result"
+                  v-if="!key==0"></span>
           </div>
         </div>
       </div>
     </div>
     <!-- 下注 -->
-    <game-bets :betNum="betNum" @resetBetnum="resets"></game-bets>
+    <game-bets :betNum="betNum"
+               @resetBetnum="resets"></game-bets>
   </div>
 </template>
 <script>
-import { resetRouteParams } from '~/js/util'
-import gameBets from '../../gameBets'
-import { pk10bjys } from '~/js/pk10color'
-import { setInterval, setTimeout } from 'timers'
-import {
-  POINT_CONVERSION_COMPRESSED,
-  SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG
-} from 'constants'
-import countDownMixin from '../../countDownMixin'
-import oddMixin from '../../oddMixin'
-import { mapActions, mapState } from 'vuex'
+import { resetRouteParams } from "~/js/util";
+import gameBets from "../../gameBets";
+import { pk10bjys } from "~/js/pk10color";
+
+import countDownMixin from "../../countDownMixin";
+import oddMixin from "../../oddMixin";
+import { mapActions } from "vuex";
 import api from "~/../api/betting";
-let countDown
-let anima
-let sortss
-let timer
+let countDown;
+let anima;
+let sortss;
 export default {
   data() {
     return {
-      gameName: 'PK10牛牛',
+      gameName: "PK10牛牛",
       isOpen: false,
       routeLists: {},
       nexts: Object,
@@ -146,58 +195,58 @@ export default {
       data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       resultList: [
         {
-          title: '庄',
-          class: 'zhuang',
+          title: "庄",
+          class: "zhuang",
           data: [1, 2, 3, 4, 5],
-          niu: '0',
-          result: 'w',
+          niu: "0",
+          result: "w",
           h: 0.67,
-          color:[1,2,3,4,2]
+          color: [1, 2, 3, 4, 2]
         },
         {
-          title: '闲一',
-          class: 'xian1',
+          title: "闲一",
+          class: "xian1",
           data: [2, 3, 4, 5, 6],
-          niu: '0',
-          result: 't',
+          niu: "0",
+          result: "t",
           h: 0.37,
-          color:[1,2,3,4,2]
+          color: [1, 2, 3, 4, 2]
         },
         {
-          title: '闲二',
-          class: 'xian2',
+          title: "闲二",
+          class: "xian2",
           data: [3, 4, 5, 6, 7],
-          niu: '0',
-          result: 't',
+          niu: "0",
+          result: "t",
           h: 0.3,
-          color:[1,2,3,4,2]
+          color: [1, 2, 3, 4, 2]
         },
         {
-          title: '闲三',
-          class: 'xian3',
+          title: "闲三",
+          class: "xian3",
           data: [4, 5, 6, 7, 8],
-          niu: '0',
-          result: 't',
+          niu: "0",
+          result: "t",
           h: 0.25,
-          color:[1,2,3,4,2]
+          color: [1, 2, 3, 4, 2]
         },
         {
-          title: '闲四',
-          class: 'xian4',
+          title: "闲四",
+          class: "xian4",
           data: [5, 6, 7, 8, 9],
-          niu: '0',
-          result: 't',
+          niu: "0",
+          result: "t",
           h: 0.3,
-          color:[1,2,3,4,2]
+          color: [1, 2, 3, 4, 2]
         },
         {
-          title: '闲五',
-          class: 'xian5',
+          title: "闲五",
+          class: "xian5",
           data: [6, 7, 8, 9, 10],
-          niu: '0',
-          result: 't',
+          niu: "0",
+          result: "t",
           h: 0.37,
-          color:[1,2,3,4,2]
+          color: [1, 2, 3, 4, 2]
         }
       ],
       carArr: [],
@@ -219,138 +268,152 @@ export default {
       qishu: 0,
       closeIsShow: false,
       niu: [
-        '无牛',
-        '牛一',
-        '牛二',
-        '牛三',
-        '牛四',
-        '牛五',
-        '牛六',
-        '牛七',
-        '牛八',
-        '牛九',
-        '牛牛'
+        "无牛",
+        "牛一",
+        "牛二",
+        "牛三",
+        "牛四",
+        "牛五",
+        "牛六",
+        "牛七",
+        "牛八",
+        "牛九",
+        "牛牛"
       ],
       betNum: []
-    }
+    };
   },
   components: {
     gameBets
   },
   created() {
-    this.routeLists = this.routes
+    this.routeLists = this.routes;
   },
   mixins: [countDownMixin, oddMixin],
   activated() {
     this.getData();
-    this.setOdds()
-    this.routeLists = this.$route.params
-    resetRouteParams(this, 'pkniuniu')
-    let name_tag =
-      this.$route.params.name_tag || this.$store.state.betting.name_tag
-    name_tag && this.getOpened(name_tag) && this.getHistory(name_tag)
-    clearInterval(this.resTimer)
+    this.setOdds();
+    this.routeLists = this.$route.params;
+    resetRouteParams(this, "pkniuniu");
+    const name_tag =
+      this.$route.params.name_tag || this.$store.state.betting.name_tag;
+    name_tag && this.getOpened(name_tag) && this.getHistory(name_tag);
+    clearInterval(this.resTimer);
     this.randomBallTimer = setInterval(() => {
-      this.ballFromBet()
-    }, 500)
-    this.cars()
-    this.resize()
-    window.addEventListener('resize', this.resize)
+      this.ballFromBet();
+    }, 500);
+    this.cars();
+    this.resize();
+    window.addEventListener("resize", this.resize);
 
-    this.clearBalls()
-    this.zhushu = 0
-    this.setOdds()
-    this.danshiExcl = ''
-    window.clearInterval(sortss)
-    window.clearInterval(anima)
-    window.clearInterval(countDown)
+    this.clearBalls();
+    this.zhushu = 0;
+    this.danshiExcl = "";
+    window.clearInterval(sortss);
+    window.clearInterval(anima);
+    window.clearInterval(countDown);
   },
   deactivated() {
-    clearInterval(this.$refs.openless.timer)
-    clearInterval(this.resTimer)
-    clearInterval(this.randomBallTimer)
-    window.clearInterval(countDown)
-    window.clearInterval(anima)
-    window.clearInterval(sortss)
-    this.isbg = false
-    this.sortData = []
-    this.time = 0
-    this.bgPositionX = 0
-    this.endPositionX = -25
-    this.isOver = false
-    this.isStart = false
+    clearInterval(this.$refs.openless.timer);
+    clearInterval(this.resTimer);
+    clearInterval(this.randomBallTimer);
+    window.clearInterval(countDown);
+    window.clearInterval(anima);
+    window.clearInterval(sortss);
+    this.isbg = false;
+    this.sortData = [];
+    this.time = 0;
+    this.bgPositionX = 0;
+    this.endPositionX = -25;
+    this.isOver = false;
+    this.isStart = false;
     if (this.dataSet && this.dataSet.length) {
       this.dataSet.forEach(item => {
-        item.data.forEach(x => (x.checked = false))
-      })
+        item.data.forEach(x => (x.checked = false));
+      });
     }
-    this.betNum = []
-    this.cars()
-    this.resize()
+    this.betNum = [];
+    this.cars();
+    this.resize();
   },
   watch: {
-    '$route.params'(newVal, oldVal) {
+    "$route.params"(newVal, oldVal) {
       if (
         newVal &&
-        newVal.js_tag === 'pkniuniu' &&
+        newVal.js_tag === "pkniuniu" &&
         (oldVal && oldVal.js_tag == newVal.js_tag)
       ) {
+        this.betNum = [];
+        this.carArr = [];
         // clearInterval(this.$refs.stopless.timer);
-        clearInterval(this.$refs.openless.timer)
-        clearInterval(this.resTimer)
-
-        this.routeLists = newVal
-        this.setBetCurent(newVal)
-        resetRouteParams(this, 'pkniuniu')
-        this.getOpened(newVal.name_tag)
-        this.getHistory(newVal.name_tag)
-        this.setBetData({})
-        this.clearCart()
+        clearInterval(this.$refs.openless.timer);
+        // clearInterval(this.resTimer)
+        this.routeLists = newVal;
+        this.setBetCurent(newVal);
+        resetRouteParams(this, "pkniuniu");
+        this.getOpened(newVal.name_tag);
+        this.getHistory(newVal.name_tag);
+        this.setOdds();
+        clearInterval(this.$refs.openless.timer);
+        clearInterval(this.resTimer);
+        clearInterval(this.randomBallTimer);
+        window.clearInterval(countDown);
+        window.clearInterval(anima);
+        window.clearInterval(sortss);
+        this.isbg = false;
+        this.sortData = [];
+        this.time = 0;
+        this.bgPositionX = 0;
+        this.endPositionX = -25;
+        this.isOver = false;
+        this.isStart = false;
+        this.$nextTick(() => this.cars());
+        this.resize();
       }
     },
     balls() {
       for (let i = 0; i < this.balls.length; i++) {
-        this.balls[i] = this.balls[i] * 1
+        this.balls[i] = this.balls[i] * 1;
       }
     },
     kjBalls() {
-      let _this = this
+      const _this = this;
       for (let i = 0; i < _this.kjBalls.length; i++) {
         for (let n = 0; n < _this.kjBalls[i].balls.length; n++) {
-          _this.kjBalls[i].balls[n] = _this.kjBalls[i].balls[n] * 1
+          _this.kjBalls[i].balls[n] = _this.kjBalls[i].balls[n] * 1;
         }
       }
     },
     isOver() {
       if (!this.isOver) {
-        this.reset()
+        this.reset();
       } else {
         window.setTimeout(() => {
-          this.isOver = false
-        }, 4000)
+          this.isOver = false;
+        }, 4000);
       }
     }
   },
   methods: {
     ...mapActions([
-      'setBetCurent',
-      'setQishu',
-      'description',
-      'playSwitch',
-      'setBetNumber',
-      'setBetOdd',
-      'setBetOdds',
-      'setBetUOdds',
-      'setPlayConfig',
-      'setBetData',
-      'clearCart',
-      'showOfficial'
+      "setBetCurent",
+      "setQishu",
+      "description",
+      "playSwitch",
+      "setBetNumber",
+      "setBetOdd",
+      "setBetOdds",
+      "setBetUOdds",
+      "setPlayConfig",
+      "setBetData",
+      "clearCart",
+      "showOfficial"
     ]),
     resets() {
-      this.betNum = []
-      this.resize()
+      this.betNum = [];
+      this.resize();
     },
-    async getData(tag = this.js_tag || 'pkniuniu') {
+    async getData(tag = this.js_tag || "pkniuniu") {
       let config = (await api.getGamePlayConfig(tag)) || [];
       config = (config[0] && config[0].submenu) || [];
       config = (config[0] && config[0].playlist) || [];
@@ -365,145 +428,145 @@ export default {
     },
     // 开始倒计时
     countDown() {
-      let _this = this
-      window.clearInterval(sortss)
-      window.clearInterval(anima)
-      window.clearInterval(countDown)
-      countDown = window.setInterval(function() {
+      const _this = this;
+      window.clearInterval(countDown);
+      countDown = window.setInterval(() => {
+        _this.count--;
         if (_this.count < 0) {
-          _this.isStart = true
+          _this.count = 0;
+          window.clearInterval(countDown);
+          _this.isStart = true;
+          return;
         }
-        _this.count--
-      }, 1000)
+      }, 1000);
     },
     star() {
-      this.isStart = true
-      this.isbg = true
-      this.bgPositionX = 10
-      this.cars()
-      this.begin()
-      this.init()
-      this.addEventListener()
+      this.isStart = true;
+      this.isbg = true;
+      this.bgPositionX = 10;
+      this.cars();
+      this.begin();
+      this.init();
+      this.addEventListener();
     },
     // 定义汽车
     cars() {
-      this.carArr = []
+      this.carArr = [];
       for (let i = 0; i < 10; i++) {
-        let car = {}
-        car.id = i //汽车号
-        car.Sright = i * 0.28 //初始位置
-        car.Eright = i * 0.28 //初始位置
-        car.speed = false //加速
-        this.carArr.push(car)
+        const car = {};
+        car.id = i; // 汽车号
+        car.Sright = i * 0.28; // 初始位置
+        car.Eright = i * 0.28; // 初始位置
+        car.speed = false; // 加速
+        this.carArr.push(car);
       }
     },
     // 重置
     reset() {
-      this.isOver = false
-      this.cars()
+      this.isOver = false;
+      this.cars();
     },
     init() {
-      anima = window.setInterval(this.begin, 5000)
+      window.clearInterval(anima);
+      anima = window.setInterval(this.begin, 5000);
     },
     clearBalls() {
       if (this.dataSet && this.dataSet.length) {
         this.dataSet.forEach(item => {
-          item.data.forEach(x => (x.checked = false))
-        })
+          item.data.forEach(x => (x.checked = false));
+        });
       }
-      this.zhushu = 0
-      this.setBetNumber(0)
+      this.zhushu = 0;
+      this.setBetNumber(0);
     },
     // 开始
     begin() {
       // this.bgPositionX+=100
       for (let i = 0; i < 10; i++) {
-        this.carArr[i].Sright = this.carArr[i].Eright
-        this.carArr[i].Eright = Math.random() * 12 + 4
+        this.carArr[i].Sright = this.carArr[i].Eright;
+        this.carArr[i].Eright = Math.random() * 12 + 4;
         if (this.carArr[i].Sright + 1 + 1 > this.carArr[i].Eright) {
-          this.carArr[i].speed = false
+          this.carArr[i].speed = false;
         } else {
-          this.carArr[i].speed = true
+          this.carArr[i].speed = true;
         }
       }
     },
     // 结束倒计时
     downTime() {
-      window.clearInterval(anima)
-      let beg = document.querySelector('.racing')
-      let arr = []
+      window.clearInterval(anima);
+      const beg = document.querySelector(".racing");
+      const arr = [];
       for (let i = 0; i < 10; i++) {
-        arr.push(Math.random() * 12 + 4)
+        arr.push(Math.random() * 12 + 4);
       }
-      arr.sort(function(a, b) {
-        return b - a
-      })
+      arr.sort((a, b) => b - a);
       // console.log(arr)
       // console.log(this.carArr)
       // console.log(this.balls)
       for (let i = 0; i < 10; i++) {
         this.carArr[this.balls[i] * 1 - 1].Sright = this.carArr[
           this.balls[i] * 1 - 1
-        ].Eright
-        this.carArr[this.balls[i] * 1 - 1].Eright = arr[i]
+        ].Eright;
+        this.carArr[this.balls[i] * 1 - 1].Eright = arr[i];
         if (
           this.carArr[this.balls[i] * 1 - 1].Sright + 1 + 1 >
           this.carArr[this.balls[i] * 1 - 1].Eright
         ) {
-          this.carArr[this.balls[i] * 1 - 1].speed = false
+          this.carArr[this.balls[i] * 1 - 1].speed = false;
         } else {
-          this.carArr[this.balls[i] * 1 - 1].speed = true
+          this.carArr[this.balls[i] * 1 - 1].speed = true;
         }
       }
       window.setTimeout(() => {
         // setTimeout(() => {
         //   this.isbg = false;
         // }, 200);
-        this.isbg = false
-        this.endPositionX += 10
+        this.isbg = false;
+        this.endPositionX += 10;
         if (beg) {
-          beg.style.backgroundPositionX += '5rem'
+          beg.style.backgroundPositionX += "5rem";
         }
         for (let i = 0; i < 10; i++) {
-          this.carArr[i].Eright = this.carArr[i].Eright + 30
-          this.carArr[i].speed = true
+          this.carArr[i].Eright = this.carArr[i].Eright + 30;
+          this.carArr[i].speed = true;
         }
         window.setTimeout(() => {
-          window.clearInterval(anima)
+          window.clearInterval(anima);
           // window.clearInterval(timer);
-          this.data = this.balls
-          this.sortData = []
+          this.data = this.balls;
+          this.sortData = [];
           for (let i = 0; i < 3; i++) {
-            this.sortData.push(this.data[i])
+            this.sortData.push(this.data[i]);
           }
-          this.bgPositionX = 0
-          this.endPositionX = -25
-          this.isOver = true
-          this.isStart = false
-          this.cars()
-          this.compare()
-          window.clearInterval(sortss)
-        }, 1000)
-      }, 5000)
+          this.bgPositionX = 0;
+          this.endPositionX = -25;
+          this.isOver = true;
+          this.isStart = false;
+          this.cars();
+          this.compare();
+          window.clearInterval(sortss);
+        }, 1000);
+      }, 5000);
     },
     // 牛牛算法
     result(arr) {
       // console.log(arr)
-      let _arr = arr
+      const _arr = arr;
       for (let i = 0; i < _arr.length - 2; i++) {
         for (let j = i + 1; j < _arr.length - 1; j++) {
           for (let k = j + 1; k < _arr.length; k++) {
             if ((_arr[i] + _arr[j] + _arr[k]) % 10 == 0) {
-              _arr.splice(k, 1)
-              _arr.splice(j, 1)
-              _arr.splice(i, 1)
+              _arr.splice(k, 1);
+              _arr.splice(j, 1);
+              _arr.splice(i, 1);
               for (let n = 0; n < _arr.length; n++) {
                 if ((_arr[0] + _arr[1]) % 10 == 0) {
                   // console.log('牛牛')
-                  return 10
+                  return 10;
                 } else {
                   // console.log('牛'+(_arr[0]+_arr[1])%10)
-                  return (_arr[0] + _arr[1]) % 10
+                  return (_arr[0] + _arr[1]) % 10;
                 }
               }
             }
@@ -511,157 +574,158 @@ export default {
         }
       }
       // console.log('没牛')
-      return 0
+      return 0;
     },
     niuniu(data, n) {
-      let _data = data.slice(n, n + 5)
-      return this.niu[this.result(_data)]
+      const _data = data.slice(n, n + 5);
+      return this.niu[this.result(_data)];
     },
-    //结果
+    // 结果
     compare() {
-      let _data = this.data
+      const _data = this.data;
       for (let i = 0; i < 6; i++) {
-        this.resultList[i].data = _data.slice(i, i + 5)
-        this.resultList[i].niu = this.result(_data.slice(i, i + 5))
+        this.resultList[i].data = _data.slice(i, i + 5);
+        this.resultList[i].niu = this.result(_data.slice(i, i + 5));
         for (let j = 0; j < 5; j++) {
-          this.resultList[i].color[j] = parseInt(Math.random()*4+1)
+          this.resultList[i].color[j] = parseInt(Math.random() * 4 + 1);
         }
       }
       // let _resultList = this.resultList
       for (let i = 1; i < this.resultList.length; i++) {
         if (this.resultList[i].niu > this.resultList[0].niu) {
-          this.resultList[i].result = 'w'
+          this.resultList[i].result = "w";
         } else {
-          this.resultList[i].result = 't'
+          this.resultList[i].result = "t";
         }
       }
       // console.log(this.resultList)
     },
     // 排序
     addEventListener() {
-      let cars = document.getElementsByClassName('car')
-      let _this = this
-      let compares = function(prop) {
+      const cars = document.getElementsByClassName("car");
+      const _this = this;
+      const compares = function(prop) {
         return function(obj1, obj2) {
-          let val1 = obj1[prop]
-          let val2 = obj2[prop]
+          let val1 = obj1[prop];
+          let val2 = obj2[prop];
           if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-            val1 = Number(val1)
-            val2 = Number(val2)
+            val1 = Number(val1);
+            val2 = Number(val2);
           }
           if (val1 < val2) {
-            return -1
+            return -1;
           } else if (val1 > val2) {
-            return 1
+            return 1;
           } else {
-            return 0
+            return 0;
           }
-        }
-      }
-      sortss = window.setInterval(function() {
-        let sortCar = []
-        let newData = []
+        };
+      };
+      window.clearInterval(sortss);
+      sortss = window.setInterval(() => {
+        const sortCar = [];
+        const newData = [];
         for (let i = 0; i < cars.length; i++) {
           sortCar.push({
             left: cars[i].offsetLeft,
             id: i + 1
-          })
+          });
         }
-        sortCar.sort(compares('left'))
+        sortCar.sort(compares("left"));
         for (let j = 0; j < sortCar.length; j++) {
-          newData.push(sortCar[j].id)
+          newData.push(sortCar[j].id);
         }
-        _this.data = newData
-      }, 500)
+        _this.data = newData;
+      }, 500);
     },
     openHistory() {
-      this.isOpen = !this.isOpen
+      this.isOpen = !this.isOpen;
       if (this.isOpen) {
-        this.$refs.accor.openItem()
+        this.$refs.accor.openItem();
       } else {
-        this.$refs.accor.closeItem()
+        this.$refs.accor.closeItem();
       }
     },
     getColor(val) {
-      return pk10bjys(val)
+      return pk10bjys(val);
     },
     _closeCallback() {
       // this.openless = 20;
     },
     sele() {
-      let p = this.getEventPosition(event)
-      let cass = document.getElementById('canvas')
-      let cxtx = cass.getContext('2d')
-      cxtx.clearRect(0, 0, cass.width, cass.height)
-      let n = 0
-      this.arr.forEach(function(v, i) {
-        cxtx.beginPath()
-        cxtx.moveTo(v.spot1.x, v.spot1.y)
-        cxtx.lineTo(v.spot2.x, v.spot2.y)
-        cxtx.lineTo(v.spot3.x, v.spot3.y)
-        cxtx.lineTo(v.spot4.x, v.spot4.y)
-        cxtx.stroke()
+      const p = this.getEventPosition(event);
+      const cass = document.getElementById("canvas");
+      const cxtx = cass.getContext("2d");
+      cxtx.clearRect(0, 0, cass.width, cass.height);
+      let n = 0;
+      this.arr.forEach((v, i) => {
+        cxtx.beginPath();
+        cxtx.moveTo(v.spot1.x, v.spot1.y);
+        cxtx.lineTo(v.spot2.x, v.spot2.y);
+        cxtx.lineTo(v.spot3.x, v.spot3.y);
+        cxtx.lineTo(v.spot4.x, v.spot4.y);
+        cxtx.stroke();
         if (p && cxtx.isPointInPath(p.x, p.y)) {
-          n = i
+          n = i;
         }
-      })
-      this.canvas(n)
+      });
+      this.canvas(n);
     },
     getEventPosition(ev) {
-      let x, y
+      let x, y;
       if (ev.layerX || ev.layerX == 0) {
-        x = ev.layerX
-        y = ev.layerY
+        x = ev.layerX;
+        y = ev.layerY;
       } else if (ev.offsetX || ev.offsetX == 0) {
-        x = ev.offsetX
-        y = ev.offsetY
+        x = ev.offsetX;
+        y = ev.offsetY;
       }
-      return { x: x, y: y }
+      return { x, y };
     },
     canvas(num) {
-      let _this = this
+      const _this = this;
       if (num == 0) {
-        return
+        return;
       }
-      let a = this.betNum.indexOf(num)
+      const a = this.betNum.indexOf(num);
       if (a > -1) {
-        this.betNum.splice(a, 1)
+        this.betNum.splice(a, 1);
       } else {
-        this.betNum.push(num)
+        this.betNum.push(num);
       }
-      let items = document.querySelector('.niuniu').querySelectorAll('.box')
-      let cass = document.getElementById('canvas')
-      let cxtx = cass.getContext('2d')
-      cxtx.clearRect(0, 0, cass.width, cass.height)
-      this.arr.forEach(function(v, i) {
+      const items = document.querySelector(".niuniu").querySelectorAll(".box");
+      const cass = document.getElementById("canvas");
+      const cxtx = cass.getContext("2d");
+      cxtx.clearRect(0, 0, cass.width, cass.height);
+      this.arr.forEach((v, i) => {
         if (i == 0) {
-          cxtx.beginPath()
-          cxtx.moveTo(v.spot1.x, v.spot1.y)
-          cxtx.lineTo(v.spot2.x, v.spot2.y)
-          cxtx.lineTo(v.spot3.x, v.spot3.y)
-          cxtx.lineTo(v.spot4.x, v.spot4.y)
-          cxtx.stroke()
+          cxtx.beginPath();
+          cxtx.moveTo(v.spot1.x, v.spot1.y);
+          cxtx.lineTo(v.spot2.x, v.spot2.y);
+          cxtx.lineTo(v.spot3.x, v.spot3.y);
+          cxtx.lineTo(v.spot4.x, v.spot4.y);
+          cxtx.stroke();
           for (let i = 0; i < items.length; i++) {
-            items[i].style.color = '#666'
+            items[i].style.color = "#666";
           }
-          return
+          return;
         }
         for (let n = 0; n < _this.betNum.length; n++) {
           if (i == _this.betNum[n]) {
-            cxtx.beginPath()
-            cxtx.strokeStyle = '#ccc'
-            cxtx.fillStyle = '#eb3349'
-            cxtx.moveTo(v.spot1.x, v.spot1.y)
-            cxtx.lineTo(v.spot2.x, v.spot2.y)
-            cxtx.lineTo(v.spot3.x, v.spot3.y)
-            cxtx.lineTo(v.spot4.x, v.spot4.y)
-            cxtx.stroke()
-            cxtx.fill()
+            cxtx.beginPath();
+            cxtx.strokeStyle = "#ccc";
+            cxtx.fillStyle = "#eb3349";
+            cxtx.moveTo(v.spot1.x, v.spot1.y);
+            cxtx.lineTo(v.spot2.x, v.spot2.y);
+            cxtx.lineTo(v.spot3.x, v.spot3.y);
+            cxtx.lineTo(v.spot4.x, v.spot4.y);
+            cxtx.stroke();
+            cxtx.fill();
             // for (let i = 0; i < items.length; i++) {
             //   items[i].style.color = "#666";
             // }
-            let obj = document.querySelector('.xian' + i)
-            obj.style.color = '#fff'
+            const obj = document.querySelector(".xian" + i);
+            obj.style.color = "#fff";
           }
         }
         // if (i == num) {
@@ -680,128 +744,128 @@ export default {
         //   let obj = document.querySelector(".xian" + i);
         //   obj.style.color = "#fff";
         // }
-        cxtx.beginPath()
-        cxtx.moveTo(v.spot1.x, v.spot1.y)
-        cxtx.lineTo(v.spot2.x, v.spot2.y)
-        cxtx.lineTo(v.spot3.x, v.spot3.y)
-        cxtx.lineTo(v.spot4.x, v.spot4.y)
-        cxtx.stroke()
-      })
+        cxtx.beginPath();
+        cxtx.moveTo(v.spot1.x, v.spot1.y);
+        cxtx.lineTo(v.spot2.x, v.spot2.y);
+        cxtx.lineTo(v.spot3.x, v.spot3.y);
+        cxtx.lineTo(v.spot4.x, v.spot4.y);
+        cxtx.stroke();
+      });
     },
     resize() {
-      let items = document.querySelectorAll('.niuniu .box')
+      const items = document.querySelectorAll(".niuniu .box");
       for (let i = 0; i < items.length; i++) {
-        items[i].style.color = '#666'
+        items[i].style.color = "#666";
       }
-      const clientWidth = document.body.clientWidth
-      this.canvasWidth = clientWidth
-      this.canvasHeight = clientWidth / 768 * 538
+      const clientWidth = document.body.clientWidth;
+      this.canvasWidth = clientWidth;
+      this.canvasHeight = (clientWidth / 768) * 538;
       this.arr = [
         {
           spot1: { x: this.canvasWidth * 0.365, y: 0 },
           spot2: { x: this.canvasWidth * 0.635, y: 0 },
           spot3: { x: this.canvasWidth * 0.635, y: this.canvasHeight * 0.67 },
           spot4: { x: this.canvasWidth * 0.365, y: this.canvasHeight * 0.67 }
-        }, //庄
+        }, // 庄
         {
           spot1: { x: 0, y: 0 },
           spot2: { x: this.canvasWidth * 0.365, y: 0 },
           spot3: { x: this.canvasWidth * 0.365, y: this.canvasHeight * 0.37 },
           spot4: { x: 0, y: this.canvasHeight * 0.37 }
-        }, //闲1
+        }, // 闲1
         {
           spot1: { x: 0, y: this.canvasHeight * 0.37 },
           spot2: { x: this.canvasWidth * 0.365, y: this.canvasHeight * 0.37 },
           spot3: { x: this.canvasWidth * 0.365, y: this.canvasHeight * 0.67 },
           spot4: { x: 0, y: this.canvasHeight }
-        }, //闲2
+        }, // 闲2
         {
           spot1: { x: this.canvasWidth * 0.365, y: this.canvasHeight * 0.67 },
           spot2: { x: this.canvasWidth * 0.635, y: this.canvasHeight * 0.67 },
           spot3: { x: this.canvasWidth, y: this.canvasHeight },
           spot4: { x: 0, y: this.canvasHeight }
-        }, //闲3
+        }, // 闲3
         {
           spot1: { x: this.canvasWidth * 0.635, y: this.canvasHeight * 0.37 },
           spot2: { x: this.canvasWidth, y: this.canvasHeight * 0.37 },
           spot3: { x: this.canvasWidth, y: this.canvasHeight },
           spot4: { x: this.canvasWidth * 0.635, y: this.canvasHeight * 0.67 }
-        }, //闲4
+        }, // 闲4
         {
           spot1: { x: this.canvasWidth * 0.635, y: 0 },
           spot2: { x: this.canvasWidth, y: 0 },
           spot3: { x: this.canvasWidth, y: this.canvasHeight * 0.37 },
           spot4: { x: this.canvasWidth * 0.635, y: this.canvasHeight * 0.37 }
-        } //闲5
-      ]
+        } // 闲5
+      ];
       this.$nextTick(() => {
-        let cass = document.getElementById('canvas')
-        let cxtx = cass.getContext('2d')
-        cxtx.clearRect(0, 0, cass.width, cass.height)
+        const cass = document.getElementById("canvas");
+        const cxtx = cass.getContext("2d");
+        cxtx.clearRect(0, 0, cass.width, cass.height);
         // 闲1
-        cxtx.strokeStyle = '#ccc' //绘制线颜色
-        cxtx.fillStyle = '#ccc'
-        let xian1 = cxtx.rect(
-          0,
-          0,
-          this.canvasWidth * 0.365,
-          this.canvasHeight * 0.37
-        )
-        cxtx.stroke()
+        cxtx.strokeStyle = "#ccc"; // 绘制线颜色
+        cxtx.fillStyle = "#ccc";
+        // const xian1 = cxtx.rect(
+        //   0,
+        //   0,
+        //   this.canvasWidth * 0.365,
+        //   this.canvasHeight * 0.37
+        // );
+        cxtx.stroke();
         // // 庄
-        cxtx.beginPath()
-        cxtx.strokeStyle = '#ccc'
-        cxtx.fillStyle = '#ccc'
-        let zhuang = cxtx.strokeRect(
-          this.canvasWidth * 0.365,
-          0,
-          this.canvasWidth * 0.27,
-          this.canvasHeight * 0.67
-        )
+        cxtx.beginPath();
+        cxtx.strokeStyle = "#ccc";
+        cxtx.fillStyle = "#ccc";
+        // const zhuang = cxtx.strokeRect(
+        //   this.canvasWidth * 0.365,
+        //   0,
+        //   this.canvasWidth * 0.27,
+        //   this.canvasHeight * 0.67
+        // );
         // // 闲5
-        cxtx.beginPath()
-        cxtx.strokeStyle = '#ccc'
-        cxtx.fillStyle = '#ccc'
-        let xian5 = cxtx.strokeRect(
-          this.canvasWidth * 0.635,
-          0,
-          this.canvasWidth * 0.365,
-          this.canvasHeight * 0.37
-        )
+        cxtx.beginPath();
+        cxtx.strokeStyle = "#ccc";
+        cxtx.fillStyle = "#ccc";
+        // const xian5 = cxtx.strokeRect(
+        //   this.canvasWidth * 0.635,
+        //   0,
+        //   this.canvasWidth * 0.365,
+        //   this.canvasHeight * 0.37
+        // );
         // // 闲2
-        cxtx.beginPath()
-        cxtx.lineStyle = 'blue'
-        let xian2 = cxtx.moveTo(0, this.canvasHeight * 0.37)
-        cxtx.lineTo(this.canvasWidth * 0.365, this.canvasHeight * 0.37)
-        cxtx.lineTo(this.canvasWidth * 0.365, this.canvasHeight * 0.67)
-        cxtx.lineTo(0, this.canvasHeight)
-        cxtx.stroke()
+        cxtx.beginPath();
+        cxtx.lineStyle = "blue";
+        // const xian2 = cxtx.moveTo(0, this.canvasHeight * 0.37);
+        cxtx.lineTo(this.canvasWidth * 0.365, this.canvasHeight * 0.37);
+        cxtx.lineTo(this.canvasWidth * 0.365, this.canvasHeight * 0.67);
+        cxtx.lineTo(0, this.canvasHeight);
+        cxtx.stroke();
         // // 闲4
-        cxtx.beginPath()
-        cxtx.lineStyle = 'blue'
-        let xian4 = cxtx.moveTo(
-          this.canvasWidth * 0.635,
-          this.canvasHeight * 0.37
-        )
-        cxtx.lineTo(this.canvasWidth, this.canvasHeight * 0.37)
-        cxtx.lineTo(this.canvasWidth, this.canvasHeight)
-        cxtx.lineTo(this.canvasWidth * 0.635, this.canvasHeight * 0.67)
-        cxtx.stroke()
+        cxtx.beginPath();
+        cxtx.lineStyle = "blue";
+        // const xian4 = cxtx.moveTo(
+        //   this.canvasWidth * 0.635,
+        //   this.canvasHeight * 0.37
+        // );
+        cxtx.lineTo(this.canvasWidth, this.canvasHeight * 0.37);
+        cxtx.lineTo(this.canvasWidth, this.canvasHeight);
+        cxtx.lineTo(this.canvasWidth * 0.635, this.canvasHeight * 0.67);
+        cxtx.stroke();
         // // 闲3
-        cxtx.beginPath()
-        cxtx.lineStyle = 'red'
-        let xian3 = cxtx.moveTo(
-          this.canvasWidth * 0.365,
-          this.canvasHeight * 0.67
-        )
-        cxtx.lineTo(this.canvasWidth * 0.635, this.canvasHeight * 0.67)
-        cxtx.lineTo(this.canvasWidth, this.canvasHeight)
-        cxtx.lineTo(0, this.canvasHeight)
-        cxtx.stroke()
-      })
+        cxtx.beginPath();
+        cxtx.lineStyle = "red";
+        // const xian3 = cxtx.moveTo(
+        //   this.canvasWidth * 0.365,
+        //   this.canvasHeight * 0.67
+        // );
+        cxtx.lineTo(this.canvasWidth * 0.635, this.canvasHeight * 0.67);
+        cxtx.lineTo(this.canvasWidth, this.canvasHeight);
+        cxtx.lineTo(0, this.canvasHeight);
+        cxtx.stroke();
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -1291,6 +1355,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         li {
+          // width: 100%;
           color: #535353;
           background: #fff;
           border: 1px solid #d2d3d5;
@@ -1385,7 +1450,7 @@ export default {
         overflow: scroll;
         li {
           padding: 0 2%;
-          // width: 100%;
+          width: 100%;
           height: 1.875rem;
           font-size: 0.9rem;
           display: flex;

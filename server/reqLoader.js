@@ -36,7 +36,7 @@ export default class ReqLoader {
     // const baseUrl = this.option.baseUrl
     for (let i = 0, l = this.option.requests.length; i < l; i++) {
       const maintained = window.vue.$store.state.maintained
-      if (maintained.msg === 45000) {
+      if (maintained.msg === 45000 || maintained.msg === 40020) {
         this.option.onProgress(1, 1)
         this.option.onComplete(true)
       }

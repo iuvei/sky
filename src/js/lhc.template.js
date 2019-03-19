@@ -172,7 +172,17 @@ const selectBalls = function(shidx) {
       balls: [12, 13, 20, 21, 28, 29, 42, 43]
     }
   }
-
+  const resWuxing = qishu => {
+    qishu = qishu || window.vue.$store.state.betting.qishu
+    if (qishu > 2019014) {
+      wuxing.wuxing_jin.balls = [5, 6, 19, 20, 27, 28, 35, 36, 49]
+      wuxing.wuxing_mu.balls = [1, 2, 9, 10, 17, 18, 31, 32, 39, 40, 47, 48]
+      wuxing.wuxing_shui.balls = [7, 8, 15, 16, 23, 24, 37, 38, 45, 46]
+      wuxing.wuxing_huo.balls = [3, 4, 11, 12, 25, 26, 33, 34, 41, 42]
+      wuxing.wuxing_tu.balls = [13, 14, 21, 22, 29, 30, 43, 44]
+    }
+    return wuxing
+  }
   const resShengxiao = function() {
     for (const k in default_shengxiao) {
       let start_balls = shidx - default_shengxiao[k].idx + 1 // 计算生肖位置开始号码
@@ -240,7 +250,7 @@ const selectBalls = function(shidx) {
   }
   // 计算生肖
   const calcShengxiao = function(val) {
-    let res = shidx + 1 - val % 12
+    let res = shidx + 1 - (val % 12)
     if (res < 0) {
       res = shidx + 1 - res
     }
@@ -277,7 +287,7 @@ const selectBalls = function(shidx) {
   return {
     shengxiao: resShengxiao(),
     balls: resBalls(),
-    wuxing,
+    wuxing: resWuxing(),
     color: default_color
   }
 }

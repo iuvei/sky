@@ -50,10 +50,7 @@ function calc_3zx(arr) {
  * @returns
  */
 function calc_2zx(arr) {
-  if (
-    arr.length < 2 ||
-    !checkArrIs(arr, /^(([0][1-9]|[1][0-1])|([1-9]|[1][0-1]))$/)
-  ) {
+  if (arr.length < 2 || !checkArrIs(arr, /^[0-9]$/)) {
     return 0
   }
   switch (arr.length) {

@@ -1,8 +1,9 @@
 <template>
   <div class="findpw_main_body">
-    <div class="login_head" >
+    <div :class="[{'login_head_pig': isfestival},'login_head']">
       <!-- <router-link to="/member"> -->
-      <span class="iconfont icon-fanhui" @click="goBack"></span>
+      <span class="iconfont icon-fanhui"
+            @click="goBack"></span>
       <!-- </router-link> -->
       <span class="title">密码找回</span>
       <span></span>
@@ -11,56 +12,104 @@
       <div class="login_con find_con">
         <yd-cell-group>
           <yd-cell-item v-show="isShow">
-            <span slot="left" class="find_account">账号：</span>
-            <yd-input slot="right" required v-model="input1" max="20" placeholder="请输入账号"></yd-input>
+            <span slot="left"
+                  class="find_account">账号：</span>
+            <yd-input slot="right"
+                      required
+                      v-model="input1"
+                      max="20"
+                      placeholder="请输入账号"></yd-input>
           </yd-cell-item>
           <yd-cell-item v-show="isShow">
-            <span slot="left" class="find_account">验证码：</span>
-            <yd-input slot="right" type="text" v-model="input2" placeholder="请输入验证码"></yd-input>
-            <span slot="right" class="verify_code">
-              <img :src="verifyImg" alt="" class="verify_img" @click="getVerify()">
+            <span slot="left"
+                  class="find_account">验证码：</span>
+            <yd-input slot="right"
+                      type="text"
+                      v-model="input2"
+                      placeholder="请输入验证码"></yd-input>
+            <span slot="right"
+                  class="verify_code">
+              <img :src="verifyImg"
+                   alt=""
+                   class="verify_img"
+                   @click="getVerify()">
             </span>
           </yd-cell-item>
           <!-- 第一步 选择验证方式 -->
-          <yd-cell-item arrow v-show="item.present" v-for="(item, index) in wayTypeArr" :key="index" @click.native="filtInfo(item, index)">
-            <span slot="left" class="find_account">{{item.text}}</span>
+          <yd-cell-item arrow
+                        v-show="item.present"
+                        v-for="(item, index) in wayTypeArr"
+                        :key="index"
+                        @click.native="filtInfo(item, index)">
+            <span slot="left"
+                  class="find_account">{{item.text}}</span>
           </yd-cell-item>
           <!-- 第二步 填写验证信息 -->
           <yd-cell-item v-show="stepTwoIsShow">
-            <span slot="left" class="find_account">{{stepTwoTxt}}</span>
-            <yd-input slot="right" v-model="verifyInfo" max="20" :placeholder="'请输入'+stepTwoTxt"></yd-input>
+            <span slot="left"
+                  class="find_account">{{stepTwoTxt}}</span>
+            <yd-input slot="right"
+                      v-model="verifyInfo"
+                      max="20"
+                      :placeholder="'请输入'+stepTwoTxt"></yd-input>
           </yd-cell-item>
-          <div class="content" v-show="questionVerify">
+          <div class="content"
+               v-show="questionVerify">
             <yd-cell-group class="form_ipt">
               <yd-cell-item arrow>
-                <span slot="left" class="left">问题一</span>
-                <select slot="right" v-model="verifyQuestionOne" class="right">
-                  <option :value="index" v-for="(item, index) in questionArr" :key="index" :selected="index===0?'selected':''">{{item}}</option>
-               </select>
-              </yd-cell-item>
-              <yd-cell-item>
-                <span slot="left">答案</span>
-                <input slot="right" type="text" placeholder="请输入答案" v-model="verifyAnswerOne">
-              </yd-cell-item>
-              <yd-cell-item arrow>
-                <span slot="left" class="left">问题二</span>
-                <select slot="right" v-model="verifyQuestionTwo" class="right">
-                  <option :value="index" v-for="(item, index) in questionArr" :key="index">{{item}}</option>
+                <span slot="left"
+                      class="left">问题一</span>
+                <select slot="right"
+                        v-model="verifyQuestionOne"
+                        class="right">
+                  <option :value="index"
+                          v-for="(item, index) in questionArr"
+                          :key="index"
+                          :selected="index===0?'selected':''">{{item}}</option>
                 </select>
               </yd-cell-item>
               <yd-cell-item>
                 <span slot="left">答案</span>
-                <input slot="right" type="text" placeholder="请输入答案" v-model="verifyAnswerTwo">
+                <input slot="right"
+                       type="text"
+                       placeholder="请输入答案"
+                       v-model="verifyAnswerOne">
               </yd-cell-item>
               <yd-cell-item arrow>
-                <span slot="left" class="left">问题三</span>
-                <select slot="right" v-model="verifyQuestionThree" class="right">
-                  <option :value="index" v-for="(item, index) in questionArr" :key="index">{{item}}</option>
+                <span slot="left"
+                      class="left">问题二</span>
+                <select slot="right"
+                        v-model="verifyQuestionTwo"
+                        class="right">
+                  <option :value="index"
+                          v-for="(item, index) in questionArr"
+                          :key="index">{{item}}</option>
                 </select>
               </yd-cell-item>
               <yd-cell-item>
                 <span slot="left">答案</span>
-               <input slot="right" type="text" placeholder="请输入答案" v-model="verifyAnswerThree">
+                <input slot="right"
+                       type="text"
+                       placeholder="请输入答案"
+                       v-model="verifyAnswerTwo">
+              </yd-cell-item>
+              <yd-cell-item arrow>
+                <span slot="left"
+                      class="left">问题三</span>
+                <select slot="right"
+                        v-model="verifyQuestionThree"
+                        class="right">
+                  <option :value="index"
+                          v-for="(item, index) in questionArr"
+                          :key="index">{{item}}</option>
+                </select>
+              </yd-cell-item>
+              <yd-cell-item>
+                <span slot="left">答案</span>
+                <input slot="right"
+                       type="text"
+                       placeholder="请输入答案"
+                       v-model="verifyAnswerThree">
               </yd-cell-item>
             </yd-cell-group>
             <p class="btn">
@@ -69,32 +118,54 @@
           </div>
           <!-- 第三步 填写新密码提交 -->
           <yd-cell-item v-show="stepThreeIsShow">
-            <span slot="left" class="find_account">新密码：</span>
-            <yd-input slot="right" type="password" v-model="newPW1" max="20" placeholder="请输入新密码"></yd-input>
+            <span slot="left"
+                  class="find_account">新密码：</span>
+            <yd-input slot="right"
+                      type="password"
+                      v-model="newPW1"
+                      max="20"
+                      placeholder="请输入新密码"></yd-input>
           </yd-cell-item>
           <yd-cell-item v-show="stepThreeIsShow">
-            <span slot="left" class="find_account">确认密码：</span>
-            <yd-input slot="right" type="password" v-model="newPW2" max="20" placeholder="请确认新密码"></yd-input>
+            <span slot="left"
+                  class="find_account">确认密码：</span>
+            <yd-input slot="right"
+                      type="password"
+                      v-model="newPW2"
+                      max="20"
+                      placeholder="请确认新密码"></yd-input>
           </yd-cell-item>
           <yd-cell-item v-show="stepThreeIsShow">
-            <span slot="left" class="find_account">验证码：</span>
-            <yd-input slot="right" type="text" v-model="input3" placeholder="请输入验证码"></yd-input>
-            <span slot="right" class="verify_code">
-              <img :src="verifyImg2" alt="" class="verify_img" @click="getVerify()">
+            <span slot="left"
+                  class="find_account">验证码：</span>
+            <yd-input slot="right"
+                      type="text"
+                      v-model="input3"
+                      placeholder="请输入验证码"></yd-input>
+            <span slot="right"
+                  class="verify_code">
+              <img :src="verifyImg2"
+                   alt=""
+                   class="verify_img"
+                   @click="getVerify()">
             </span>
           </yd-cell-item>
         </yd-cell-group>
       </div>
       <!-- 公用按钮 -->
-      <div class="login_btn" v-show="btnIsShow">
+      <div class="login_btn"
+           v-show="btnIsShow">
         <div class="btn">
-          <yd-button bgcolor='#F93' style='width:90%' @click.native="submitData">确定</yd-button>
+          <yd-button bgcolor='#F93'
+                     style='width:90%'
+                     @click.native="submitData">确定</yd-button>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -106,7 +177,7 @@ export default {
       input1: "",
       input2: "",
       input3: "",
-      isparent : false,
+      isparent: false,
       isShow: true,
       btnIsShow: true,
       stepTwoTxt: "密保邮箱",
@@ -139,16 +210,28 @@ export default {
       verifyQuestionOne: 0,
       verifyQuestionTwo: 0,
       verifyQuestionThree: 0,
-      verifyAnswerOne: '',
-      verifyAnswerTwo: '',
-      verifyAnswerThree: '',
+      verifyAnswerOne: "",
+      verifyAnswerTwo: "",
+      verifyAnswerThree: "",
       questionArr: [
-        '点击选择密保问题','您母亲的姓名是？', '您父亲的姓名是？', '您配偶的姓名是？',
-        '您的出生地是？', '您高中班主任的名字是？', '您初中班主任的名字是？',
-        '您小学班主任的名字是？', '您的小学校名是？', '您的学号（或工号）是？',
-        '您父亲的生日是？', '您母亲的生日是', '您配偶的生日是？'
-      ],
+        "点击选择密保问题",
+        "您母亲的姓名是？",
+        "您父亲的姓名是？",
+        "您配偶的姓名是？",
+        "您的出生地是？",
+        "您高中班主任的名字是？",
+        "您初中班主任的名字是？",
+        "您小学班主任的名字是？",
+        "您的小学校名是？",
+        "您的学号（或工号）是？",
+        "您父亲的生日是？",
+        "您母亲的生日是",
+        "您配偶的生日是？"
+      ]
     };
+  },
+  computed: {
+    ...mapState(['isfestival'])
   },
   mounted() {
     this.$dialog.loading.open("正在加载中···");
@@ -205,26 +288,26 @@ export default {
             pass: this.newPW1,
             vcode: this.input3,
             client: 1
-          }).then(res => {
-            this.isShow = true
+          }).then(() => {
+            this.isShow = true;
             this.verifyQuestionOne = 0;
             this.verifyQuestionTwo = 0;
             this.verifyQuestionThree = 0;
-            this.verifyAnswerOne = '';
-            this.verifyAnswerTwo = '';
-            this.verifyAnswerThree = '';
-            this.input1 = '';
-            this.input2 = '';
-            this.btnIsShow = false
-            this.stepTwoIsShow = false
-            this.stepThreeIsShow = false
-            this.questionVerify = false
+            this.verifyAnswerOne = "";
+            this.verifyAnswerTwo = "";
+            this.verifyAnswerThree = "";
+            this.input1 = "";
+            this.input2 = "";
+            this.btnIsShow = false;
+            this.stepTwoIsShow = false;
+            this.stepThreeIsShow = false;
+            this.questionVerify = false;
             this.$router.push("/login");
             this.$dialog.alert({ mes: "修改成功，请使用新密码登录" });
-            this.getVerify(); 
-          });         
+            this.getVerify();
+          });
         }
-      } 
+      }
       // else {
       //   let obj = {
       //     ac:
@@ -254,24 +337,24 @@ export default {
       // }
     },
     goBack() {
-      if(this.questionVerify || this.stepThreeIsShow){
+      if (this.questionVerify || this.stepThreeIsShow) {
         this.verifyQuestionOne = 0;
         this.verifyQuestionTwo = 0;
         this.verifyQuestionThree = 0;
-        this.verifyAnswerOne = '';
-        this.verifyAnswerTwo = '';
-        this.verifyAnswerThree = '';
-        this.input1 = '';
-        this.input2 = '';
+        this.verifyAnswerOne = "";
+        this.verifyAnswerTwo = "";
+        this.verifyAnswerThree = "";
+        this.input1 = "";
+        this.input2 = "";
       }
-      if(this.isparent){
+      if (this.isparent) {
         this.getVerify();
-        this.input1 = '';
-        this.input2 = '';
+        this.input1 = "";
+        this.input2 = "";
       }
       if (this.isShow) {
-        this.input1 = '';
-        this.input2 = '';
+        this.input1 = "";
+        this.input2 = "";
         this.$router.back();
         this.questionVerify = false;
         this.stepThreeIsShow = false;
@@ -297,8 +380,8 @@ export default {
 
       if (i == 0) {
         this.stepTwoTxt = "密保问题";
-        this.questionVerify = true
-        this.stepTwoIsShow = false
+        this.questionVerify = true;
+        this.stepTwoIsShow = false;
       } else if (i == 1) {
         this.stepTwoTxt = "密保邮箱";
       } else if (i == 2) {
@@ -307,7 +390,7 @@ export default {
         this.stepTwoTxt = "交易密码";
       }
     },
-    verifyData () {
+    verifyData() {
       this.$dialog.loading.open(" ");
       this.$ajax("request", {
         ac: "FPcheckQuestion",
@@ -317,13 +400,13 @@ export default {
         question_3: this.verifyQuestionThree,
         answer_1: this.verifyAnswerOne,
         answer_2: this.verifyAnswerTwo,
-        answer_3: this.verifyAnswerThree,
+        answer_3: this.verifyAnswerThree
       }).then(res => {
-        this.passToken = res.accessCode
-        this.questionVerify = false
-        this.stepThreeIsShow = true
-        this.getVerify()
-        this.btnIsShow = true
+        this.passToken = res.accessCode;
+        this.questionVerify = false;
+        this.stepThreeIsShow = true;
+        this.getVerify();
+        this.btnIsShow = true;
         // this.funcName = '修改密保问题'
       });
       this.$dialog.loading.close();
@@ -346,6 +429,9 @@ export default {
     height: poTorem(48px);
     width: 100%;
     background: url(../../../../img/phone_header.png) CENTER TOP;
+    &.login_head_pig {
+      @include pigbg;
+    }
     .iconfont {
       font-size: poTorem(30px);
       padding-left: poTorem(10px);
@@ -450,11 +536,14 @@ export default {
     background-color: #eee;
     .yd-cell-item {
       padding-left: 1.25rem;
-      span, input {
+      span,
+      input {
         font-size: 0.9rem;
         text-indent: 0 !important;
       }
-      .right, input, select {
+      .right,
+      input,
+      select {
         color: #333;
         font-size: 0.9rem;
       }
@@ -468,7 +557,7 @@ export default {
         font-size: poTorem(16px);
         line-height: poTorem(16px);
         color: #fff;
-        background-color: #ff7c34;
+        background-color: $mainColor;
         border-radius: poTorem(5px);
         outline: none;
         border: none;

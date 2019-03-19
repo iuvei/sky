@@ -16,6 +16,11 @@
       </div>
       <!--横向滚动文字-->
       <scroll></scroll>
+      <!-- 聊天室入口 -->
+      <chatRoom v-show="showChatRoom"></chatRoom>
+      <!-- <chatRoom v-show="true"></chatRoom> -->
+
+      <!-- <button @click="$router.push({name: 'jingcai_key'})">竞彩</button> -->
 
       <!-- 插入购彩页面 -->
       <buyLottery></buyLottery>
@@ -25,7 +30,12 @@
     </div>
 
     <!-- 游客试玩提示框 -->
-    <welcomeGuest :show="guest"></welcomeGuest>
+    <welcomeGuest :show="guest" @closeWelcPop="guest=false"></welcomeGuest>
+
+    <!-- 抢红包 -->
+    <div class="grabhongbao" @click="$router.push('/grabhb')" v-if="sysinfo.event_gift*1 == 1" v-drag>
+      <img src="../../img/grabhongbao/grabhongbao.png" alt="">
+    </div>
   </div>
 </template>
 
@@ -34,11 +44,11 @@ import config from '~/config'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import heads from './components/header'
 import scroll from './components/scroll'
+import chatRoomComponent from './components/chatRoom'
 import welcomeGuest from './components/welcomeGuest'
 import newScroll from './components/newScroll'
 import loader from '../public/loader'
 import buyLottery from '../gouCai/index'
-import ReqLoader from '../../../server/reqLoader'
 export default {
   data: () => ({
     a: 0,
@@ -51,6 +61,7 @@ export default {
     ]
   }),
   components: {
+    chatRoom: chatRoomComponent,
     heads,
     scroll,
     newScroll,
@@ -59,10 +70,21 @@ export default {
     welcomeGuest
   },
   computed: {
-    ...mapState(['loader']),
+    ...mapState(['loader', 'sysinfo', 'userinfo', 'chatRoom']),
     ...mapGetters({
       product: 'cartProducts'
-    })
+    }),
+    showChatRoom() {
+      return this.sysinfo.talking_on * 1
+      // if (this.sysinfo.talking_on == 0) {
+      //   return false;
+      // }
+      // // return ;
+      // if (this.userinfo.isLogin) {
+      //   return this.chatRoom.loginIsShow;
+      // }
+      // return this.chatRoom.unLoginIsSHow;
+    }
   },
   methods: {
     ...mapActions(['reqLoader'])
@@ -70,8 +92,8 @@ export default {
   watch: {
     loader: {
       /** 判断进度条显示路由 */
-      handler: function(val, oldVal) {
-        val.percent == 1 &&
+      handler(val) {
+        val.percent === 1 &&
           setTimeout(() => {
             this.number = true
           }, 1000)
@@ -105,7 +127,7 @@ export default {
       if (
         Array.isArray(res) &&
         res.length &&
-        res[0].banner.indexOf('http') != -1
+        res[0].banner.indexOf('http') !== -1
       ) {
         this.slideImg = res
       }
@@ -133,6 +155,17 @@ export default {
   .main_menu {
     width: 100%;
     height: poTorem(65px);
+  }
+  .grabhongbao {
+    position: fixed;
+    // bottom: 15%;
+    // right: 3%;
+    top: 70%;
+    left: 80%;
+    z-index: 100;
+    img {
+      width: poTorem(80px);
+    }
   }
 }
 </style>

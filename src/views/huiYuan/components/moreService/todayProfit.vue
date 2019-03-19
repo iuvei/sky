@@ -1,187 +1,190 @@
 <template>
   <div class="todayProfit_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
-    <div class="todayProfit_main_content">
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
+    <div class="todayProfit_main_content other-block">
       <div class="up_content">
-        <p>盈亏总额（元）</p>
-        <p>
-          <span>{{baseData.win_price}}</span>
-          <img src="../../../../img/recharge/refresh.png" alt="" @click="getBaseData">
-        </p>
-        <p>盈亏计算方式：中奖 - 投注 + 活动 + 返点</p>
+        <p>{{(baseData.profit * 1 || 0).toFixed(2)}}</p>
+        <!-- <img src="~img/recharge/refresh.png" alt="" @click="getBaseData"> -->
       </div>
+
+      <yd-flexbox class="two_content">
+        <yd-flexbox-item>
+          <router-link to='/moreService/Nrecharge'
+                       class="recharge">
+            <p class="price">{{(baseData.pay * 1 || 0).toFixed(2)}}</p>
+            <p>今日充值</p>
+          </router-link>
+        </yd-flexbox-item>
+        <yd-flexbox-item>
+          <router-link to='/moreService/NgetCash'
+                       class="get_cash">
+            <p class="price">{{(baseData.tkprice * 1 || 0).toFixed(2)}}</p>
+            <p>今日提现</p>
+          </router-link>
+        </yd-flexbox-item>
+      </yd-flexbox>
+
+      <div class="date-wrap">
+        <select-date class="menu"
+                     :unixStamp='unixStamp'
+                     @date="setDate"></select-date>
+      </div>
+
       <div class="center_content">
-        <div v-for="(item, index) in allWealth" :key="index">
-          <p>{{item.num}}</p>
-          <p>{{item.title}}</p>
-        </div>
+        <yd-flexbox v-for="(item, index) in allWealth"
+                    :key="index">
+          <yd-flexbox-item>{{item.title}}</yd-flexbox-item>
+          <yd-flexbox-item class="price-color">{{item.num}}</yd-flexbox-item>
+        </yd-flexbox>
       </div>
-      <div class="footer_content">
-        <router-link to='/moreService/Nrecharge' class="recharge">
-          <img src="../../../../img/personal_center/charge.png" alt="">
-          <span>充值</span>
-        </router-link>
-        <router-link to='/moreService/NgetCash' class="get_cash">
-          <img src="../../../../img/personal_center/get_cash.png" alt="">
-          <span>提现</span>
-        </router-link>
+
+      <div class="desc_content">
+        <p>- 投注金额：在当天开奖的投注订单金额</p>
+        <p>- 中奖金额：在当天中奖派发的金额</p>
+        <p>- 盈亏汇总：中奖金额 + 赠送彩金 + 返水金额 - 投注金额</p>
       </div>
+
     </div>
   </div>
 </template>
 <script>
-import publicHead from './publicHead'
+import publicHead from "./publicHead";
+import selectDate from "../SelectDate";
 export default {
-  components : {
-    publicHead
+  components: {
+    publicHead,
+    selectDate
   },
   data() {
     return {
-      funcName: '今日盈亏',
-      baseData: {},
+      unixStamp: new Date(),
+      funcName: "今日盈亏",
+      baseData: {}, // 今日数据
       allWealth: [
         {
-          num: '',
-          title: '投注金额'
+          num: "",
+          title: "投注金额"
         },
         {
-          num: '',
-          title: '中奖金额'
+          num: "",
+          title: "中奖金额"
         },
         {
-          num: '',
-          title: '活动礼金'
+          num: "",
+          title: "赠送彩金"
         },
         {
-          num: '',
-          title: '返点金额'
+          num: "",
+          title: "返水金额"
         },
         {
-          num: '',
-          title: '充值金额'
+          num: "",
+          title: "充值金额"
         },
         {
-          num: '',
-          title: '提现金额'
+          num: "",
+          title: "提现金额"
+        },
+        {
+          num: "",
+          title: "盈亏汇总"
         }
       ]
+    };
+  },
+  watch: {
+    unixStamp() {
+      this.getBaseData();
     }
   },
-  mounted() {
-    this.getBaseData()
+  activated() {
+    this.unixStamp = new Date();
+    this.getBaseData();
   },
   methods: {
+    setDate(date) {
+      this.unixStamp = date;
+    },
     getBaseData() {
-      this.$dialog.loading.open(' ')
-      this.$ajax('request', {
-        ac: 'todayWin'
-      }).then(res => {
-        this.baseData = res
-        this.allWealth[0].num = this.baseData.tou_price
-        this.allWealth[1].num = this.baseData.zhong
-        this.allWealth[2].num = this.baseData.huo_price
-        this.allWealth[3].num = this.baseData.fan_price
-        this.allWealth[4].num = this.baseData.pay_price
-        this.allWealth[5].num = this.baseData.ti_price
-        this.$dialog.loading.close()
+      this.$dialog.loading.open(" ");
+      this.$ajax("request", {
+        ac: "GetProfitAndLoss",
+        lasttime: new Date(this.unixStamp).format("yyMMdd")
       })
+        .then((res = {}) => {
+          if (
+            new Date().format("yyMMdd") ===
+            new Date(this.unixStamp).format("yyMMdd")
+          ) {
+            this.baseData = res;
+          }
+          this.allWealth[0].num = (res.touzhu * 1 || 0).toFixed(2);
+          this.allWealth[1].num = (res.paicai * 1 || 0).toFixed(2);
+          this.allWealth[2].num = (res.caijin * 1 || 0).toFixed(2);
+          this.allWealth[3].num = (res.fanshui * 1 || 0).toFixed(2);
+          this.allWealth[4].num = (res.pay * 1 || 0).toFixed(2);
+          this.allWealth[5].num = (res.tkprice * 1 || 0).toFixed(2);
+          this.allWealth[6].num = (res.profit * 1 || 0).toFixed(2);
+
+          this.$dialog.loading.close();
+        })
+        .catch(() => this.$dialog.loading.close());
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
-@import "../../../../css/resources.scss";
+@import "~css/resources.scss";
 .todayProfit_main_body {
   background-color: #eee;
+  font-size: 1rem;
+  line-height: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
   .todayProfit_main_content {
     .up_content {
-      margin: poTorem(10px) 0;
-      background-color: #fff;
-      padding: poTorem(20px);
-      p {
-        &:first-child {
-          font-size: poTorem(13px);
-          color: #000;
-        }
-        &:nth-child(2) {
-          text-align: center;
-          margin-bottom: poTorem(30px);
-          span {
-            font-size: poTorem(25px);
-            color: #e33939;
-            margin-right: poTorem(20px);
-          }
-          img {
-            width: poTorem(21px);
-          }
-        }
-        &:last-child {
-          font-size: poTorem(13px);
-          color: #666;
-          text-align: center;
-        }
+      background-color: $mainColor;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #ffffff;
+      height: 8rem;
+      line-height: 8rem;
+    }
+    .two_content {
+      background-color: #f06327;
+      color: #ffffff;
+      position: relative;
+      .get_cash::before {
+        content: "";
+        border-left: 1px solid #ffffff;
+        position: absolute;
+        left: 50%;
+        top: 1rem;
+        height: 2rem;
+      }
+      .price {
+        color: #fae80a;
+      }
+    }
+    .date-wrap {
+      padding: 0.7rem 0;
+      .menu {
+        background-color: #ffffff;
       }
     }
     .center_content {
+      line-height: 3rem;
       background-color: #fff;
-      @include between;
-      flex-wrap: wrap;
-      padding: poTorem(20px) 0;
-      div {
-        width: poTorem(120px);
-        height: poTorem(50px);
-        p {
-          text-align: center;
-          font-size: poTorem(15px);
-          &:first-child {
-            color: #ff9147;
-            margin-bottom: poTorem(10px);
-          }
-          &:last-child {
-            color: #666;
-          }
-        }
-        &:nth-child(2), &:nth-child(5) {
-          border-left: poTorem(1px) dashed #ddd;
-          border-right: poTorem(1px) dashed #ddd;
-        }
-        &:nth-child(n+4) {
-          margin-top: poTorem(40px);
-        }
+      .price-color {
+        color: #df0000;
       }
     }
-    .footer_content {
-      background-color: #fff;
-      @include center;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      border-top: poTorem(1px) solid #ddd;
-      .recharge, .get_cash {
-        @include center;
-        width: 49%;
-        height: poTorem(31px);
-        margin: poTorem(20px) 0;
-        padding-right: poTorem(20px);
-        img {
-          width: poTorem(22px);
-          margin-right: poTorem(10px);
-        }
-        span {
-          font-size: poTorem(18px);
-        }
-      }
-      .recharge {
-        border-right: poTorem(1px) solid #ddd;
-        span {
-          color: #fb6f10;
-        }
-      }
-      .get_cash {
-        span {
-          color: #7cba59;
-        }
-      }
+    .desc_content {
+      text-align: left;
+      font-size: 0.9rem;
+      padding: 1rem 0.7rem;
     }
   }
 }

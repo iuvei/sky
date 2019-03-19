@@ -1,32 +1,38 @@
 <template>
-  <div class="heads" ref="heads">
-    <div :class="[{'ios_phone_header': isnested}, 'phone_header']" v-if="!isnested">
+  <div class="heads"
+       ref="heads">
+    <div :class="[{'phone_header_pig': !isnested}, 'phone_header']">
       <div class="pull_left">
       </div>
-      <div :class="[{'ios_pull_title': isnested}, 'pull_title']">
+      <div class="pull_title">
         <span>基本走势</span>
       </div>
-      <div :class="[{'ios_pull_right': isnested}, 'pull_right']" @click="show = !show">
+      <div class="pull_right"
+           @click="show = !show">
         <i :class="{'rotate_pos': show}"></i>
         <span>彩种</span>
       </div>
     </div>
-    <select-game @afterSelectGame="afterSelectGame" :id="gameId" :autoSelect="true" :show="show"></select-game>
-    <lotteryHistory :listType="listType" ref="zoushiLottery" :iosKaijiang="iosKaijiang"></lotteryHistory>
+    <select-game @afterSelectGame="afterSelectGame"
+                 :id="gameId"
+                 :autoSelect="true"
+                 :show="show"></select-game>
+    <lotteryHistory :listType="listType"
+                    ref="zoushiLottery"
+                    :iosKaijiang="iosKaijiang"></lotteryHistory>
   </div>
 
 </template>
 <script>
-import selectGame from "./selectGame";
-import { mapState, mapActions } from "vuex";
-import lotteryHistory from "../../kaiJiang/details/lotteryHistory";
+import selectGame from './selectGame';
+import { mapState, mapActions } from 'vuex';
+import lotteryHistory from '../../kaiJiang/details/lotteryHistory';
 import {
-  trendDataToView,
   getTrendDigitByName,
   findDigitsByName
-} from "../../../js/trendUtil.js";
+} from '../../../js/trendUtil.js';
 export default {
-  props: ["iosKaijiang", 'lotId'],
+  props: ['iosKaijiang', 'lotId'],
   components: {
     selectGame,
     lotteryHistory
@@ -52,49 +58,21 @@ export default {
   },
   watch: {
     digits(val) {
-      let headClassList = this.$refs.heads.classList;
+      const headClassList = this.$refs.heads.classList;
       val.length > 5
-        ? headClassList.add("double")
-        : headClassList.remove("double");
+        ? headClassList.add('double')
+        : headClassList.remove('double');
     },
-    show(val) {
-      // if (val === true) {
-      //   document.querySelector(".bg").style.height =
-      //     document.querySelector(".echart_con").clientHeight +
-      //     document.querySelector(".zoushi .phone_header").clientHeight +
-      //     "px";
-      // }
-    }
+    show() {}
   },
-  // activated() {
-  //   if (this.isnested) {
-  //     //     let webReadyInitSend = window.WebViewInvoke.bind('initSend')
-  //     //     let iosData = await webReadyInitSend()
-  //     //     this.$dialog.alert({mes : iosData})
-  //     //     this.isDetective = iosData === 0 ? true : false
-  //     window.document.addEventListener("message", e => {
-  //       let iosData = JSON.parse(e.data);
-  //       // this.$dialog.alert({mes: iosData})
-  //       if (iosData.game_id) {
-  //         let basicData = {
-  //           game_id: iosData.game_id,
-  //           game_name: iosData.game_name,
-  //           js_tag: iosData.js_tag,
-  //           tag: iosData.tag,
-  //           speed: iosData.speed
-  //         };
-  //         this.afterSelectGame(basicData);
-  //       }
-  //     });
-  //   }
-  // },
+
   methods: {
     ...mapActions([
-      "setGameTrend",
-      "setGameDigits",
-      "setTrendData",
-      "setGameNumbers",
-      "setTrendval"
+      'setGameTrend',
+      'setGameDigits',
+      'setTrendData',
+      'setGameNumbers',
+      'setTrendval'
     ]),
     afterSelectGame(game) {
       console.log(game);
@@ -105,10 +83,11 @@ export default {
         name_tag: game.tag,
         game_name: game.game_name,
         speed: game.speed,
-        enable: game.enable
+        enable: game.enable,
+        yearid: game.yearid
       };
       this.setGameTrend(game);
-      let digits = findDigitsByName(game.game_name);
+      const digits = findDigitsByName(game.game_name);
       this.setGameDigits(digits);
       this.setGameNumbers(getTrendDigitByName(game.game_name));
       this.setTrendval(0);
@@ -125,8 +104,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";
-.heads{
-  display:flex;
+.heads {
+  display: flex;
   flex-direction: column;
   flex: 1;
   height: 0;
@@ -142,6 +121,9 @@ export default {
   background: url(../../../img/phone_header.png) CENTER TOP;
   position: relative;
   z-index: 21;
+  &.phone_header_pig {
+    @include pigbg;
+  }
   .pull_title,
   .pull_left,
   .pull_right {
@@ -176,16 +158,6 @@ export default {
   .pull_title {
     @include center;
   }
-  .ios_pull_title {
-    font-size: poTorem(20px);
-  }
-  .ios_pull_right {
-    font-size: poTorem(19px);
-  }
-}
-.ios_phone_header {
-  height: poTorem(70px);
-  padding-top: poTorem(20px);
 }
 .popup {
   .pop_head {

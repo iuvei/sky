@@ -1,10 +1,10 @@
-import { pukecalc_zhushu } from '~/js/touzhu/touzhu.puke.calc'
+import { Pukecalc_zhushu } from '~/js/touzhu/touzhu.puke.calc'
 import {
   getCalcFuncByPlayID,
   getRenderTypeByPlayID
 } from '~/js/touzhu/touzhu.puke.util'
 // import { RenderTypes } from './commonTypes'
-const zhushuFunc = new pukecalc_zhushu()
+const zhushuFunc = new Pukecalc_zhushu()
 const xypkUtil = {
   // 计算注数
   calcZhushu(playid, oneDimValuesArr) {

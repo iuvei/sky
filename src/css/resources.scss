@@ -1,6 +1,12 @@
 /**
 *公共方法
 */
+$mainColor: #ff7c34;
+$festivalColor: #ff6143;
+@mixin pigbg {
+  background: url(~img/theme/phone_header.png);
+  background-size: cover;
+}
 @mixin left {
   display: flex;
   justify-content: left;

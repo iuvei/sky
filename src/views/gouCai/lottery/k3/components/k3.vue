@@ -1,5 +1,5 @@
 <template>
-  <div class="shishicai">
+  <div class="k3">
     <!-- 头部 -->
     <div class="heads">
       <div class="heads_top">
@@ -19,26 +19,34 @@
         </div>
         <div class="balls">
           <ul v-if="this.balls.length > 1">
-            <li v-for="(item,index) in balls" :key="index">
-              <img v-if="item != '0'" :src="require('../../../../../img/saizi_0'+ item +'.png')" alt="">
+            <li v-for="(item,index) in balls"
+                :key="index">
+              <img v-if="item != '0'"
+                   :src="require('../../../../../img/saizi_0'+ item +'.png')"
+                   alt="">
             </li>
           </ul>
           <ul v-else>
-            <li v-for="(item,index) in randomBalls" :key="index">
-              <img v-if="item != '0'" :src="require('../../../../../img/saizi_0'+ item +'.png')" alt="">
+            <li v-for="(item,index) in randomBalls"
+                :key="index">
+              <img v-if="item != '0'"
+                   :src="require('../../../../../img/saizi_0'+ item +'.png')"
+                   alt="">
             </li>
           </ul>
           <!-- <p v-show="this.balls.length == 1">正在开奖</p> -->
           <span @click="openHistory">
             <i>历史开奖</i>
-            <i class="icon" :class="{'slidedown' : isOpen}"></i>
+            <i class="icon"
+               :class="{'slidedown' : isOpen}"></i>
           </span>
         </div>
       </div>
       <div class="heads_bottom">
         <!-- 历史开奖 -->
         <yd-accordion>
-          <yd-accordion-item ref="accordion" :auto="false">
+          <yd-accordion-item ref="accordion"
+                             :auto="false">
             <div class="history">
               <ul>
                 <li class="title">
@@ -48,12 +56,18 @@
                   <span>大小</span>
                   <span>单双</span>
                 </li>
-                <li v-for="(item, index) in kjBalls" v-if="index <= 7" :key="index">
+                <li v-for="(item, index) in kjBalls"
+                    v-if="index <= 7"
+                    :key="index">
                   <span>{{item.qishu.toString().slice(-4)}}</span>
-                  <span class="kaijiang" v-if="item.balls.length > 1">
-                    <img :src="require('../../../../../img/saizi_0'+ item.balls[0] +'.png')" alt="">
-                    <img :src="require('../../../../../img/saizi_0'+ item.balls[1] +'.png')" alt="">
-                    <img :src="require('../../../../../img/saizi_0'+ item.balls[2] +'.png')" alt="">
+                  <span class="kaijiang"
+                        v-if="item.balls.length > 1">
+                    <img :src="require('../../../../../img/saizi_0'+ item.balls[0] +'.png')"
+                         alt="">
+                    <img :src="require('../../../../../img/saizi_0'+ item.balls[1] +'.png')"
+                         alt="">
+                    <img :src="require('../../../../../img/saizi_0'+ item.balls[2] +'.png')"
+                         alt="">
                   </span>
                   <!-- <span class="kaijiang" v-else>
                     <img :src="require('../../../../../img/saizi_0'+ randomBalls[0] +'.png')" alt="">
@@ -62,8 +76,10 @@
                   </span> -->
                   <span v-else>正在开奖</span>
                   <span>{{item.balls | returnHeZhi}}</span>
-                  <span v-ks style="color: #555">{{item.balls | returnDaXiao}}</span>
-                  <span v-ks style="color: #555">{{item.balls | returnDanShuang}}</span>
+                  <span v-ks
+                        style="color: #555">{{item.balls | returnDaXiao}}</span>
+                  <span v-ks
+                        style="color: #555">{{item.balls | returnDanShuang}}</span>
                 </li>
               </ul>
             </div>
@@ -76,38 +92,49 @@
             <i>{{nextQishu}}</i>期{{closeIsShow?'截止时间':'已封盘'}}:
           </div>
           <div class="haoma">
-            <app-count-down ref="openless" v-model="openless_leftTime" :time="openless" timetype="second" done-text="正在开奖" format="{%h}:{%m}:{%s}" :callback="_openCallback"></app-count-down>
+            <app-count-down ref="openless"
+                            v-model="openless_leftTime"
+                            :time="openless"
+                            timetype="second"
+                            done-text="正在开奖"
+                            format="{%h}:{%m}:{%s}"
+                            :callback="_openCallback"></app-count-down>
           </div>
-          <div class="haoma" v-html="renderStr" @click="userBalanceClick"></div>
+          <div class="haoma"
+               v-html="renderStr"
+               @click="userBalanceClick"></div>
         </div>
       </div>
     </div>
     <keep-alive>
       <!-- 投注部分 -->
-      <betting :routeList="routeLists" ref='chooseBall'></betting>
+      <betting :routeList="routeLists"
+               ref='chooseBall'></betting>
 
     </keep-alive>
     <keep-alive>
       <!-- 购物车 -->
-      <shop :quotation="closeIsShow" ref='touzhuBtn' @clearAll='transmit'></shop>
+      <shop :quotation="closeIsShow"
+            ref='touzhuBtn'
+            @clearAll='transmit'></shop>
     </keep-alive>
   </div>
 </template>
 <script>
-import betting from '../components/betting'
-import shop from '../../shop'
-import { mapActions, mapState } from 'vuex'
-import { resetRouteParams } from '~/js/util'
-import countDownMixin from '../../countDownMixin'
+import betting from "../components/betting";
+import shop from "../../shop";
+import { mapActions, mapState } from "vuex";
+import { resetRouteParams } from "~/js/util";
+import countDownMixin from "../../countDownMixin";
 export default {
   directives: {
     ks: el => {
-      if (el.innerHTML == '大' || el.innerHTML == '单') {
-        el.style.color = '#fff'
-        el.style.background = '#e50014'
-      } else if (el.innerHTML == '小' || el.innerHTML == '双') {
-        el.style.color = '#fff'
-        el.style.background = '#009a44'
+      if (el.innerHTML == "大" || el.innerHTML == "单") {
+        el.style.color = "#fff";
+        el.style.background = "#e50014";
+      } else if (el.innerHTML == "小" || el.innerHTML == "双") {
+        el.style.color = "#fff";
+        el.style.background = "#009a44";
       }
     }
   },
@@ -119,8 +146,8 @@ export default {
       kjBalls: [],
       closeIsShow: false,
       isOpen: false,
-      val: ''
-    }
+      val: ""
+    };
   },
   components: {
     betting,
@@ -130,7 +157,7 @@ export default {
     sumNum() {
       return (
         Number(this.balls[0]) + Number(this.balls[1]) + Number(this.balls[2])
-      )
+      );
     },
     ...mapState({
       cart: state => state.betting.cart,
@@ -138,102 +165,103 @@ export default {
     })
   },
   async activated() {
-    this.routeLists = this.$route.params
-    resetRouteParams(this, 'k3')
-    let name_tag =
-      this.$route.params.name_tag || this.$store.state.betting.name_tag
-    if(name_tag) {
-      this.getOpened(name_tag)
-      this.getHistory(name_tag)
+    this.routeLists = this.$route.params;
+    resetRouteParams(this, "k3");
+    const name_tag =
+      this.$route.params.name_tag || this.$store.state.betting.name_tag;
+    if (name_tag) {
+      this.getOpened(name_tag);
+      this.getHistory(name_tag);
     }
     // name_tag &&
     //   (await this.getOpened(name_tag)) &&
     //   (await this.getHistory(name_tag))
-    clearInterval(this.resTimer)
+    clearInterval(this.resTimer);
     this.randomBallTimer = setInterval(() => {
-      this.ballFromBet()
-    }, 500)
+      this.ballFromBet();
+    }, 500);
   },
   deactivated() {
     // clearInterval(this.$refs.stopless.timer);
-    clearInterval(this.$refs.openless.timer)
-    clearInterval(this.resTimer)
-    clearInterval(this.randomBallTimer)
+    clearInterval(this.$refs.openless.timer);
+    clearInterval(this.resTimer);
+    clearInterval(this.randomBallTimer);
   },
   watch: {
-    '$route.params'(newVal, oldVal) {
+    "$route.params"(newVal, oldVal) {
       if (
         newVal &&
-        newVal.js_tag === 'k3' &&
+        newVal.js_tag === "k3" &&
         (oldVal && oldVal.js_tag == newVal.js_tag)
       ) {
         // clearInterval(this.$refs.stopless.timer);
-        clearInterval(this.$refs.openless.timer)
-        clearInterval(this.resTimer)
+        clearInterval(this.$refs.openless.timer);
+        clearInterval(this.resTimer);
 
-        this.routeLists = newVal
-        this.setBetCurent(newVal)
-        resetRouteParams(this, 'k3')
-        this.getOpened(newVal.name_tag)
-        this.getHistory(newVal.name_tag)
-        this.setBetData({})
-        this.clearCart()
+        this.routeLists = newVal;
+        this.setBetCurent(newVal);
+        resetRouteParams(this, "k3");
+        this.getOpened(newVal.name_tag);
+        this.getHistory(newVal.name_tag);
+        this.setBetData({});
+        this.clearCart();
       }
     }
   },
   filters: {
     returnHeZhi(arr) {
-      if (Array.isArray(arr) && arr.length)
-        return arr.reduce((pre, next) => Number(pre) + Number(next))
-      else return '-'
+      if (Array.isArray(arr) && arr.length) {
+        return arr.reduce((pre, next) => Number(pre) + Number(next));
+      } else return "-";
     },
     returnDaXiao(arr) {
       if (Array.isArray(arr) && arr.length) {
-        let val = arr.reduce((pre, next) => Number(pre) + Number(next))
-        return Number(val) > 10 ? '大' : '小'
+        const val = arr.reduce((pre, next) => Number(pre) + Number(next));
+        return Number(val) > 10 ? "大" : "小";
       }
-      return '-'
+      return "-";
     },
     returnDanShuang(arr) {
       if (Array.isArray(arr) && arr.length) {
-        let val = arr.reduce((pre, next) => Number(pre) + Number(next))
-        return Number(val) % 2 == 0 ? '双' : '单'
+        const val = arr.reduce((pre, next) => Number(pre) + Number(next));
+        return Number(val) % 2 == 0 ? "双" : "单";
       }
-      return '-'
+      return "-";
     }
   },
   methods: {
     transmit() {
       const bettingItem = this.$children.find(x =>
-        x.$vnode.tag.includes('k3_betting')
-      )
-      bettingItem && bettingItem.clearBalls && bettingItem.clearBalls()
-      this.bus.$emit('clearBalls')
+        x.$vnode.tag.includes("k3_betting")
+      );
+      bettingItem && bettingItem.clearBalls && bettingItem.clearBalls();
+      this.bus.$emit("clearBalls");
     },
     greet(val) {
-      this.val = val
+      this.val = val;
     },
     openHistory() {
-      this.isOpen = !this.isOpen
+      this.isOpen = !this.isOpen;
       if (this.isOpen) {
-        this.$refs.accordion.openItem()
+        this.$refs.accordion.openItem();
       } else {
-        this.$refs.accordion.closeItem()
+        this.$refs.accordion.closeItem();
       }
     },
     openTime(s) {
-      let now = new Date()
-      let period = Math.ceil((s * 1000 - now.getTime()) / 1000)
-      return period
+      const now = new Date();
+      const period = Math.ceil((s * 1000 - now.getTime()) / 1000);
+      return period;
     },
-    ...mapActions(['setBetCurent', 'setBetData', 'clearCart'])
+    ...mapActions(["setBetCurent", "setBetData", "clearCart"])
   },
   mixins: [countDownMixin]
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../../css/resources.scss";
-.shishicai {
+.k3 {
+  height: calc(100vh - 3rem);
   width: 100%;
   background: #fff;
   flex: 1;

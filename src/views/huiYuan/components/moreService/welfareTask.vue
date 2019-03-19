@@ -1,20 +1,26 @@
 <template>
   <div class="welfareTask_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="whole_page">
-      <div class="entry_box" style="margin-bottom: 0.625rem">
-        <router-link class="dispatch_in" to="/moreService/signIn">
+      <div class="entry_box"
+           style="margin-bottom: 0.625rem">
+        <router-link class="dispatch_in"
+                     to="/moreService/signIn">
           <div class="left_content">
-            <img src="../../../../img/welfareTask/sign_in.png" alt="">
+            <img src="../../../../img/welfareTask/sign_in.png"
+                 alt="">
             <div class="entry_door">
               <p>每日签到</p>
               <p>开启宝箱</p>
             </div>
           </div>
-          <img src="../../../../img/right_jiantou.png" alt="" class="right_arrow">
+          <img src="../../../../img/right_jiantou.png"
+               alt=""
+               class="right_arrow">
         </router-link>
       </div>
-      <div class="entry_box" style="margin-bottom: 0.625rem">
+      <!-- <div class="entry_box" style="margin-bottom: 0.625rem">
         <router-link class="dispatch_in" to="/moreService/offer">
           <div class="left_content">
             <img src="../../../../img/welfareTask/youhui.png" alt="">
@@ -25,22 +31,22 @@
           </div>
           <img src="../../../../img/right_jiantou.png" alt="" class="right_arrow">
         </router-link>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 <script>
-import publicHead from '../moreService/publicHead'
+import publicHead from "../moreService/publicHead";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '福利任务'
-    }
+      funcName: "福利任务"
+    };
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";

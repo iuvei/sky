@@ -21,6 +21,7 @@
         "moduleName": "babel-runtime"
       }
     ],
+    "transform-vue-jsx",
     [
       "component",
       [

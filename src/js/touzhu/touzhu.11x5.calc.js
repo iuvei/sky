@@ -107,7 +107,10 @@ function Calc_Zhushu_Obj() {
     for (const k in ba) {
       const len = ba[k].split(/[\/\|]/)
       if (
-        len.length === 3 && len[0] !== len[1] && len[1] !== len[2] && len[2] !== len[0] &&
+        len.length === 3 &&
+        len[0] !== len[1] &&
+        len[1] !== len[2] &&
+        len[2] !== len[0] &&
         checkArrIs(len, /^(([0][1-9]|[1][0-1])|([1-9]|[1][0-1]))$/)
       ) {
         num++
@@ -510,7 +513,8 @@ function Calc_Zhushu_Obj() {
     for (const k in ba) {
       const len = ba[k].split(/[\/\|]/)
       if (
-        len.length === 2 && len[0] !== len[1] &&
+        len.length === 2 &&
+        len[0] !== len[1] &&
         checkArrIs(len, /^(([0][1-9]|[1][0-1])|([1-9]|[1][0-1]))$/)
       ) {
         num++
@@ -520,7 +524,7 @@ function Calc_Zhushu_Obj() {
   }
   // 二码 前二组选胆拖
   this.calc_2m_q2zuxdt = function(ba) {
-    if (ba.length < 2) {
+    if (ba.length < 2 || !ba[0] || !ba[1]) {
       return 0
     }
     const ba1 = ba[1].split('|')
@@ -1470,6 +1474,8 @@ function Calc_Zhushu_Obj() {
     return 0
   }
 
+  this.calc_lhd2 = arr => arr.reduce((a, b) => a.concat(b)).length
+
   this.calc_q5z1 = function(ba) {
     if (
       ba.length < 1 ||
@@ -1487,8 +1493,398 @@ function Calc_Zhushu_Obj() {
 
   // 双面盘
   this.calc_smp = ba => Array.isArray(ba) ? ba.length : 0
+
+  // 双面盘
+  this.calc_smp2 = arr => arr.reduce((a, b) => a.concat(b)).length
   // END CLASS
 }
 
-// 还能再牛逼一点嘛？？？
-export { Calc_Zhushu_Obj }
+const calc = new Calc_Zhushu_Obj()
+
+const CalcObj = new Map([
+  [
+    1,
+    {
+      name: '前三直选复式',
+      wanfa: '前三直选复式',
+      calcFn: calc.calc_3m_q3zhxfs
+    }
+  ],
+  [
+    2,
+    {
+      name: '直选单式',
+      wanfa: '前三直选单式',
+      calcFn: calc.calc_3m_q3zhxds
+    }
+  ],
+  [
+    3,
+    {
+      name: '组选复式',
+      wanfa: '前三组选复式',
+      calcFn: calc.calc_3m_q3zuxfs
+    }
+  ],
+  [
+    4,
+    {
+      name: '组选单式',
+      wanfa: '前三组选单式',
+      calcFn: calc.calc_3m_q3zuxds
+    }
+  ],
+  [
+    5,
+    {
+      name: '组选胆拖',
+      wanfa: '前三组选胆拖',
+      calcFn: calc.calc_3m_q3zuxdt
+    }
+  ],
+  [
+    6,
+    {
+      name: '直选复式',
+      wanfa: '中三直选复式',
+      calcFn: calc.calc_3m_z3zhxfs
+    }
+  ],
+  [
+    7,
+    {
+      name: '直选单式',
+      wanfa: '中三直选单式',
+      calcFn: calc.calc_3m_z3zhxds
+    }
+  ],
+  [
+    8,
+    {
+      name: '组选复式',
+      wanfa: '中三组选复式',
+      calcFn: calc.calc_3m_z3zuxfs
+    }
+  ],
+  [
+    9,
+    {
+      name: '组选单式',
+      wanfa: '中三组选单式',
+      calcFn: calc.calc_3m_z3zuxds
+    }
+  ],
+  [
+    10,
+    {
+      name: '组选胆拖',
+      wanfa: '中三组选胆拖',
+      calcFn: calc.calc_3m_z3zuxdt
+    }
+  ],
+  [
+    11,
+    {
+      name: '直选复式',
+      wanfa: '后三直选复式',
+      calcFn: calc.calc_3m_h3zhxfs
+    }
+  ],
+  [
+    12,
+    {
+      name: '直选单式',
+      wanfa: '后三直选单式',
+      calcFn: calc.calc_3m_h3zhxds
+    }
+  ],
+  [
+    13,
+    {
+      name: '组选复式',
+      wanfa: '后三组选复式',
+      calcFn: calc.calc_3m_h3zuxfs
+    }
+  ],
+  [
+    14,
+    {
+      name: '组选单式',
+      wanfa: '后三组选单式',
+      calcFn: calc.calc_3m_h3zuxds
+    }
+  ],
+  [
+    15,
+    {
+      name: '组选胆拖',
+      wanfa: '后三组选胆拖',
+      calcFn: calc.calc_3m_h3zuxdt
+    }
+  ],
+  [
+    16,
+    {
+      name: '直选复式',
+      wanfa: '前二直选复式',
+      calcFn: calc.calc_2m_q2zhxfs
+    }
+  ],
+  [
+    17,
+    {
+      name: '直选单式',
+      wanfa: '前二直选单式',
+      calcFn: calc.calc_2m_q2zhxds
+    }
+  ],
+  [
+    18,
+    {
+      name: '组选复式',
+      wanfa: '前二组选复式',
+      calcFn: calc.calc_2m_q2zuxfs
+    }
+  ],
+  [
+    19,
+    {
+      name: '组选单式',
+      wanfa: '前二组选单式',
+      calcFn: calc.calc_2m_q2zuxds
+    }
+  ],
+  [
+    20,
+    {
+      name: '组选胆拖',
+      wanfa: '前二组选胆拖',
+      calcFn: calc.calc_2m_q2zuxdt
+    }
+  ],
+  [
+    21,
+    {
+      name: '直选复式',
+      wanfa: '后二直选复式',
+      calcFn: calc.calc_2m_h2zhxfs
+    }
+  ],
+  [
+    22,
+    {
+      name: '直选单式',
+      wanfa: '后二直选单式',
+      calcFn: calc.calc_2m_h2zhxds
+    }
+  ],
+  [
+    23,
+    {
+      name: '组选复式',
+      wanfa: '后二组选复式',
+      calcFn: calc.calc_2m_h2zuxfs
+    }
+  ],
+  [
+    24,
+    {
+      name: '组选单式',
+      wanfa: '后二组选单式',
+      calcFn: calc.calc_2m_h2zuxds
+    }
+  ],
+  [
+    25,
+    {
+      name: '组选胆拖',
+      wanfa: '后二组选胆拖',
+      calcFn: calc.calc_2m_h2zuxdt
+    }
+  ],
+  [26, { name: '前三位', wanfa: '不定位-前三位', calcFn: calc.calc_bdw_q3w }],
+  [27, { name: '中三位', wanfa: '不定位-中三位', calcFn: calc.calc_bdw_z3w }],
+  [28, { name: '后三位', wanfa: '不定位-后三位', calcFn: calc.calc_bdw_h3w }],
+  [29, { name: '定位胆', wanfa: '定位胆', calcFn: calc.calc_dwd_dwd }],
+  [
+    30,
+    {
+      name: '一中一',
+      wanfa: '任选一中一(复式)',
+      calcFn: calc.calc_rxfs_rx1z1
+    }
+  ],
+  [
+    31,
+    {
+      name: '二中二',
+      wanfa: '任选二中二(复式)',
+      calcFn: calc.calc_rxfs_rx2z2
+    }
+  ],
+  [
+    32,
+    {
+      name: '三中三',
+      wanfa: '任选三中三(复式)',
+      calcFn: calc.calc_rxfs_rx3z3
+    }
+  ],
+  [
+    33,
+    {
+      name: '四中四',
+      wanfa: '任选四中四(复式)',
+      calcFn: calc.calc_rxfs_rx4z4
+    }
+  ],
+  [
+    34,
+    {
+      name: '五中五',
+      wanfa: '任选五中五(复式)',
+      calcFn: calc.calc_rxfs_rx5z5
+    }
+  ],
+  [
+    35,
+    {
+      name: '六中五',
+      wanfa: '任选六中五(复式)',
+      calcFn: calc.calc_rxfs_rx6z5
+    }
+  ],
+  [
+    36,
+    {
+      name: '七中五',
+      wanfa: '任选七中五(复式)',
+      calcFn: calc.calc_rxfs_rx7z5
+    }
+  ],
+  [
+    37,
+    {
+      name: '八中五',
+      wanfa: '任选八中五(复式)',
+      calcFn: calc.calc_rxfs_rx8z5
+    }
+  ],
+  [
+    38,
+    {
+      name: '一中一',
+      wanfa: '任选一中一(单式)',
+      calcFn: calc.calc_rxds_rx1z1
+    }
+  ],
+  [
+    39,
+    {
+      name: '二中二',
+      wanfa: '任选二中二(单式)',
+      calcFn: calc.calc_rxds_rx2z2
+    }
+  ],
+  [
+    40,
+    {
+      name: '三中三',
+      wanfa: '任选三中三(单式)',
+      calcFn: calc.calc_rxds_rx3z3
+    }
+  ],
+  [
+    41,
+    {
+      name: '四中四',
+      wanfa: '任选四中四(单式)',
+      calcFn: calc.calc_rxds_rx4z4
+    }
+  ],
+  [
+    42,
+    {
+      name: '五中五',
+      wanfa: '任选五中五(单式)',
+      calcFn: calc.calc_rxds_rx5z5
+    }
+  ],
+  [
+    43,
+    {
+      name: '六中五',
+      wanfa: '任选六中五(单式)',
+      calcFn: calc.calc_rxds_rx6z5
+    }
+  ],
+  [
+    44,
+    {
+      name: '七中五',
+      wanfa: '任选七中五(单式)',
+      calcFn: calc.calc_rxds_rx7z5
+    }
+  ],
+  [
+    45,
+    {
+      name: '二中二',
+      wanfa: '任二中二胆拖',
+      calcFn: calc.calc_rxdt_rx2z2
+    }
+  ],
+  [
+    46,
+    {
+      name: '三中三',
+      wanfa: '任三中三胆拖',
+      calcFn: calc.calc_rxdt_rx3z3
+    }
+  ],
+  [
+    47,
+    {
+      name: '四中四',
+      wanfa: '任四中四胆拖',
+      calcFn: calc.calc_rxdt_rx4z4
+    }
+  ],
+  [
+    48,
+    {
+      name: '五中五',
+      wanfa: '任五中五胆拖',
+      calcFn: calc.calc_rxdt_rx5z5
+    }
+  ],
+  [
+    49,
+    {
+      name: '六中五',
+      wanfa: '任六中五胆拖',
+      calcFn: calc.calc_rxdt_rx6z5
+    }
+  ],
+  [
+    50,
+    {
+      name: '七中五',
+      wanfa: '任七中五胆拖',
+      calcFn: calc.calc_rxdt_rx7z5
+    }
+  ],
+  [
+    51,
+    {
+      name: '八中五',
+      wanfa: '任八中五胆拖',
+      calcFn: calc.calc_rxdt_rx8z5
+    }
+  ],
+  [54, { name: '龙虎斗', wanfa: '龙虎斗', calcFn: calc.calc_lhd }],
+  [56, { name: '双面盘', wanfa: '双面盘', calcFn: calc.calc_smp }],
+  [57, { name: '牛牛', wanfa: '牛牛', calcFn: calc.calc_nn }]
+])
+
+export { Calc_Zhushu_Obj, CalcObj }

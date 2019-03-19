@@ -1,21 +1,34 @@
 <template>
   <div class="correctLoginPW_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="content">
       <yd-cell-group class="form_ipt">
         <yd-cell-item v-show="isShow">
           <span slot="left">原QQ</span>
-          <input slot="right" type="text" :placeholder="oldQQ" v-model="noldQQ1">
+          <input slot="right"
+                 type="text"
+                 :placeholder="oldQQ"
+                 v-model="noldQQ1">
         </yd-cell-item>
         <yd-cell-item>
           <span slot="left">{{txt}}</span>
-          <input slot="right" type="text" placeholder="请输入新QQ号码" v-model="newQQ">
+          <input slot="right"
+                 type="text"
+                 placeholder="请输入新QQ号码"
+                 v-model="newQQ">
         </yd-cell-item>
         <yd-cell-item>
           <span slot="left">验证码</span>
-          <input slot="right" type="number" placeholder="请输入验证码" v-model="verifyNum">
-          <span slot="right" @click="getVerify">
-            <img :src="verifyImg" alt="" class="verify_img">
+          <input slot="right"
+                 type="number"
+                 placeholder="请输入验证码"
+                 v-model="verifyNum">
+          <span slot="right"
+                @click="getVerify">
+            <img :src="verifyImg"
+                 alt=""
+                 class="verify_img">
           </span>
         </yd-cell-item>
       </yd-cell-group>
@@ -29,52 +42,52 @@
 import publicHead from "./publicHead";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   data() {
     return {
       funcName: "绑定QQ",
       isShow: false,
       oldQQ: "",
-      noldQQ1:'',
+      noldQQ1: "",
       newQQ: "",
       verifyImg: "",
       verifyNum: "",
-      txt: 'QQ',
-      vid: ''
+      txt: "QQ",
+      vid: ""
     };
   },
   activated() {
-    this.noldQQ = ''
-    this.noldQQ1 = ''
-    this.newQQ = ''
-    this.verifyNum = ''
+    this.noldQQ = "";
+    this.noldQQ1 = "";
+    this.newQQ = "";
+    this.verifyNum = "";
     this.$dialog.loading.open("正在加载中···");
     if (this.$store.state.userinfo.accountInfo.qq) {
       this.isShow = true;
-      this.funcName = '修改QQ'
-      this.txt = '新QQ'
+      this.funcName = "修改QQ";
+      this.txt = "新QQ";
       this.oldQQ = this.$store.state.userinfo.accountInfo.qq;
     } else {
       this.isShow = false;
-      this.funcName = '绑定QQ'
-      this.txt = 'QQ'
+      this.funcName = "绑定QQ";
+      this.txt = "QQ";
     }
     this.getVerify();
   },
   methods: {
     submitData() {
-      let isPass = this.isShow ? this.noldQQ1 && this.newQQ : this.newQQ
-      if(!isPass) {
-        this.$dialog.toast({mes: '请输入qq号码'})
-        return
+      const isPass = this.isShow ? this.noldQQ1 && this.newQQ : this.newQQ;
+      if (!isPass) {
+        this.$dialog.toast({ mes: "请输入qq号码" });
+        return;
       }
-      if(!this.verifyNum) {
-        this.$dialog.toast({mes: '请输入验证码'})
-        return
+      if (!this.verifyNum) {
+        this.$dialog.toast({ mes: "请输入验证码" });
+        return;
       } else if (!/^[0-9]{4}$/.test(this.verifyNum)) {
-        this.$dialog.toast({mes: '请输入正确验证码'})
-        return
+        this.$dialog.toast({ mes: "请输入正确验证码" });
+        return;
       }
       this.$ajax("request", {
         ac: "updateUserInfo",
@@ -82,44 +95,44 @@ export default {
         qq: this.newQQ,
         vcode: this.verifyNum * 1,
         vid: this.vid,
-        type: 5,
-      }).then(res => {
-        this.getVerify()
+        type: 5
+      }).then(() => {
+        this.getVerify();
         this.$dialog.alert({ mes: "提交成功，请等待审核" });
 
         this.$ajax("request", {
           ac: "encodeLogin",
-          code: this.$store.state.userinfo.accountInfo.code,
+          code: this.$store.state.userinfo.accountInfo.code
         }).then(res => {
           console.log(res);
           this.$store.commit("GET_USERINFO", {
             accountInfo: res,
-            isLogin: true,
+            isLogin: true
           });
           this.$router.back();
         });
       });
     },
-    getVerify(i) {
+    getVerify() {
       this.$ajax("request", {
         ac: "getVerifyImage"
       }).then(res => {
         this.verifyImg = res.img;
-        this.vid = res.vid
+        this.vid = res.vid;
         this.$dialog.loading.close();
       });
     },
     randomNum() {
       return Math.floor(Math.random() * 10000) + "";
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
 .correctLoginPW_main_body {
   .content {
-    height: poTorem(688px);
+    height: 100%;
     background-color: #eee;
     padding: poTorem(20px);
     .form_ipt {
@@ -147,7 +160,7 @@ export default {
         font-size: poTorem(16px);
         line-height: poTorem(16px);
         color: #fff;
-        background-color: #ff7c34;
+        background-color: $mainColor;
         border-radius: poTorem(5px);
         outline: none;
         border: none;

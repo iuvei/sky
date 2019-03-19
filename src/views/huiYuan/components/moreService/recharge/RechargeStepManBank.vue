@@ -1,6 +1,9 @@
 <template>
   <yd-cell-group>
-    <div v-for="(item, index) in data" :key="index" class="transfer_option" @click="clickItem(item)">
+    <div v-for="(item, index) in data"
+         :key="index"
+         class="transfer_option"
+         @click="clickItem(item)">
       <div class="transfer_info">
         <div class="tag">
           <p>银行</p>
@@ -13,7 +16,9 @@
           <p>{{item.bank_home}}</p>
         </div>
       </div>
-      <img class="arrow_down" src="../../../../../img/daili/arrow_right.png" alt="">
+      <img class="arrow_down"
+           src="../../../../../img/daili/arrow_right.png"
+           alt="">
     </div>
   </yd-cell-group>
 </template>
@@ -27,8 +32,8 @@ export default {
     clickItem(item) {
       // showBankTransferInfo
       this.$emit("clickItem", item);
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

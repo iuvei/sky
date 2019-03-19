@@ -1,18 +1,29 @@
 <template>
   <div class="adviceFeedbacks_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="adviceFeedbacks_main_content">
       <div class="top">
-        <router-link :to="item.path" class="pieces_content" v-for="(item, index) in gridsData" :key="index">
-          <img :src="item.src" alt="">
+        <router-link :to="item.path"
+                     class="pieces_content"
+                     v-for="(item, index) in gridsData"
+                     :key="index">
+          <img :src="item.src"
+               alt="">
           <span>{{item.text}}</span>
         </router-link>
-        <a :href="sysinfo.service_url">
-          <img src="../../../../img/personal_center/service.png" alt="">
+        <a href="#"
+           @click="openbigwin">
+          <img src="../../../../img/personal_center/service.png"
+               alt="">
           <span>联系客服</span>
         </a>
       </div>
-      <yd-tab class="tabss" v-model="tab" :callback="getData" :prevent-default="false" :item-click="itemClick">
+      <yd-tab class="tabss"
+              v-model="tab"
+              :callback="getData"
+              :prevent-default="false"
+              :item-click="itemClick">
         <div>
           <ul>
             <li>标题</li>
@@ -20,8 +31,13 @@
             <li>反馈时间</li>
           </ul>
         </div>
-        <yd-tab-panel v-for="(item,key) in items" :key="key" :label="item.label">
-          <div @click="toDetails(item)" v-for="(item,key) in allData" :key="key" :id="item.id">
+        <yd-tab-panel v-for="(item,key) in items"
+                      :key="key"
+                      :label="item.label">
+          <div @click="toDetails(item)"
+               v-for="(item,key) in allData"
+               :key="key"
+               :id="item.id">
             <ul class="info">
               <li>{{item.title}}</li>
               <li>{{item.answer.length == 0?"未回复":"已回复"}}</li>
@@ -34,106 +50,111 @@
   </div>
 </template>
 <script>
-import publicHead from './publicHead'
-import { mapState } from 'vuex'
+import publicHead from "./publicHead";
+import { mapState, mapActions } from "vuex";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '意见反馈',
+      funcName: "意见反馈",
       tab: 0,
       allData: [],
       pageId: 0,
-      gridsData:[
+      gridsData: [
         {
-          text: '我要反馈',
-          path: '/moreService/adviceFeedback',
-          src: require('../../../../img/personal_center/opinion.png')
+          text: "我要反馈",
+          path: "/moreService/adviceFeedback",
+          src: require("../../../../img/personal_center/opinion.png")
         }
       ],
       items: [
         {
-          label: '全部',
-          content: ''
+          label: "全部",
+          content: ""
         },
         {
-          label: '已回复',
-          content: ''
+          label: "已回复",
+          content: ""
         },
         {
-          label: '未回复',
-          content: ''
+          label: "未回复",
+          content: ""
         }
       ],
-      label:'全部'
-    }
+      label: "全部"
+    };
   },
   activated() {
-    this.getAllData()
+    this.getAllData();
   },
   computed: {
     ...mapState(["sysinfo"])
   },
   methods: {
-    getAllData() {
-      this.$dialog.loading.open(' ');
-      this.$ajax('request', {
-        ac: 'getOpinionList',
-      }).then(res => {
-        this.allData = res
-        this.$dialog.loading.close()
-      })
+    ...mapActions(["getServiceUrl"]),
+    async openbigwin() {
+      const url = await this.getServiceUrl();
+      window.location.href = url;
     },
-    getData(label,key) {
-      this.label = label
-      this.$dialog.loading.open(' ');
-      this.$ajax('request', {
-        ac: 'getOpinionList',
+    getAllData() {
+      this.$dialog.loading.open(" ");
+      this.$ajax("request", {
+        ac: "getOpinionList"
       }).then(res => {
-        for(var i = 0; i<res.length; i++) {
-          if(res[i].status === 1) {
-            this.$dialog.loading.open(' ');
-            this.$ajax('request', {
-              ac: 'ReadOpinion',
+        this.allData = res;
+        this.$dialog.loading.close();
+      });
+    },
+    getData(label) {
+      this.label = label;
+      this.$dialog.loading.open(" ");
+      this.$ajax("request", {
+        ac: "getOpinionList"
+      }).then(res => {
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].status === 1) {
+            this.$dialog.loading.open(" ");
+            this.$ajax("request", {
+              ac: "ReadOpinion",
               id: res[i].id
-            }).then(res => {
-              this.$dialog.loading.close()
-            })
+            }).then(() => {
+              this.$dialog.loading.close();
+            });
           }
         }
-        if(this.label == '全部'){
-          this.allData = res
-        } else if (this.label === '已回复') {
-          this.allData = []
-          for ( var i = 0 ; i < res.length ; i++ ) {
-            if(!(res[i].answer.length == 0)){
-              this.allData.push(res[i])
+        if (this.label == "全部") {
+          this.allData = res;
+        } else if (this.label === "已回复") {
+          this.allData = [];
+          for (let i = 0; i < res.length; i++) {
+            if (!(res[i].answer.length == 0)) {
+              this.allData.push(res[i]);
             }
           }
-        } else if(this.label === '未回复'){
-          this.allData = []
-          for ( var i = 0 ; i < res.length ; i++ ) {
-            if(res[i].answer.length == 0){
-              this.allData.push(res[i])
+        } else if (this.label === "未回复") {
+          this.allData = [];
+          for (let i = 0; i < res.length; i++) {
+            if (res[i].answer.length == 0) {
+              this.allData.push(res[i]);
             }
           }
         }
-        this.$dialog.loading.close()
-      })
+        this.$dialog.loading.close();
+      });
     },
     itemClick(key) {
       this.tab = key;
     },
     toDetails(item) {
       this.$router.push({
-        name: 'fankuixiangqing',
+        name: "fankuixiangqing",
         params: item
-      })
-    },
+      });
+    }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -153,7 +174,7 @@ export default {
         float: left;
         height: poTorem(40px);
         text-align: center;
-        &:first-child{
+        &:first-child {
           border-right: poTorem(1px) solid #ccc;
         }
         span {
@@ -161,7 +182,7 @@ export default {
           height: poTorem(40px);
           line-height: poTorem(40px);
           vertical-align: super;
-          color:rgb(17,140,227);
+          color: rgb(17, 140, 227);
           font-size: poTorem(20px);
           margin-left: poTorem(10px);
         }
@@ -182,7 +203,7 @@ export default {
           line-height: poTorem(45px);
           text-align: center;
           border-bottom: poTorem(1px) solid #ccc;
-          &:last-child{
+          &:last-child {
             // font-size: poTorem(10px);
           }
         }

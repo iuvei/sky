@@ -1,14 +1,19 @@
 <template>
   <div class="sysNotice_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="sysNotice_main_content">
       <div class="long_line"></div>
-      <div class="notice_box" v-for="(item, index) in allData" :key="index">
-        <img src="../../../img/shouye/system_notice.png" alt="">
+      <div class="notice_box"
+           v-for="(item, index) in allData"
+           :key="index">
+        <img src="../../../img/shouye/system_notice.png"
+             alt="">
         <div class="notice_bord">
           <div class="notice_up">
             <p>系统公告</p>
-            <p style="word-break: break-all;">{{decodeEvent(item.content)}}</p>
+            <p style="word-break: break-all;"
+               v-html="decodeEvent(item.content)">{{}}</p>
           </div>
           <p class="notice_down"> [ 系统公告 ] {{formatDate(item.send_time)}}</p>
         </div>
@@ -17,50 +22,50 @@
   </div>
 </template>
 <script>
-import publicHead from '../../huiYuan/components/moreService/publicHead'
-import decodeEvent from '../decode'
+import publicHead from "../../huiYuan/components/moreService/publicHead";
+import decodeEvent from "../decode";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '系统公告',
+      funcName: "系统公告",
       allData: []
-    }
+    };
   },
   mixins: [decodeEvent],
   activated() {
     this.$nextTick(() => {
-      let _this = document.getElementsByClassName('long_line')[0],
-        _that = document.getElementsByClassName('sysNotice_main_content')[0],
-        _it = document.getElementsByClassName('personal_center_head')[0]
-      if(_that.clientHeight < window.innerHeight - _it.clientHeight) {
-        _this.style.height = window.innerHeight - _it.clientHeight + 'px'
+      const _this = document.getElementsByClassName("long_line")[0],
+        _that = document.getElementsByClassName("sysNotice_main_content")[0],
+        _it = document.getElementsByClassName("personal_center_head")[0];
+      if (_that.clientHeight < window.innerHeight - _it.clientHeight) {
+        _this.style.height = window.innerHeight - _it.clientHeight + "px";
       } else {
-        _this.style.height = _that.clientHeight + 'px'
+        _this.style.height = _that.clientHeight + "px";
       }
-    })
-    this.allData = this.$route.params.message
+    });
+    this.allData = this.$route.params.message;
   },
   methods: {
     formatDate(t) {
-      let date = new Date(t * 1000)
-      var y = date.getFullYear()
-      var m = date.getMonth() + 1
-      m = m < 10 ? ('0' + m) : m
-      var d = date.getDate()
-      d = d < 10 ? ('0' + d) : d 
-      var h = date.getHours()
-      h = h < 10 ? ('0' + h) : h
-      var minute = date.getMinutes()
-      var second = date.getSeconds()
-      minute = minute < 10 ? ('0' + minute) : minute 
-      second = second < 10 ? ('0' + second) : second
-      return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
+      const date = new Date(t * 1000);
+      const y = date.getFullYear();
+      let m = date.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      let d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      let h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+      minute = minute < 10 ? "0" + minute : minute;
+      second = second < 10 ? "0" + second : second;
+      return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";
@@ -91,17 +96,17 @@ export default {
       .notice_bord {
         text-align: left;
         display: inline-block;
-        width: poTorem(276px);
+        width: 80%;
         // height: poTorem(147px);
         border: poTorem(1px) solid #d4d4d4;
         border-radius: poTorem(4px);
         background-color: #fff;
         .notice_up {
           padding: poTorem(10px);
-          >p {
+          > p {
             &:first-child {
               color: #e12626;
-              font-size: poTorem(15px)
+              font-size: poTorem(15px);
             }
             &:last-child {
               font-size: poTorem(13px);

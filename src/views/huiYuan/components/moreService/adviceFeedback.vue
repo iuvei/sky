@@ -1,20 +1,28 @@
 <template>
   <div class="adviceFeedback_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="adviceFeedback_main_content">
       <div class="feedback_type">
-        <p v-for="(item, index) in options" :key="index" @click="chooseOption(index)">
+        <p v-for="(item, index) in options"
+           :key="index"
+           @click="chooseOption(index)">
           <span :class="[isChoosed==index?'active':'', 'radio']"></span>
           <span>{{item}}</span>
         </p>
       </div>
       <div class="word_ipt">
-        <textarea type="textarea" placeholder="点击输入反馈内容" v-model="content"></textarea>
+        <textarea type="textarea"
+                  placeholder="点击输入反馈内容"
+                  v-model="content"></textarea>
       </div>
       <yd-cell-item class="num">
-            <span slot="left">联系方式：</span>
-            <yd-input slot="right" v-model="phoneNumber" regex="mobile" placeholder="请留下您的联系方式"></yd-input>
-        </yd-cell-item>
+        <span slot="left">联系方式：</span>
+        <yd-input slot="right"
+                  v-model="phoneNumber"
+                  regex="mobile"
+                  placeholder="请留下您的联系方式"></yd-input>
+      </yd-cell-item>
       <!-- <div>
         <input type="text" placeholder="请留下您的联系方式" v-model="phoneNumber">
       </div> -->
@@ -25,41 +33,41 @@
   </div>
 </template>
 <script>
-import publicHead from './publicHead'
+import publicHead from "./publicHead";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '我要反馈',
-      options: ['建议', '投诉', '错误报告'],
+      funcName: "我要反馈",
+      options: ["建议", "投诉", "错误报告"],
       isChoosed: 0,
       type: 1,
-      content: '',
-      phoneNumber: ''
-    }
+      content: "",
+      phoneNumber: ""
+    };
   },
   methods: {
     chooseOption(i) {
-      this.isChoosed = i
-      this.type = i+1
+      this.isChoosed = i;
+      this.type = i + 1;
     },
     submitData() {
-      this.$ajax('request', {
-        ac: 'getFeedback',
+      this.$ajax("request", {
+        ac: "getFeedback",
         content: this.content,
         type: this.type,
-        title: this.type==1?"建议":this.type==2?"投诉":"错误报告",
+        title: this.type == 1 ? "建议" : this.type == 2 ? "投诉" : "错误报告",
         contact: this.phoneNumber
-      }).then(res => {
-        this.$dialog.alert({mes: '提交成功，感谢您的宝贵意见'})
-        this.content = ''
-        this.$router.back()
-      })
+      }).then(() => {
+        this.$dialog.alert({ mes: "提交成功，感谢您的宝贵意见" });
+        this.content = "";
+        this.$router.back();
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -114,7 +122,7 @@ export default {
         font-size: poTorem(18px);
         line-height: poTorem(16px);
         color: #fff;
-        background-color: #ff7c34;
+        background-color: $mainColor;
         border-radius: poTorem(5px);
         outline: none;
         border: none;

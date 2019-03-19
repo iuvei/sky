@@ -1,6 +1,13 @@
 <template>
-  <yd-tab v-model="allPlayType" @click.native="scrollToShow" horizontal-scroll class="all-game">
-    <yd-tab-panel v-for="(item,key) in allPlayTypes" :key="key" :label="item.title" :tabkey='key' class="item"> </yd-tab-panel>
+  <yd-tab v-model="allPlayType"
+          @click.native="scrollToShow"
+          horizontal-scroll
+          class="all-game">
+    <yd-tab-panel v-for="(item,key) in allPlayTypes"
+                  :key="key"
+                  :label="item.title"
+                  :tabkey='key'
+                  class="item"> </yd-tab-panel>
   </yd-tab>
 </template>
 
@@ -34,7 +41,7 @@ export default {
           window.innerWidth / 2 - e.x;
       }
     },
-    clickItem(key, item) {
+    clickItem(key) {
       this.tabType = key;
     }
   }
@@ -58,8 +65,8 @@ export default {
       color: #454545;
     }
     li.yd-tab-nav-item.yd-tab-active {
-      color: #ff7c34;
-      border-bottom: 1px solid #ff7c34;
+      color: $mainColor;
+      border-bottom: 1px solid $mainColor;
     }
   }
   .yd-tab-nav .yd-tab-active:before {

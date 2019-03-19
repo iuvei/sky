@@ -1,10 +1,10 @@
 import axios from '../server/axios'
-import http from '../server/http'
+import http from '../server/fetch'
 import difference from 'lodash/difference'
 import api from './betting'
-import { PROXY, KEY_GAMES } from './commType'
+import { PROXY } from './commType'
 
-import { Games, GamePlayConfig, Odd } from './store.util'
+import { Odd } from './store.util'
 
 export default {
   /**
@@ -26,13 +26,13 @@ export default {
    */
   async getGameList() {
     if (!this) return []
-    const _games = new Games()
-    let games = _games.get(KEY_GAMES)
-    if (!games || !games.length) {
-      games = await this.getGameListAtin()
-      _games.set(games)
-    }
-    return games || []
+    // const _games = new Games()
+    // let games = _games.get(KEY_GAMES)
+    // if (!games || !games.length) {
+    //   games = await this.getGameListAtin()
+    //   _games.set(games)
+    // }
+    return await this.getGameListAtin() || []
   },
   async getLotteries() {
     const games = await this.getGameList()
@@ -41,28 +41,19 @@ export default {
     }
     return []
   },
-  getPleyConfigTags() {
-    const games = new Games().getLottery(),
-      configs = new GamePlayConfig().get()
-    let tags = []
-    // 如果在缓存中存在,则取交集
-    if (
-      Array.isArray(games) &&
-      games.length &&
-      Array.isArray(configs) &&
-      configs.length
-    ) {
-      tags = difference(games.map(x => x.js_tag), configs.map(x => x.js_tag))
-      tags = Array.from(new Set(tags))
-    } else if (!configs || (Array.isArray(configs) && !configs.length)) {
-      // 如果缓存不存在,则重新获取
-      tags = Array.from(new Set(games.map(x => x.js_tag)))
+  async getGameTags() {
+    const games = await this.getGameList()
+    if (games.length) {
+      return games
+        .filter(x => x.enable === 1 && x.type === 1)
+        .map(x => x.js_tag)
     }
-    return tags
+    return []
   },
   async getGamePlayConfigs() {
     const configs = []
-    const tags = this.getPleyConfigTags()
+    const tags = await this.getGameTags()
+    // const tags = ['11x5','3d','k3','lhc','pk10',]
     return await Promise.all(tags.map(x => api.getGamesPlayConfig(x))).then(
       results => {
         if (
@@ -76,7 +67,7 @@ export default {
               configs.push(x)
             }
           })
-          new GamePlayConfig().set(configs)
+          // new GamePlayConfig().set(configs)
         }
         return results
       }
@@ -137,9 +128,7 @@ export default {
       enom: location.host
     })
     if (sysinfo) {
-      sysinfo.service_url = sysinfo.service_url
-        .replace(/\\\\u0026/g, '&')
-        .replace(/\&amp\;/g, '&')
+      // sysinfo.service_url = sysinfo.service_url.replace(/\\u0026/g, '&').replace(/\&amp\;/g, '&')
       document.title = sysinfo.web_title || '维护中···'
       window.vue.$store.commit('SET_SYSINFO', sysinfo)
       // this.$store.commit("SET_SYSINFO", sysinfo);

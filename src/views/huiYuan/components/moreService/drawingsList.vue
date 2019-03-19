@@ -1,6 +1,7 @@
 <template>
   <div class="drawingsList_main_body">
-    <publicHead :title="funcName" :type="2"></publicHead>
+    <publicHead :title="funcName"
+                :type="2"></publicHead>
     <div class="order_info">
       <p class="title_word">出款内容</p>
       <div class="flex_box">
@@ -31,34 +32,43 @@
   </div>
 </template>
 <script>
-import publicHead from '../moreService/publicHead'
+import publicHead from "../moreService/publicHead";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '出款明细',
-      allData: '',
-      recordTime: ''
-    }
+      funcName: "出款明细",
+      allData: "",
+      recordTime: ""
+    };
   },
   activated() {
-    this.allData = this.$route.params
-    let timestamp = this.allData.time*1000
-    let assignTime = new Date(timestamp),
-        y = assignTime.getFullYear(),
-        M = assignTime.getMonth() + 1,
-        d = assignTime.getDate(),
-        h = assignTime.getHours(),
-        m = assignTime.getMinutes(),
-        s = assignTime.getSeconds(),
-        add0 = (m) => {
-          return m > 9 ? m : '0' + m
-        }
-    this.recordTime = y + '-' + add0(M) + '-' + add0(d) + " " + add0(h) + ":" + add0(m) + ":" + add0(s)
+    this.allData = this.$route.params;
+    const timestamp = this.allData.time * 1000;
+    const assignTime = new Date(timestamp),
+      y = assignTime.getFullYear(),
+      M = assignTime.getMonth() + 1,
+      d = assignTime.getDate(),
+      h = assignTime.getHours(),
+      m = assignTime.getMinutes(),
+      s = assignTime.getSeconds(),
+      add0 = m => m > 9 ? m : "0" + m;
+    this.recordTime =
+      y +
+      "-" +
+      add0(M) +
+      "-" +
+      add0(d) +
+      " " +
+      add0(h) +
+      ":" +
+      add0(m) +
+      ":" +
+      add0(s);
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -68,7 +78,7 @@ export default {
     padding: poTorem(20px);
     .title_word {
       padding-left: poTorem(5px);
-      border-left: poTorem(5px) solid #ff7c34;
+      border-left: poTorem(5px) solid $mainColor;
       font-size: poTorem(20px);
       color: #313131;
       height: poTorem(18px);
@@ -90,7 +100,8 @@ export default {
         font-size: poTorem(15px);
         color: #313131;
       }
-      .tag, .content {
+      .tag,
+      .content {
         display: inline-block;
         // height: poTorem(20px);
         line-height: poTorem(32px);

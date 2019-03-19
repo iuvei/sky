@@ -1,7 +1,10 @@
 <template>
   <span>
-    <span v-html="str" style="display:inline-block; min-width: 2rem" @click="handleClick"></span>
-    <span ref="tpl" v-if="showTpl">
+    <span v-html="str"
+          style="display:inline-block; min-width: 2rem"
+          @click="handleClick"></span>
+    <span ref="tpl"
+          v-if="showTpl">
       <slot></slot>
     </span>
   </span>
@@ -64,11 +67,11 @@ export default {
       this.doRun();
     },
     doRun() {
-      let leftTime = this.lastTime - Math.floor(new Date().getTime() / 1000);
+      const leftTime = this.lastTime - Math.floor(new Date().getTime() / 1000);
       if (leftTime > 0) {
         // this.str = this.timestampTotime(leftTime);
         this.str = leftTime;
-        this.timer = requestAnimationFrame(this.doRun)
+        this.timer = requestAnimationFrame(this.doRun);
       } else {
         this.str = this.doneText;
         this.callback && this.callback(this);
@@ -76,7 +79,7 @@ export default {
     },
     timestampTotime(time) {
       let format = this.tempFormat;
-      let t = {};
+      const t = {};
       t.s = time % 60;
       time = Math.floor(time / 60);
       t.m = time % 60;
@@ -102,7 +105,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.tempFormat = !!this.$slots.default
+      this.tempFormat = this.$slots.default
         ? this.$refs.tpl.innerHTML
         : this.format;
       this.showTpl = false;

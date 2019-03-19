@@ -9,16 +9,19 @@ const pkgInfo = require('./package.json')
 const url = require('url')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const extractCSS = new ExtractTextPlugin('styles/[name]-one.css')
-// const extractLESS = new ExtractTextPlugin('styles/[name]-two.css')
 const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
+const edition = require('./config/edition.json').edition
+process.env.edition = edition
+
+const fileListPlugin = require('./plugin/sw')
 
 module.exports = (options = {}) => {
   const config = require('./config/' +
     (process.env.npm_config_config || options.config || 'default'))
-
+  process.env.edition = edition
   const plugins = [
     new HtmlWebpackPlugin({
       favicon: 'assets/favicon.ico',
@@ -84,9 +87,6 @@ module.exports = (options = {}) => {
       VERSION: JSON.stringify(pkgInfo.version),
       CONFIG: JSON.stringify(config.runtimeConfig)
     }),
-    // new webpack.ProvidePlugin({
-    //   introJs: ['intro.js', 'introJs']
-    // }),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, 'assets'),
@@ -99,44 +99,6 @@ module.exports = (options = {}) => {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     })
-    // new tinyPngWebpackPlugin({
-    //   key: 'bO1eLnXzWu8xRuzIgSBGOXarq0Ft6PDD', // can be Array, eg:['your key 1','your key 2'....]
-    //   ext: ['png', 'jpeg', 'jpg'],
-    //   proxy: '' // img ext name
-    //   // proxy: 'http://user:pass@192.168.0.1:8080' // http proxy,eg:如果你来自中国，同时拥有shadowsocks，翻墙默认配置为 http:127.0.0.1:1080 即可。（注，该参数因为需要超时断开连接的原因，导致最后会延迟执行一会webpack。但相对于国内网络环境，用此参数还是非常划算的，测试原有两张图片，无此参数耗时2000ms+，有此参数耗时1000ms+节约近半。）
-    // })
-    // new ParallelUglifyPlugin({
-    //   workerCount: os.cpus().length,
-    //   uglifyJS: {
-    //     output: {
-    //       beautify: false, // 不需要格式化
-    //       comments: false // 保留注释
-    //     },
-    //     compress: {
-    //       warnings: false, // 删除无用代码时不输出警告
-    //       drop_console: true, // 删除console语句
-    //       collapse_vars: true, // 内嵌定义了但是只有用到一次的变量
-    //       reduce_vars: true // 提取出出现多次但是没有定义成变量去引用的静态值
-    //     }
-    //   }
-    // })
-    // new ParallelUglifyPlugin({
-    //   workerCount: os.cpus().length,
-    //   uglifyES: {
-    //     output: {
-    //       beautify: false, // 不需要格式化
-    //       comments: false // 保留注释
-    //     },
-    //     compress: {
-    //       warnings: false, // 删除无用代码时不输出警告
-    //       drop_console: true, // 删除console语句
-    //       collapse_vars: true, // 内嵌定义了但是只有用到一次的变量
-    //       reduce_vars: true // 提取出出现多次但是没有定义成变量去引用的静态值
-    //     }
-    //   }
-    // })
-    // const CompressionWebpackPlugin = require('compression-webpack-plugin')
-
     const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
     plugins.push(
@@ -154,15 +116,6 @@ module.exports = (options = {}) => {
         parallel: true
       })
     )
-    // plugins.push(
-    //   new CompressionWebpackPlugin({
-    //     asset: '[path].gz[query]',
-    //     algorithm: 'gzip',
-    //     test: new RegExp('\\.(' + ['js', 'css'].join('|') + ')$'),
-    //     threshold: 10240,
-    //     minRatio: 0.8
-    //   })
-    // )
     plugins.push(
       new CopyWebpackPlugin([
         {
@@ -171,15 +124,17 @@ module.exports = (options = {}) => {
         }
       ])
     )
+    plugins.push(new fileListPlugin({ config: true }))
     // plugins.push(new webpack.optimize.ModuleConcatenationPlugin())
     // if (process.argv.includes('report')) {
     //   plugins.push(new BundleAnalyzerPlugin({ analyzerPort: 8889 }))
     // }
-    plugins.push(new BundleAnalyzerPlugin({ analyzerPort: 9999 }))
+    // plugins.push(new BundleAnalyzerPlugin({ analyzerPort: 9999 }))
   }
+
   return {
     cache: true,
-    devtool: options.dev ? 'eval-source-map' : 'source-map',
+    devtool: options.dev ? 'source-map' : false,
     entry: {
       vendor: ['babel-polyfill'],
       app: './src/index'
@@ -196,6 +151,15 @@ module.exports = (options = {}) => {
     module: {
       noParse: [/dayjs.js/],
       rules: [
+        // {
+        //   test: /\.(js|vue)$/,
+        //   loader: 'eslint-loader',
+        //   enforce: 'pre',
+        //   include: [resolve('src')],
+        //   options: {
+        //     failOnError: true
+        //   }
+        // },
         {
           test: /\.vue$/,
           loader: ['happypack/loader?id=vue']
@@ -281,10 +245,6 @@ module.exports = (options = {}) => {
             }
           ]
         },
-        // {
-        //   test: /\.json$/,
-        //   loader: 'json-loader'
-        // },
         {
           test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
           exclude: /favicon\.png$/,
@@ -301,7 +261,10 @@ module.exports = (options = {}) => {
       ]
     },
     plugins,
-
+    // eslint: {
+    //   failOnError: true, // eslint报error了就终止webpack编译
+    //   cache: true // 开启eslint的cache，cache存在node_modules/.cache目录里
+    // },
     resolve: {
       extensions: ['.js', '.json', '.vue', '.scss', '.css'],
       alias: {
@@ -318,14 +281,14 @@ module.exports = (options = {}) => {
 
     devServer: config.devServer
       ? {
-        host: '0.0.0.0',
-        port: config.devServer.port,
-        proxy: config.devServer.proxy,
-        historyApiFallback: {
-          index: url.parse(config.publicPath).pathname,
-          disableDotRule: true
+          host: '192.168.100.160',
+          port: config.devServer.port,
+          proxy: config.devServer.proxy,
+          historyApiFallback: {
+            index: url.parse(config.publicPath).pathname,
+            disableDotRule: true
+          }
         }
-      }
       : undefined,
 
     performance: {

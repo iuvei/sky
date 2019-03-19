@@ -2,7 +2,9 @@
   <div class="maintained_main_body">
     <div class="maintained_main_content">
       <div style="text-align:center">
-        <img src="~img/football/maintained.png" alt="" style="width:80%">
+        <img src="~img/football/maintained.png"
+             alt=""
+             style="width:80%">
       </div>
       <div class="p1">抱歉！系统正在维护，暂停下注！如有什么疑问请联系客服！</div>
       <div class="p2">
@@ -10,9 +12,6 @@
         <span>{{maintained.data && maintained.data.maintenance_time}}</span>
       </div>
 
-      <!-- <p>
-        <a :href="sysinfo.service_url">联系客服</a>
-      </p> -->
     </div>
   </div>
 </template>
@@ -52,7 +51,7 @@ export default {
       font-size: poTorem(20px);
       line-height: 2rem;
       span {
-        color: #ff7c34;
+        color: $mainColor;
       }
     }
   }

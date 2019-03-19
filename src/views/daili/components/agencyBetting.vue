@@ -1,6 +1,11 @@
 <template>
   <div class="agencyStatement_main_body">
-    <publicHead :title="accountOptions[0]" :type="1" :timeText="chooseTimeText" @chooseTimeShow="choosedTime=true" @pullDown="optionsShow" slot='list'></publicHead>
+    <publicHead :title="accountOptions[0]"
+                :type="1"
+                :timeText="chooseTimeText"
+                @chooseTimeShow="choosedTime=true"
+                @pullDown="optionsShow"
+                slot='list'></publicHead>
     <!-- <publicHead :title="accountOptions[choosed]" :type="1" :timeText="chooseTimeText" @chooseTimeShow="choosedTime=true" @pullDown="optionsShow" slot='list'></publicHead> -->
     <!-- <div class="account_type" v-show="bgIsShow" slot='list'>
       <div :class="[{options_is_show: optionsIsShow}, defaultClass2]">
@@ -9,62 +14,101 @@
     </div> -->
     <div class="agencyStatement_main_content">
       <div class="search_ipt">
-        <input type="text" placeholder="请输入下级账号" v-model="account">
-        <img src="../../../img/daili/search.png" alt="" @click="manualSearch">
+        <input type="text"
+               placeholder="请输入下级账号"
+               v-model="account">
+        <img src="../../../img/daili/search.png"
+             alt=""
+             @click="manualSearch">
       </div>
-      <yd-tab class="betRecord" :callback="getData">
-        <yd-tab-panel label="全部" :tabkey="0">
-          <div class="empty" v-show="allData.length==0">
-            <img src="../../../img/bet_record/noRecords.png" alt="">
+      <yd-tab class="betRecord"
+              :callback="getData">
+        <yd-tab-panel label="全部"
+                      :tabkey="0">
+          <div class="empty"
+               v-show="allData.length==0">
+            <img src="../../../img/bet_record/noRecords.png"
+                 alt="">
             <p>暂无记录</p>
           </div>
-          <AgencyBettingScroll :allData="allData" :tabkey='0' @loadMore="loadMore" v-if="tabType==0"></AgencyBettingScroll>
+          <AgencyBettingScroll :allData="allData"
+                               :tabkey='0'
+                               @loadMore="loadMore"
+                               v-if="tabType==0"></AgencyBettingScroll>
         </yd-tab-panel>
-        <yd-tab-panel label="待开奖" :tabkey="3">
-          <div class="empty" v-show="allData.length==0">
-            <img src="../../../img/bet_record/noRecords.png" alt="">
+        <yd-tab-panel label="待开奖"
+                      :tabkey="3">
+          <div class="empty"
+               v-show="allData.length==0">
+            <img src="../../../img/bet_record/noRecords.png"
+                 alt="">
             <p>暂无记录</p>
           </div>
-          <AgencyBettingScroll :allData="allData" :tabkey='3' @loadMore="loadMore" :selfTxt="'待开奖'" v-if="tabType==3">
+          <AgencyBettingScroll :allData="allData"
+                               :tabkey='3'
+                               @loadMore="loadMore"
+                               :selfTxt="'待开奖'"
+                               v-if="tabType==3">
           </AgencyBettingScroll>
         </yd-tab-panel>
-        <yd-tab-panel label="已中奖" :tabkey="2">
-          <div class="empty" v-show="allData.length==0">
-            <img src="../../../img/bet_record/noRecords.png" alt="">
+        <yd-tab-panel label="已中奖"
+                      :tabkey="2">
+          <div class="empty"
+               v-show="allData.length==0">
+            <img src="../../../img/bet_record/noRecords.png"
+                 alt="">
             <p>暂无记录</p>
           </div>
-          <AgencyBettingScroll :allData="allData" :tabkey='2' @loadMore="loadMore" v-if="tabType==2">
+          <AgencyBettingScroll :allData="allData"
+                               :tabkey='2'
+                               @loadMore="loadMore"
+                               v-if="tabType==2">
           </AgencyBettingScroll>
         </yd-tab-panel>
-        <yd-tab-panel label="未中奖" :tabkey="5">
-          <div class="empty" v-show="allData.length==0">
-            <img src="../../../img/bet_record/noRecords.png" alt="">
+        <yd-tab-panel label="未中奖"
+                      :tabkey="5">
+          <div class="empty"
+               v-show="allData.length==0">
+            <img src="../../../img/bet_record/noRecords.png"
+                 alt="">
             <p>暂无记录</p>
           </div>
-          <AgencyBettingScroll :allData="allData" :tabkey='5' @loadMore="loadMore" :selfTxt="'未中奖'" v-if="tabType==5">
+          <AgencyBettingScroll :allData="allData"
+                               :tabkey='5'
+                               @loadMore="loadMore"
+                               :selfTxt="'未中奖'"
+                               v-if="tabType==5">
             <p slot="txt">未中奖</p>
           </AgencyBettingScroll>
         </yd-tab-panel>
-        <yd-tab-panel label="撤单" :tabkey="4">
-          <div class="empty" v-show="allData.length==0">
-            <img src="../../../img/bet_record/noRecords.png" alt="">
+        <yd-tab-panel label="撤单"
+                      :tabkey="4">
+          <div class="empty"
+               v-show="allData.length==0">
+            <img src="../../../img/bet_record/noRecords.png"
+                 alt="">
             <p>暂无记录</p>
           </div>
-          <AgencyBettingScroll :allData="allData" :tabkey='4' @loadMore="loadMore" :selfTxt="'撤单'" v-if="tabType==4">
+          <AgencyBettingScroll :allData="allData"
+                               :tabkey='4'
+                               @loadMore="loadMore"
+                               :selfTxt="'撤单'"
+                               v-if="tabType==4">
             <p slot="txt">撤单</p>
           </AgencyBettingScroll>
         </yd-tab-panel>
       </yd-tab>
     </div>
-    <yd-actionsheet :items="timeOptions" v-model="choosedTime" class="changePeriod"></yd-actionsheet>
+    <yd-actionsheet :items="timeOptions"
+                    v-model="choosedTime"
+                    class="changePeriod"></yd-actionsheet>
   </div>
 </template>
 <script>
-import publicHead from '../../huiYuan/components/moreService/publicHead'
-import { getDate, getMonday, getMonth } from '../../../js/agencyDate'
+import publicHead from "../../huiYuan/components/moreService/publicHead";
 
-import { mapActions, mapState } from 'vuex'
-import Component from './block/index'
+import { mapActions, mapState } from "vuex";
+import Component from "./block/index";
 // console.log(Component);
 export default {
   components: {
@@ -72,119 +116,117 @@ export default {
     ...Component
   },
   computed: {
-    ...mapState('member', ['st_timeData'])
+    ...mapState("member", ["st_timeData"])
   },
   data() {
     return {
-      funcName: '投注明细',
-      chooseTimeText: '今天',
+      funcName: "投注明细",
+      chooseTimeText: "今天",
       choosedTimeIndex: 0,
       lasttime: 0,
       allData: [],
       pageOffset: 40,
       pageid: 0,
       choosedTime: false,
-      tabType:0,
+      tabType: 0,
       typeItem: [
-        { label: '全部', type: 0 },
-        { label: '待开奖', type: 3 },
-        { label: '已中奖', type: 2 },
-        { label: '未中奖', type: 5 },
-        { label: '撤单', type: 4 }
+        { label: "全部", type: 0 },
+        { label: "待开奖", type: 3 },
+        { label: "已中奖", type: 2 },
+        { label: "未中奖", type: 5 },
+        { label: "撤单", type: 4 }
       ],
-      baseData: '',
-      account: '',
-      userID: '',
+      baseData: "",
+      account: "",
+      userID: "",
       timeOptions: [],
       // accountOptions: ['全部', '彩票', '体育'],
-      accountOptions: ['投注明细'],
+      accountOptions: ["投注明细"],
       choosed: 0,
       bgIsShow: false,
       optionsIsShow: false,
-      defaultClass2: 'type_options'
-    }
+      defaultClass2: "type_options"
+    };
   },
   mounted() {
-    this.initTimeData()
-    this.getBaseData()
+    this.initTimeData();
+    this.getBaseData();
   },
   methods: {
-    ...mapActions('agent', ['getDailiTouzhuLog']),
+    ...mapActions("agent", ["getDailiTouzhuLog"]),
     initTimeData() {
       // this.tabType = sessionStorage.getItem("agencyBetIndex") || 0;
-      this.timeOptions = Array.from(this.st_timeData).map(v => {
-        return {
-          val: v[0],
-          label: v[1],
-          callback: item => {
-            this.chooseTimeText = item.label
-            this.lasttime = item.val
-            this.getBaseData()
-          }
+      this.timeOptions = Array.from(this.st_timeData).map(v => ({
+        val: v[0],
+        label: v[1],
+        callback: item => {
+          this.chooseTimeText = item.label;
+          this.lasttime = item.val;
+          this.getBaseData();
         }
-      })
+      }));
     },
-    async getBaseData(pageid = 0) {
-      this.$dialog.loading.open('正在加载中···')
-      this.pageid = 0
-      let res = await this.getDailiTouzhuLog({
+    async getBaseData() {
+      this.$dialog.loading.open("正在加载中···");
+      this.pageid = 0;
+      const res = await this.getDailiTouzhuLog({
         gameid: 0,
         username: this.account,
         type: this.tabType,
         // lasttime: this.lasttime,
         lasttime: this.lasttime,
         pageid: 0
-      })
+      });
       if (res) {
-        this.allData = res
+        this.allData = res;
       } else {
-        this.allData = []
+        this.allData = [];
       }
-      this.$dialog.loading.close()
+      this.$dialog.loading.close();
     },
     async loadMore(fn) {
       // this.$dialog.loading.open("正在加载中···");
-      this.pageid++
-      let res = await this.getDailiTouzhuLog({
+      this.pageid++;
+      const res = await this.getDailiTouzhuLog({
         gameid: 0,
         username: this.account,
         type: this.tabType,
         lasttime: this.lasttime,
         // lasttime: 4,
         pageid: this.pageid
-      })
+      });
       if (res) {
-        this.allData = [...this.allData, ...res]
+        this.allData = [...this.allData, ...res];
       }
-      fn(res.length == this.pageOffset)
+      fn(res.length == this.pageOffset);
     },
     manualSearch() {
       // this.lasttime
-      this.getBaseData()
+      this.getBaseData();
     },
     getData(l, i) {
       // localStorage.setItem("agencyBetIndex", i);
-      this.tabType = this.typeItem[i].type
-      sessionStorage.setItem('agencyBetIndex', i)
-      this.getBaseData()
+      this.tabType = this.typeItem[i].type;
+      sessionStorage.setItem("agencyBetIndex", i);
+      this.getBaseData();
     },
     chooseType(n) {
-      this.choosed = n
-      this.optionsIsShow = false
-      this.bgIsShow = false
-      this.getBaseData()
+      this.choosed = n;
+      this.optionsIsShow = false;
+      this.bgIsShow = false;
+      this.getBaseData();
     },
     optionsShow() {
-      this.bgIsShow = !this.bgIsShow
+      this.bgIsShow = !this.bgIsShow;
       setTimeout(() => {
-        this.optionsIsShow = true
-      }, 0)
+        this.optionsIsShow = true;
+      }, 0);
     }
     // toDetails() {
     //   this.$router.push("/moreService/betRecordDetails");
     // },
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";

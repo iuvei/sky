@@ -1,21 +1,34 @@
 <template>
   <div class="correctLoginPW_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="content">
       <yd-cell-group class="form_ipt">
         <yd-cell-item v-show="isShow">
           <span slot="left">原手机</span>
-          <input slot="right" type="text" :placeholder="oldPhone" v-model="oldPhone1">
+          <input slot="right"
+                 type="text"
+                 :placeholder="oldPhone"
+                 v-model="oldPhone1">
         </yd-cell-item>
         <yd-cell-item>
           <span slot="left">{{txt}}</span>
-          <input slot="right" type="text" placeholder="请输入新手机号码" v-model="newPhone">
+          <input slot="right"
+                 type="text"
+                 placeholder="请输入新手机号码"
+                 v-model="newPhone">
         </yd-cell-item>
         <yd-cell-item>
           <span slot="left">验证码</span>
-          <input slot="right" type="number" placeholder="请输入验证码" v-model="verifyNum">
-          <span slot="right" @click="getVerify">
-            <img :src="verifyImg" alt="" class="verify_img">
+          <input slot="right"
+                 type="number"
+                 placeholder="请输入验证码"
+                 v-model="verifyNum">
+          <span slot="right"
+                @click="getVerify">
+            <img :src="verifyImg"
+                 alt=""
+                 class="verify_img">
           </span>
         </yd-cell-item>
       </yd-cell-group>
@@ -29,52 +42,54 @@
 import publicHead from "./publicHead";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   data() {
     return {
       funcName: "绑定手机",
       isShow: false,
       oldPhone: "",
-      oldPhone1:'',
+      oldPhone1: "",
       newPhone: "",
       verifyImg: "",
       verifyNum: "",
-      txt:'手机',
-      vid: ''
+      txt: "手机",
+      vid: ""
     };
   },
   activated() {
-    this.oldPhone = ''
-    this.oldPhone1 = ''
-    this.newPhone = ''
-    this.verifyNum = ''
+    this.oldPhone = "";
+    this.oldPhone1 = "";
+    this.newPhone = "";
+    this.verifyNum = "";
     this.$dialog.loading.open("正在加载中···");
     if (this.$store.state.userinfo.accountInfo.phone) {
       this.isShow = true;
-      this.txt = '新手机'
-      this.funcName = '修改手机'
+      this.txt = "新手机";
+      this.funcName = "修改手机";
       this.oldPhone = this.$store.state.userinfo.accountInfo.phone;
     } else {
       this.isShow = false;
-      this.txt = '手机'
-      this.funcName = '绑定手机'
+      this.txt = "手机";
+      this.funcName = "绑定手机";
     }
     this.getVerify();
   },
   methods: {
     submitData() {
-      let isPass = this.isShow ? this.oldPhone1 && this.newPhone : this.newPhone
-      if(!isPass) {
-        this.$dialog.toast({mes: '请输入手机号'})
-        return
+      const isPass = this.isShow
+        ? this.oldPhone1 && this.newPhone
+        : this.newPhone;
+      if (!isPass) {
+        this.$dialog.toast({ mes: "请输入手机号" });
+        return;
       }
-      if(!this.verifyNum) {
-        this.$dialog.toast({mes: '请输入验证码'})
-        return
+      if (!this.verifyNum) {
+        this.$dialog.toast({ mes: "请输入验证码" });
+        return;
       } else if (!/^[0-9]{4}$/.test(this.verifyNum)) {
-        this.$dialog.toast({mes: '请输入正确验证码'})
-        return
+        this.$dialog.toast({ mes: "请输入正确验证码" });
+        return;
       }
       this.$ajax("request", {
         ac: "updateUserInfo",
@@ -82,19 +97,19 @@ export default {
         phone: this.newPhone,
         vcode: this.verifyNum,
         vid: this.vid,
-        type: 3,
-      }).then(res => {
-        this.getVerify()
+        type: 3
+      }).then(() => {
+        this.getVerify();
         this.$dialog.alert({ mes: "提交成功，请等待审核" });
 
         this.$ajax("request", {
           ac: "encodeLogin",
-          code: this.$store.state.userinfo.accountInfo.code,
+          code: this.$store.state.userinfo.accountInfo.code
         }).then(res => {
           console.log(res);
           this.$store.commit("GET_USERINFO", {
             accountInfo: res,
-            isLogin: true,
+            isLogin: true
           });
           this.$router.back();
         });
@@ -105,18 +120,18 @@ export default {
         ac: "getVerifyImage"
       }).then(res => {
         this.verifyImg = res.img;
-        this.vid = res.vid
+        this.vid = res.vid;
         this.$dialog.loading.close();
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
 .correctLoginPW_main_body {
   .content {
-    height: poTorem(688px);
+    height: 100%;
     background-color: #eee;
     padding: poTorem(20px);
     .form_ipt {
@@ -144,7 +159,7 @@ export default {
         font-size: poTorem(16px);
         line-height: poTorem(16px);
         color: #fff;
-        background-color: #ff7c34;
+        background-color: $mainColor;
         border-radius: poTorem(5px);
         outline: none;
         border: none;

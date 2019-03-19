@@ -26,19 +26,20 @@
   </div>
 </template>
 <script>
-// import { userWinList_get, lottery_get } from "../../../../api/user";
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
       data: []
-    };
+    }
   },
-  mounted() {
-    // lottery_get().then(res => {
-    //   this.data = res.data.data;
-    // });
+  methods: {
+    ...mapActions(['setPlayItem'])
+  },
+  activated() {
+    this.setPlayItem(null)
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,19 +1,29 @@
 <template>
   <div>
-    <publicHead :title="funcName" :type="5" @dontGoBack="controlShow"></publicHead>
-    <RechargePayByWei v-if="showView===3" :manData="manData" @backstep="specialShow=true" @toSuccess="toSuccess"></RechargePayByWei>
-    <RechargePayByOnline v-if="showView===2" :manData="manData" @backstep="specialShow=true" @toSuccess="toSuccess"></RechargePayByOnline>
-    <RechargePaySuccess v-if="showView===200" :money="money" @backstep="toFirstStep"></RechargePaySuccess>
+    <publicHead :title="funcName"
+                :type="5"
+                @dontGoBack="controlShow"></publicHead>
+    <RechargePayByWei v-if="showView===3"
+                      :manData="manData"
+                      @backstep="specialShow=true"
+                      @toSuccess="toSuccess"></RechargePayByWei>
+    <RechargePayByOnline v-if="showView===2"
+                         :manData="manData"
+                         @backstep="specialShow=true"
+                         @toSuccess="toSuccess"></RechargePayByOnline>
+    <RechargePaySuccess v-if="showView===200"
+                        :money="money"
+                        @backstep="toFirstStep"></RechargePaySuccess>
   </div>
 </template>
 <script>
-import publicHead from '../publicHead'
-import Component from './index'
-import { mapState, mapMutations, mapActions } from 'vuex'
-import { randomFormtoken } from '~/js/user/gsfunc'
-import { PayConnect } from '~/js/PayConnect'
-import { setTimeout } from 'timers'
-import axios from 'axios'
+import publicHead from "../publicHead";
+import Component from "./index";
+import { mapState, mapMutations, mapActions } from "vuex";
+import { randomFormtoken } from "~/js/user/gsfunc";
+import { PayConnect } from "~/js/PayConnect";
+
+import axios from "axios";
 
 export default {
   components: {
@@ -22,7 +32,7 @@ export default {
   },
   sockets: {
     connect() {
-      console.log('socket connected')
+      console.log("socket connected");
     }
   },
   // directives: { ...Directives },
@@ -35,138 +45,140 @@ export default {
   data() {
     return {
       specialShow: true,
-      funcName: '充值',
+      funcName: "充值",
       weiView: [],
       manBankView: [],
       onlineView: [],
       showView: 0,
       manData: {},
       paySuccess: false,
-      payType: '', // 13银联 5支付宝 3微信 11QQ 15转账 1在线支付
+      payType: "", // 13银联 5支付宝 3微信 11QQ 15转账 1在线支付
       rechargeSum: [10, 100, 300, 500, 1000, 3000, 5000, 10000],
       dynamicFormData: {},
       active: -1,
-      money: '',
+      money: "",
       temp: 0,
       // 定义QQ 微信 支付宝的map映射
       mapType: new Map([[3, 0], [5, 1], [11, 2]])
-    }
+    };
   },
   activated() {
-    this.payType = parseInt(this.$route.query.payType)
-    this.funcName = this.$route.query.funcName
+    this.payType = parseInt(this.$route.query.payType);
+    this.funcName = this.$route.query.funcName;
     // this.getPayData()
-    this.getDefaultTips()
-    this.manData = this.$route.params.manData
-    this.money = this.manData.money
-    this.showView = this.$route.params.showView
+    this.getDefaultTips();
+    this.manData = this.$route.params.manData;
+    this.money = this.manData.money;
+    this.showView = this.$route.params.showView;
   },
   methods: {
-    ...mapMutations(['SET_BALANCE']),
-    ...mapActions(['flushPrice']),
-    ...mapActions('recharge', ['getDefaultTips']),
+    ...mapMutations(["SET_BALANCE"]),
+    ...mapActions(["flushPrice"]),
+    ...mapActions("recharge", ["getDefaultTips"]),
     toSuccess() {
-      this.temp = this.showView
-      this.showView = 200
+      this.temp = this.showView;
+      this.showView = 200;
     },
     toFirstStep() {
-      this.specialShow = true
-      this.showView = this.temp
+      this.specialShow = true;
+      this.showView = this.temp;
     },
     controlShow() {
       if (!this.specialShow) {
-        this.showView = this.temp
-        this.specialShow = true
+        this.showView = this.temp;
+        this.specialShow = true;
       } else {
-        this.$router.back()
+        this.$router.back();
       }
     },
     dealPayData(res) {
-      switch (this.payType) { // 13银联 5支付宝 3微信 11QQ 15转账 1在线支付
+      switch (
+        this.payType // 13银联 5支付宝 3微信 11QQ 15转账 1在线支付
+      ) {
         case 1:
-          this.onlineView = res
-          this.showView = 1
-          break
+          this.onlineView = res;
+          this.showView = 1;
+          break;
         case 15:
-          this.manBankView = res
-          this.showView = 2
-          break
+          this.manBankView = res;
+          this.showView = 2;
+          break;
         default:
-          this.weiView = res
-          this.showView = 3
-          break
+          this.weiView = res;
+          this.showView = 3;
+          break;
       }
     },
     getPayData() {
-      this.$dialog.loading.open(' ')
-      this.$ajax('request', {
-        ac: 'getPayDataByUtype',
+      this.$dialog.loading.open(" ");
+      this.$ajax("request", {
+        ac: "getPayDataByUtype",
         type: this.payType,
-        https:window.location.protocol.indexOf('https')==0?'1':'0'
+        https: window.location.protocol.indexOf("https") == 0 ? "1" : "0"
       }).then(res => {
-        this.dealPayData(res)
-        this.$dialog.loading.close()
-      })
+        this.dealPayData(res);
+        this.$dialog.loading.close();
+      });
     },
     viewItemClick(item) {
       if (!this.money) {
-        this.$dialog.alert({ mes: '请输入正确充值金额！' })
-        return
+        this.$dialog.alert({ mes: "请输入正确充值金额！" });
+        return;
       }
-      this.temp = this.showView
-      this.specialShow = false
+      this.temp = this.showView;
+      this.specialShow = false;
       switch (this.payType) {
         case 1:
           // this.manData = item;
           // this.submitPayThrid(
           //   Object.assign({ type: 1, subtype: item.id }, item)
           // )
-          this.submitPayThrid({ type: 1, subtype: item.id }, item)
-          break
+          this.submitPayThrid({ type: 1, subtype: item.id }, item);
+          break;
         case 15:
-          item.money = this.money
-          this.manData = item
-          break
+          item.money = this.money;
+          this.manData = item;
+          break;
         // case 13:
         //   this.submitPayThrid({ type: item.type, thrid_id: item.id })
         //   break;
         default:
-          this.viewWeiGoPay(item)
-          break
+          this.viewWeiGoPay(item);
+          break;
       }
     },
     // 三方支付
     submitPayThrid(params, passItem) {
-      console.log('params', params, passItem)
+      console.log("params", params, passItem);
       // const _this = this
       if (
-        passItem.hasOwnProperty('is_socket') &&
+        passItem.hasOwnProperty("is_socket") &&
         [1, 2].includes(passItem.is_socket)
       ) {
-        this.$dialog.loading.open(' ')
+        this.$dialog.loading.open(" ");
         if (passItem.is_socket === 1) {
-          this.doWebScoketPay(passItem)
+          this.doWebScoketPay(passItem);
         } else if (passItem.is_socket === 2) {
-          this.doHttpPay(passItem)
+          this.doHttpPay(passItem);
         }
 
-        return
+        return;
       } else {
-        this.$dialog.loading.open(' ')
-        let request = {
-          ac: 'submitPayThrid',
+        this.$dialog.loading.open(" ");
+        const request = {
+          ac: "submitPayThrid",
           price: this.money,
           form_unique_token: randomFormtoken(),
           ...params
-        }
-        this.$ajax('request', request).then(res => {
-          let data = res.data.split('&').map(r => {
-            let obj = r.split('=>')
-            return { [obj[0]]: obj[1] }
-          })
-          console.log(res)
+        };
+        this.$ajax("request", request).then(res => {
+          const data = res.data.split("&").map(r => {
+            const obj = r.split("=>");
+            return { [obj[0]]: obj[1] };
+          });
+          console.log(res);
           this.dynamicFormData = {
-            url: res.url.replace(/\\\//g, '/'),
+            url: res.url.replace(/\\\//g, "/"),
             method: res.method,
             data: Object.assign(...data),
             qrcode: res.qrcode,
@@ -174,98 +186,96 @@ export default {
             showQrcode: true,
             show: true,
             dingdan: res.dingdan
-          }
-          this.$dialog.loading.close()
-        })
+          };
+          this.$dialog.loading.close();
+        });
       }
     },
     viewWeiGoPay(item) {
-      console.log(this.mapType.get(this.payType), this.payType)
+      console.log(this.mapType.get(this.payType), this.payType);
       if (item.man) {
-        item.money = this.money
-        item.weiType = this.mapType.get(this.payType)
-        this.manData = item
-        console.log(item)
+        item.money = this.money;
+        item.weiType = this.mapType.get(this.payType);
+        this.manData = item;
+        console.log(item);
       } else {
-        this.specialShow = true
+        this.specialShow = true;
 
-        this.submitPayThrid({ type: item.type, thrid_id: item.id }, item)
+        this.submitPayThrid({ type: item.type, thrid_id: item.id }, item);
       }
     },
     showWeiMan1() {
-      this.specialShow = false
-      this.showView = 3
-      this.manData = this.dynamicFormData
-      this.manData.weiType = this.mapType.get(this.payType)
+      this.specialShow = false;
+      this.showView = 3;
+      this.manData = this.dynamicFormData;
+      this.manData.weiType = this.mapType.get(this.payType);
     },
 
     chooseSum(a, b) {
-      this.money = a
-      this.active = b
+      this.money = a;
+      this.active = b;
     },
     async refreshUserinfo() {
-      this.$dialog.loading.open('正在刷新')
-      let res = await this.flushPrice()
+      this.$dialog.loading.open("正在刷新");
+      const res = await this.flushPrice();
       if (res) {
-        this.$dialog.loading.open('刷新成功')
+        this.$dialog.loading.open("刷新成功");
       }
       setTimeout(() => {
-        this.$dialog.loading.close()
-      }, 500)
+        this.$dialog.loading.close();
+      }, 500);
     },
 
     // 开始 WebSocket 支付请求
     doWebScoketPay(passItem) {
-      const _this = this
+      const _this = this;
       const config = {
         errorRepeatTime: 30,
         url: `ws://${passItem.url}`, // 'ws://23.100.88.43:9000', //params.url,
         data: passItem.data || passItem.socket_data,
         price: _this.money,
         callback: event => {
-          this.afterWebSocketConnet(event)
+          this.afterWebSocketConnet(event);
         },
-        errorCallback: event => {
-          let i = 0
-          let _this = this
+        errorCallback: () => {
           setTimeout(() => {
-            config.errorRepeatTime--
-            new PayConnect(config)
-          }, 2000)
+            config.errorRepeatTime--;
+            new PayConnect(config);
+          }, 2000);
         },
         afterErrorCallback: () => {
-          _this.$dialog.toast({ mes: '该通道连接超时，请选择其他通道' })
-          _this.$dialog.loading.close()
+          _this.$dialog.toast({ mes: "该通道连接超时，请选择其他通道" });
+          _this.$dialog.loading.close();
         }
-      }
+      };
 
-      let conn = new PayConnect(config)
+      new PayConnect(config);
     },
 
     // 开始 Http post 支付请求
     doHttpPay(passItem) {
-      const _this = this
+      const _this = this;
       const params = `data=${passItem.data || passItem.socket_data}&price=${
           _this.money
         }`,
         header = {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            "Content-Type": "application/x-www-form-urlencoded"
           }
-        }
-      console.log('doHttpPay', params)
+        };
+      console.log("doHttpPay", params);
       axios.post(passItem.url, params, header).then(result => {
-        console.log(result)
-        _this.postToPay(result, _this)
-      })
+        console.log(result);
+        _this.postToPay(result, _this);
+      });
     },
     // WebSocket请求处理后置操作
     afterWebSocketConnet(evt) {
-      const _this = this
-      _this.$dialog.loading.close()
+      const _this = this;
+      _this.$dialog.loading.close();
       // console.log('Received Message: ' + evt.data)
       if (evt && evt.data) {
-        let data = JSON.parse(evt.data)
+        const data = JSON.parse(evt.data);
         if (data.msg === 0 && data.data) {
           // let _data = data.data.data.split('&').map(r => {
           //   let obj = r.split('=>')
@@ -287,26 +297,26 @@ export default {
           //   'this.dynamicFormData',
           //   JSON.stringify(this.dynamicFormData)
           // )
-          _this.postToPay(data, _this)
+          _this.postToPay(data, _this);
         } else {
           _this.$dialog.toast({
             mes: data.param
-          })
+          });
         }
       }
     },
     // 跨域构造post参数并提交
     postToPay(response, _this) {
       if (response.data.msg === 0) {
-        const res = response.data.data
+        const res = response.data.data;
         // const res = data.data
-        let _data = res.data.split('&').map(r => {
-          let obj = r.split('=>')
-          return { [obj[0]]: obj[1] }
-        })
+        const _data = res.data.split("&").map(r => {
+          const obj = r.split("=>");
+          return { [obj[0]]: obj[1] };
+        });
 
         _this.dynamicFormData = {
-          url: res.url.replace(/\\\//g, '/'),
+          url: res.url.replace(/\\\//g, "/"),
           method: res.method,
           data: Object.assign(..._data),
           qrcode: res.qrcode,
@@ -314,28 +324,29 @@ export default {
           showQrcode: true,
           show: true,
           dingdan: res.dingdan
-        }
+        };
         console.log(
-          'this.dynamicFormData',
+          "this.dynamicFormData",
           JSON.stringify(this.dynamicFormData)
-        )
+        );
       } else {
         _this.$dialog.toast({
           mes: response.data.param
-        })
+        });
       }
-      this.$dialog.loading.close()
+      this.$dialog.loading.close();
       // console.log(res)
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../../css/resources.scss";
 .rechargeStep_main_body {
   .rechargeStep_main_content {
+    overflow: scroll;
     background-color: #f3f3f3;
-    height: poTorem(688px);
+    height: 100%;
     .account_info {
       padding: poTorem(5px);
       @include between;
@@ -434,10 +445,10 @@ export default {
               width: poTorem(53px);
               height: poTorem(23px);
               line-height: poTorem(21px);
-              border: poTorem(1px) solid #ff7c34;
+              border: poTorem(1px) solid $mainColor;
               border-radius: poTorem(12px);
               text-align: center;
-              color: #ff7c34;
+              color: $mainColor;
               margin-left: poTorem(10px);
             }
           }
@@ -516,7 +527,7 @@ export default {
         font-size: poTorem(18px);
         color: #fff;
         text-align: center;
-        background-color: #ff7c34;
+        background-color: $mainColor;
         border-radius: poTorem(5px);
         line-height: poTorem(35px);
         &:first-child {

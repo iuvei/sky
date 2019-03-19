@@ -22,21 +22,25 @@
         </div>
         <div class="balls">
           <ul v-if="balls.length > 1">
-            <li v-for="(item,index) in balls" :key="index">{{item}}</li>
+            <li v-for="(item,index) in balls"
+                :key="index">{{item}}</li>
           </ul>
           <ul v-else>
-            <li v-for="(item,index) in randomBalls" :key="index">{{item}}</li>
+            <li v-for="(item,index) in randomBalls"
+                :key="index">{{item}}</li>
           </ul>
           <span @click="oepnHistory">
             <i>历史开奖</i>
-            <i class="icon" :class="{'slidedown':this.isOpen}"></i>
+            <i class="icon"
+               :class="{'slidedown':this.isOpen}"></i>
           </span>
         </div>
       </div>
       <div class="heads_bottom">
         <!-- 历史开奖 -->
         <yd-accordion>
-          <yd-accordion-item ref="accordion" :auto="false">
+          <yd-accordion-item ref="accordion"
+                             :auto="false">
             <div class="history">
               <ul>
                 <li class="title">
@@ -46,7 +50,9 @@
                   <span>重号个数</span>
                   <span>总和值</span>
                 </li>
-                <li v-for="(item, index) in kjBalls" v-if="index <= 7" :key="index">
+                <li v-for="(item, index) in kjBalls"
+                    v-if="index <= 7"
+                    :key="index">
                   <span>{{item.qishu.toString().slice(-4)}}</span>
                   <span class="kaijiang">
                     {{item.balls.length ? item.balls.join(',') : '正在开奖'}}
@@ -69,28 +75,37 @@
             <i>{{nextQishu}}</i>期{{closeIsShow?'截止时间':'已封盘'}}:
           </div>
           <div class="haoma">
-            <app-count-down ref="openless" v-model="openless_leftTime" :time="openless" timetype="second" done-text="正在开奖" format="{%h}:{%m}:{%s}" :callback="_openCallback"></app-count-down>
+            <app-count-down ref="openless"
+                            v-model="openless_leftTime"
+                            :time="openless"
+                            timetype="second"
+                            done-text="正在开奖"
+                            format="{%h}:{%m}:{%s}"
+                            :callback="_openCallback"></app-count-down>
           </div>
-          <div class="haoma" v-html="renderStr" @click="userBalanceClick"></div>
+          <div class="haoma"
+               v-html="renderStr"
+               @click="userBalanceClick"></div>
         </div>
       </div>
     </div>
     <!-- 投注部分 -->
     <betting :routeList="routeLists"></betting>
     <!-- 购物车 -->
-    <shop :quotation="closeIsShow" @clearAll='transmit'></shop>
+    <shop :quotation="closeIsShow"
+          @clearAll='transmit'></shop>
   </div>
 </template>
 <script>
-import betting from '../components/betting'
-import shop from '../../shop'
-import { secondsFormat } from '~/js/touzhu/touzhu.util'
-import { resetRouteParams } from '~/js/util'
-import { mapActions, mapState } from 'vuex'
-import countDownMixin from '../../countDownMixin'
+import betting from "../components/betting";
+import shop from "../../shop";
+
+import { resetRouteParams } from "~/js/util";
+import { mapActions, mapState } from "vuex";
+import countDownMixin from "../../countDownMixin";
 export default {
-  name: 'elevenx5head',
-  props: ['routes'],
+  name: "elevenx5head",
+  props: ["routes"],
   data() {
     return {
       routeLists: {},
@@ -103,9 +118,9 @@ export default {
       content: [],
       openTimeContent: [],
       isOpen: false,
-      val: '',
+      val: "",
       repeatArr: []
-    }
+    };
   },
   components: {
     betting,
@@ -118,141 +133,141 @@ export default {
     })
   },
   async activated() {
-    this.routeLists = this.routes
-    resetRouteParams(this, '11x5')
-    let name_tag =
-      this.$route.params.name_tag || this.$store.state.betting.name_tag
-    if(name_tag) {
-      this.getOpened(name_tag)
-      this.getHistory(name_tag)
+    this.routeLists = this.routes;
+    resetRouteParams(this, "11x5");
+    const name_tag =
+      this.$route.params.name_tag || this.$store.state.betting.name_tag;
+    if (name_tag) {
+      this.getOpened(name_tag);
+      this.getHistory(name_tag);
     }
     // name_tag &&
     //   (await this.getOpened(name_tag)) &&
     //   (await this.getHistory(name_tag))
     // name_tag && this.getHistory(name_tag)
-    clearInterval(this.resTimer)
+    clearInterval(this.resTimer);
     this.randomBallTimer = setInterval(() => {
-      this.ballFromBet()
-    }, 500)
+      this.ballFromBet();
+    }, 500);
   },
   deactivated() {
     // clearInterval(this.$refs.stopless.timer);
-    clearInterval(this.$refs.openless.timer)
-    clearInterval(this.resTimer)
-    clearInterval(this.randomBallTimer)
+    clearInterval(this.$refs.openless.timer);
+    clearInterval(this.resTimer);
+    clearInterval(this.randomBallTimer);
   },
   filters: {
     singleNum(num) {
-      return Number(num)
+      return Number(num);
     }
   },
   watch: {
-    '$route.params'(newVal, oldVal) {
+    "$route.params"(newVal, oldVal) {
       if (
         newVal &&
-        newVal.js_tag === '11x5' &&
+        newVal.js_tag === "11x5" &&
         (oldVal && oldVal.js_tag == newVal.js_tag)
       ) {
         // clearInterval(this.$refs.stopless.timer);
-        clearInterval(this.$refs.openless.timer)
-        clearInterval(this.resTimer)
+        clearInterval(this.$refs.openless.timer);
+        clearInterval(this.resTimer);
 
-        this.routeLists = newVal
-        resetRouteParams(this, '11x5')
-        this.getOpened(newVal.name_tag)
-        this.getHistory(newVal.name_tag)
-        this.setBetCurent(newVal)
-        this.setBetData({})
-        this.clearCart()
+        this.routeLists = newVal;
+        resetRouteParams(this, "11x5");
+        this.getOpened(newVal.name_tag);
+        this.getHistory(newVal.name_tag);
+        this.setBetCurent(newVal);
+        this.setBetData({});
+        this.clearCart();
       }
     },
     kjBalls(val) {
       if (val.length) {
-        this.getBatchRepeatTimes()
+        this.getBatchRepeatTimes();
       }
     }
   },
   methods: {
-    ...mapActions(['setBetCurent', 'setBetData', 'clearCart']),
+    ...mapActions(["setBetCurent", "setBetData", "clearCart"]),
     renderQishu(qishu) {
-      let _val = qishu
-      return (_val && (_val * 1 - 1 + '').padStart(4, '0')) || ''
+      const _val = qishu;
+      return (_val && (_val * 1 - 1 + "").padStart(4, "0")) || "";
     },
-    //总和值
+    // 总和值
     getSumVal(balls) {
       if (balls && balls.length) {
-        let sum = (typeof balls === 'string' ? balls.split('+') : balls)
+        const sum = (typeof balls === "string" ? balls.split("+") : balls)
           .map(x => Number(x))
-          .reduce((a, b) => a + b)
-        let arr = []
-        arr.push(sum > 29 ? '大' : '小')
-        arr.push(sum % 2 === 0 ? '双' : '单')
-        return arr
+          .reduce((a, b) => a + b);
+        const arr = [];
+        arr.push(sum > 29 ? "大" : "小");
+        arr.push(sum % 2 === 0 ? "双" : "单");
+        return arr;
       } else {
-        return ['-', '-']
+        return ["-", "-"];
       }
     },
-    //跨度
+    // 跨度
     getSpanning(numbers) {
-      if (!numbers || !numbers.length) return '-'
-      let _arr = typeof numbers === 'string' ? numbers.split(' ') : numbers,
+      if (!numbers || !numbers.length) return "-";
+      const _arr = typeof numbers === "string" ? numbers.split(" ") : numbers,
         max = Math.max(..._arr),
-        min = Math.min(..._arr)
+        min = Math.min(..._arr);
 
-      return max - min
+      return max - min;
     },
-    //获取重复个数
+    // 获取重复个数
     getRepeatTimes(item) {
-      if (!this.kjBalls[0].balls || !this.kjBalls[0].balls.length) return '-'
-      let index = this.kjBalls.findIndex(x => x.qishu === item.qishu) + 1
-      if (index === this.kjBalls.length) return '-'
-      let prev = this.kjBalls[index] //前一行
-      let _balls_cur = item.balls.length //当前行球
-          ? item.balls
-          : [], //.sort((a, b) => a - b)
-        _balls_prev = prev.balls, //.sort((a, b) => a - b), //前一行球
-        count = 0
+      if (!this.kjBalls[0].balls || !this.kjBalls[0].balls.length) return "-";
+      const index = this.kjBalls.findIndex(x => x.qishu === item.qishu) + 1;
+      if (index === this.kjBalls.length) return "-";
+      const prev = this.kjBalls[index]; // 前一行
+      const _balls_cur = item.balls.length // 当前行球
+        ? item.balls
+        : []; // .sort((a, b) => a - b)
+      const _balls_prev = prev.balls; // .sort((a, b) => a - b), //前一行球
+      let count = 0;
       for (let i = 0; i < _balls_cur.length; i++) {
         if (_balls_prev.includes(_balls_cur[i])) {
-          count += 1
+          count += 1;
         }
       }
 
-      return count.toString()
+      return count.toString();
     },
     // 批量获取重复个数
     getBatchRepeatTimes() {
-      let arr = []
+      const arr = [];
       this.kjBalls.forEach(item => {
-        arr.push(this.getRepeatTimes(item))
-      })
-      this.repeatArr = arr
+        arr.push(this.getRepeatTimes(item));
+      });
+      this.repeatArr = arr;
     },
     transmit() {
-      // debugger
       this.$children.forEach(x => {
-        if (x.$vnode.tag.includes('eleventxfive_betting')) {
-          x.clearBalls && x.clearBalls()
+        if (x.$vnode.tag.includes("eleventxfive_betting")) {
+          x.clearBalls && x.clearBalls();
         }
-      })
-      this.bus.$emit('clearBalls')
+      });
+      this.bus.$emit("clearBalls");
       // this.$children[3].clearBalls()
     },
     oepnHistory() {
-      this.isOpen = !this.isOpen
+      this.isOpen = !this.isOpen;
       if (this.isOpen) {
-        this.$refs.accordion.openItem()
+        this.$refs.accordion.openItem();
       } else {
-        this.$refs.accordion.closeItem()
+        this.$refs.accordion.closeItem();
       }
     }
   },
   mixins: [countDownMixin]
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../../css/resources.scss";
 .elevenx5 {
+  height: calc(100vh - 3rem);
   width: 100%;
   background: #fff;
   // position: absolute;
@@ -448,17 +463,16 @@ export default {
     .spots {
       position: absolute;
       @include center;
-      width: poTorem(18px);
-      height: poTorem(18px);
+      width: poTorem(24px);
+      height: poTorem(24px);
       background: #e03a3a;
       display: flex;
       border-radius: 50%;
       font-weight: bolder;
       color: #fff;
-      right: poTorem(8px);
-      top: poTorem(8px);
+      right: 0;
+      top: 0;
     }
   }
 }
-
 </style>

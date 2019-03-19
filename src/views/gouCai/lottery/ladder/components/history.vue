@@ -16,7 +16,8 @@
             <!-- <p v-show="this.balls.length == 1">正在开奖</p> -->
             <div @click="openHistory">
               <i>历史开奖</i>
-              <i class="icon" :class="{'slidedown' : isOpen}"></i>
+              <i class="icon"
+                 :class="{'slidedown' : isOpen}"></i>
             </div>
           </div>
         </div>
@@ -25,16 +26,20 @@
       <div class="heads_bottom">
         <!-- 历史开奖 -->
         <yd-accordion>
-          <yd-accordion-item ref="accordion" :auto="false">
+          <yd-accordion-item ref="accordion"
+                             :auto="false">
             <div class="history">
               <ul>
                 <li class="title">
                   <span>期号</span>
                   <span>开奖号码</span>
                 </li>
-                <li v-for="(item, index) in kjBalls" v-if="index <= 7" :key="index">
+                <li v-for="(item, index) in kjBalls"
+                    v-if="index <= 7"
+                    :key="index">
                   <span>{{item.qishu.toString().slice(-4)}}</span>
-                  <span class="kaijiang" v-if="item.balls.length > 1">
+                  <span class="kaijiang"
+                        v-if="item.balls.length > 1">
                     <i class="ball-left">{{item.balls[0] === '0' ? '左' : '右'}}</i>
                     <i class="ball-3">{{item.balls[1] === '0' ? '3' : '4'}}</i>
                     <i :class="item.balls[2] === '0' ? 'ball-odd' : 'ball-even'">{{item.balls[2] === '0' ? '单' : '双'}}</i>
@@ -52,9 +57,17 @@
             <i>{{nextQishu}}</i>期{{closeIsShow?'截止时间':'已封盘'}}:
           </div>
           <div class="haoma">
-            <app-count-down ref="openless" v-model="openless_leftTime" :time="openless" timetype="second" done-text="正在开奖" format="{%h}:{%m}:{%s}" :callback="_openCallback"></app-count-down>
+            <app-count-down ref="openless"
+                            v-model="openless_leftTime"
+                            :time="openless"
+                            timetype="second"
+                            done-text="正在开奖"
+                            format="{%h}:{%m}:{%s}"
+                            :callback="_openCallback"></app-count-down>
           </div>
-          <div class="haoma" v-html="renderStr" @click="userBalanceClick"></div>
+          <div class="haoma"
+               v-html="renderStr"
+               @click="userBalanceClick"></div>
         </div>
       </div>
     </div>
@@ -63,7 +76,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions } from "vuex";
 import { resetRouteParams } from "~/js/util";
 import countDownMixin from "../../countDownMixin";
 export default {
@@ -87,7 +100,7 @@ export default {
   async activated() {
     this.routeLists = this.$route.params;
     resetRouteParams(this, "tzyx");
-    let name_tag =
+    const name_tag =
       this.$route.params.name_tag || this.$store.state.betting.name_tag;
     if (name_tag) {
       await this.getOpened(name_tag);
@@ -122,9 +135,9 @@ export default {
         this.clearCart();
       }
     },
-    balls(balls){
-      if(balls.length){
-        this.$emit('ladder', balls, this.openless_leftTime)
+    balls(balls) {
+      if (balls.length) {
+        this.$emit("ladder", balls, this.openless_leftTime);
       }
     }
   },
@@ -291,16 +304,16 @@ export default {
               }
               .ball-left {
                 color: #676363;
-                background: #DCDCDC;
+                background: #dcdcdc;
               }
               .ball-3 {
                 background: #626262;
               }
               .ball-odd {
-                background: #1AA1E7;
+                background: #1aa1e7;
               }
               .ball-even {
-                background: #E33B3F;
+                background: #e33b3f;
               }
             }
             &:nth-child(odd) {

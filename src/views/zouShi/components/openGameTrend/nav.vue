@@ -4,14 +4,17 @@
       <li>
         <span>开奖结果</span>
       </li>
-      <li v-for="(item,index) in digits" :key="index" @click='light(index)' :class="{'active':$store.state.trend.trendval==index}">
+      <li v-for="(item,index) in digits"
+          :key="index"
+          @click='light(index)'
+          :class="{'active':$store.state.trend.trendval==index}">
         <span>{{item}}</span>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState } from 'vuex';
 export default {
   computed: {
     ...mapState({
@@ -26,33 +29,33 @@ export default {
     });
   },
   methods: {
-    ...mapActions(["setTrendval"]),
-    light: function(index) {
+    ...mapActions(['setTrendval']),
+    light(index) {
       this.setTrendval(index);
     },
     setDigitItemWidth(container) {
-      let arr = [],
-        spans = container.getElementsByTagName("SPAN");
+      const arr = [],
+        spans = container.getElementsByTagName('SPAN');
       for (let i = 0; i < spans.length; i++) {
         arr.push(spans[i]);
       }
-      arr.map(
-        item => (item.style.width = document.body.clientWidth / 4 + "px")
+      arr.forEach(
+        item => item.style.width = `${document.body.clientWidth / 4}px`
       );
     },
     changeNavWidth() {
-      let container = this.$refs.container,
+      const container = this.$refs.container,
         len = this.digits.length;
       if (len === 3) {
-        container.classList.add("head-four");
-        container.style.width = document.body.clientWidth + "px";
+        container.classList.add('head-four');
+        container.style.width = document.body.clientWidth + 'px';
         this.setDigitItemWidth(container);
       }
       if (len > 3) {
-        container.classList.remove("head-four");
-        container.parentElement.classList.add("muti");
+        container.classList.remove('head-four');
+        container.parentElement.classList.add('muti');
         container.style.width =
-          document.body.clientWidth / 4 * (len + 1) + "px";
+          (document.body.clientWidth / 4) * (len + 1) + 'px';
         this.setDigitItemWidth(container);
       }
     },
@@ -64,14 +67,13 @@ export default {
     this.changeNavWidth();
   },
   activated() {
-    let container = this.$refs.container,
-      eventName =
-        "orientationchange" in window ? "orientationchange" : "resize";
+    const eventName =
+      'orientationchange' in window ? 'orientationchange' : 'resize';
     window.addEventListener(eventName, this.handleResize);
   },
   deactivated() {
-    let eventName =
-      "orientationchange" in window ? "orientationchange" : "resize";
+    const eventName =
+      'orientationchange' in window ? 'orientationchange' : 'resize';
     window.removeEventListener(eventName, this.handleResize);
   }
 };

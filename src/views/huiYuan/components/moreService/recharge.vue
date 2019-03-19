@@ -1,14 +1,20 @@
 <template>
   <div class="recharge_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
-    <p class="choose_titile" v-show="false">
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
+    <p class="choose_titile"
+       v-show="false">
       <span></span>
       <span>请选择充值方式</span>
     </p>
     <yd-cell-group class="pay_option">
-      <yd-cell-item arrow v-for="(item, index) in payType" :key="index" @click.native="goToNext(item)">
+      <yd-cell-item arrow
+                    v-for="(item, index) in payType"
+                    :key="index"
+                    @click.native="goToNext(item)">
         <span slot="left">
-          <img :src="'/assets/recharge/'+item.icon" alt="">
+          <img :src="'/assets/recharge/'+item.icon"
+               alt="">
         </span>
         <span slot="left">{{item.name}}</span>
       </yd-cell-item>
@@ -20,7 +26,7 @@ import publicHead from "./publicHead";
 import { mapState } from "vuex";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   data() {
     return {
@@ -48,38 +54,59 @@ export default {
         {
           bank: "中国工商银行",
           name: "曾秋平",
-          branch: "来宾武宣支行",
+          branch: "来宾武宣支行"
         },
         {
           bank: "中国招商银行",
           name: "梁继伟",
-          branch: "绵阳分行营业部",
-        },
+          branch: "绵阳分行营业部"
+        }
       ],
       choosedBank: false,
       bankName: "选择银行卡",
       anyBanks: [],
-      payType: [],
+      payType: []
     };
   },
   computed: {
     ...mapState({
       user_price: store => store.userinfo.accountInfo.price,
-      username: store => store.userinfo.accountInfo.username,
-    }),
+      username: store => store.userinfo.accountInfo.username
+    })
   },
-  mounted() {
+  async activated() {
+    // this.getUserBankCard();
     this.getPayTypeByUtype();
   },
+  mounted() {},
   methods: {
+    getUserBankCard(){
+      this.$dialog.loading.open("正在加载中···");
+      this.$ajax("request", {
+        ac: "getUserBankCard"
+      }).then(res => {
+        if (!res) {
+          this.$router.replace({
+            path: "/moreService/bindingBankcard",
+            query: { rent: true }
+          });
+          return;
+        }
+      });
+    },
     getPayTypeByUtype() {
       this.$dialog.loading.open("正在加载中···");
       this.$ajax("request", {
-        ac: "getPayTypeByUtype",
+        ac: "getPayTypeByUtype"
       }).then(res => {
-        this.payType = res.sort((a, b) => {
-          return a.sort - b.sort;
-        });
+        // if (!res) {
+        //   this.$router.replace({
+        //     path: "/moreService/bindingBankcard",
+        //     query: { rent: true }
+        //   });
+        //   return;
+        // }
+        this.payType = res.sort((a, b) => a.sort - b.sort);
         // console.log(this.payType);
         this.$dialog.loading.close();
       });
@@ -88,15 +115,15 @@ export default {
       this.$router.push({
         name: "chongzhiqueren",
         params: {
-          rechargeType,
+          rechargeType
         },
         query: {
           payType: rechargeType.id,
-          funcName: rechargeType.name,
-        },
+          funcName: rechargeType.name
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -107,7 +134,7 @@ export default {
   background-color: #f2f3f4;
   .next_step {
     width: 100%;
-    background-color: #ff7c34;
+    background-color: $mainColor;
     font-size: poTorem(18px);
     color: #fff;
     text-align: center;

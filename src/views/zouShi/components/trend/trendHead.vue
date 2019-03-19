@@ -1,12 +1,15 @@
 <template>
   <div class="trend_head">
-    <span v-for="(item,index) in digits" :key="index" @click='light(index)' :class="{'active':$store.state.trend.trendval==index}">
+    <span v-for="(item,index) in digits"
+          :key="index"
+          @click='light(index)'
+          :class="{'active':$store.state.trend.trendval==index}">
       {{item}}
     </span>
   </div>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState } from 'vuex';
 export default {
   computed: {
     ...mapState({
@@ -16,8 +19,8 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["setTrendval"]),
-    light: function(index) {
+    ...mapActions(['setTrendval']),
+    light(index) {
       this.setTrendval(index);
     }
   }

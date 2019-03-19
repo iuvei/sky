@@ -1,10 +1,15 @@
 <template>
   <div class="lottery_content">
-    <yd-grids-group :rows="3" class="func_part">
-      <yd-grids-item v-for="(item, index) in gridsData" :key="index">
-        <div @click="goPath(item)" class="pieces_content" slot="else">
+    <yd-grids-group :rows="3"
+                    class="func_part">
+      <yd-grids-item v-for="(item, index) in gridsData"
+                     :key="index">
+        <div @click="goPath(item)"
+             class="pieces_content"
+             slot="else">
           <i :class="{'flag_mark':userFlag[item.class]}"></i>
-          <img :src="item.src" alt="">
+          <img :src="item.src"
+               alt="">
           <div class="word">
             <p>{{item.text}}</p>
           </div>
@@ -15,133 +20,121 @@
 </template>
 <script>
 import { mapState } from "vuex";
-let basicArr = [
-        // {
-        //   text: '今日盈亏',
-        //   path: '/moreService/todayProfit',
-        //   src: require('../../../img/personal_center/money_state.png')
-        // },
-        {
-          text: "中奖记录",
-          path: "/moreService/prizeRecord",
-          src: require("../../../img/personal_center/bingo_record.png"),
-        },
-        {
-          text: "投注记录",
-          path: "/moreService/betRecords",
-          src: require("../../../img/personal_center/bought_record.png"),
-        },
-        {
-          text: "账户明细",
-          path: "/moreService/accountInfo",
-          src: require("../../../img/personal_center/account_details.png"),
-        },
-        // {
-        //   text: "VIP等级",
-        //   path: {name: 'huiyuanxinxi', params: {direct: true}},
-        //   src: require("../../../img/personal_center/VIP_level.png")
-        // },
-        // {
-        //   text: "现金交易",
-        //   path: "/moreService/cashTransaction",
-        //   src: require("../../../img/personal_center/cash_bills.png"),
-        // },
-        {
-          text: "代理中心",
-          path: "/moreService/agencyCenter",
-          src: require("../../../img/personal_center/agency_center.png"),
-        },
-        {
-          text: "时时返水",
-          path: "/moreService/backwater",
-          src: require("../../../img/personal_center/backwater.png"),
-        },
-        {
-          text: "福利任务",
-          path: "/moreService/welfareTask",
-          class: "welfare",
-          src: require("../../../img/personal_center/welfare.png"),
-        },
-        {
-          text: "个人消息",
-          path: "/moreService/personalMessage",
-          class: "message",
-          src: require("../../../img/personal_center/message.png"),
-        },
-        {
-          text: "安全中心",
-          path: "/moreService/securityCenter",
-          class:"safety",
-          src: require("../../../img/personal_center/security_center.png"),
-        },
-        {
-          text: "意见反馈",
-          path: "/moreService/adviceFeedbacks",
-          class: "feedback",
-          src: require("../../../img/more_settings/feedback.png"),
-        },
-        {
-          text: "更多设置",
-          path: "/moreService/moreSetting",
-          src: require("../../../img/personal_center/more_settings.png"),
-        },
-      ],
-      hasVIP =         {
-          text: "VIP等级",
-          path: {name: 'huiyuanxinxi', params: {direct: true}},
-          src: require("../../../img/personal_center/VIP_level.png")
-        },
-       hasCash= {
-          text: "现金交易",
-          path: "/moreService/cashTransaction",
-          src: require("../../../img/personal_center/cash_bills.png"),
-        }
+const basicArr = [
+    {
+      text: "中奖记录",
+      path: "/moreService/prizeRecord",
+      src: require("../../../img/personal_center/bingo_record.png")
+    },
+    {
+      text: "投注记录",
+      path: "/moreService/betRecords",
+      src: require("../../../img/personal_center/bought_record.png")
+    },
+    {
+      text: "账户明细",
+      path: "/moreService/accountInfo",
+      src: require("../../../img/personal_center/account_details.png")
+    },
+    {
+      text: "代理中心",
+      path: "/moreService/agencyCenter",
+      src: require("../../../img/personal_center/agency_center.png")
+    },
+    {
+      text: "时时返水",
+      path: "/moreService/backwater",
+      src: require("../../../img/personal_center/backwater.png")
+    },
+    {
+      text: "福利任务",
+      path: "/moreService/welfareTask",
+      class: "welfare",
+      src: require("../../../img/personal_center/welfare.png")
+    },
+    {
+      text: "个人消息",
+      path: "/moreService/personalMessage",
+      class: "message",
+      src: require("../../../img/personal_center/message.png")
+    },
+    {
+      text: "安全中心",
+      path: "/moreService/securityCenter",
+      class: "safety",
+      src: require("../../../img/personal_center/security_center.png")
+    },
+    {
+      text: "意见反馈",
+      path: "/moreService/adviceFeedbacks",
+      class: "feedback",
+      src: require("../../../img/more_settings/feedback.png")
+    },
+    {
+      text: "更多设置",
+      path: "/moreService/moreSetting",
+      src: require("../../../img/personal_center/more_settings.png")
+    }
+  ],
+  hasVIP = {
+    text: "VIP等级",
+    path: { name: "huiyuanxinxi", params: { direct: true } },
+    src: require("../../../img/personal_center/VIP_level.png")
+  },
+  hasCash = {
+    text: "现金交易",
+    path: "/moreService/cashTransaction",
+    src: require("../../../img/personal_center/cash_bills.png")
+  },
+  hasTodayWin = {
+    text: "今日盈亏",
+    path: "/moreService/todayProfit",
+    src: require("../../../img/personal_center/money_state.png")
+  };
 export default {
   data() {
-    return {
-      rebate: false
-    };
+    return {};
   },
-  activated() {
-    this.rebate = this.$store.state.userinfo.accountInfo.rebate?1:0 //判断返水级活动是否开放
-  },
+  activated() {},
   computed: {
-    ...mapState(["userFlag", 'sysinfo','userinfo']),
+    ...mapState(["userFlag", "sysinfo", "userinfo"]),
     gridsData() {
       if (this.sysinfo.cash_status == 1) {
-        basicArr.splice(3, 0, hasCash)
+        basicArr.splice(3, 0, hasCash);
       }
-      if(this.sysinfo.event_rise == 1) {
-        basicArr.splice(3, 0, hasVIP)
+      if (this.sysinfo.event_rise == 1) {
+        basicArr.splice(3, 0, hasVIP);
       }
-      return basicArr
+      if (this.sysinfo.profit_status == 1) {
+        basicArr.splice(3, 0, hasTodayWin);
+      }
+      return basicArr;
     },
-    
-  },
-   methods: {
-     goPath(i){
-      if(i.text == '时时返水'){
-        if(this.rebate == 1){
-          this.$router.push({
-            name: i.path,
-          });
-        }else{
-          this.$dialog.toast({mes: '该活动暂未开放，敬请期待！'})
-          return
-        }
-      }
-      if(i.text == 'VIP等级'){
-        this.$router.push({
-          name: i.path.name,
-        });
-      } else {
-        this.$router.push({
-          path: i.path,
-        });
-      }
-      
+    rebate() {
+      return this.$store.state.userinfo.accountInfo.rebate;
     }
-   }
+  },
+  methods: {
+    goPath(i) {
+      if (
+        i.text == "时时返水" &&
+        this.$store.state.userinfo.isLogin &&
+        this.rebate != 1
+      ) {
+        this.$dialog.toast({ mes: "该活动暂未开放，敬请期待！" });
+        return;
+      } else {
+        if (i.text === "投注记录") {
+          this.$router.push({
+            name: "goucaijilu",
+            params: {
+              fromOutside: true
+            }
+          });
+        } else this.$router.push(i.path);
+      }
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

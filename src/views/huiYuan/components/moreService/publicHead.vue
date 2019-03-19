@@ -1,32 +1,49 @@
 <template>
   <div class="personal_center_head">
-    <div class="public_head">
-      <div class="back_btn" @click="goBack">
-        <img src="../../../../img/shouye/back.png" alt="">
+    <div :class="[{'public_head_pig':isfestival},'public_head']">
+      <div class="back_btn"
+           @click="goBack">
+        <img src="../../../../img/shouye/back.png"
+             alt="">
       </div>
       <div :class="[type==3?'border_center':'', defaultClass]">
-        <span v-show="type!=3" :class="{special: hasBorder}" @click="transport">{{title}}</span>
-        <span v-for="(item, index) in titleData" :key="index" v-show="type==3" @click="isClick(index)" :class="{active:isActive==index}">{{item}}</span>
+        <span v-show="type!=3"
+              :class="{special: hasBorder}"
+              @click="transport">{{title}}</span>
+        <span v-for="(item, index) in titleData"
+              :key="index"
+              v-show="type==3"
+              @click="isClick(index)"
+              :class="{active:isActive==index}">{{item}}</span>
       </div>
       <div class="right_menu">
         <!-- type:0为刷新按钮 1为下拉箭头 3为带边框标题 4为签到记录 其他为无内容 -->
-        <img src="../../../../img/personal_center/refresh.png" alt="" v-show="type==0" @click="refreshData" style="padding-right:1rem">
-        <router-link to="/moreService/signInRecord" v-show="type==4">
-          <img src="../../../../img/welfareTask/sign_in_record.png" alt="">
+        <img src="../../../../img/personal_center/refresh.png"
+             alt=""
+             v-show="type==0"
+             @click="refreshData"
+             style="padding-right:1rem">
+        <router-link to="/moreService/signInRecord"
+                     v-show="type==4">
+          <img src="../../../../img/welfareTask/sign_in_record.png"
+               alt="">
         </router-link>
-        <router-link to="/moreService/drawingsRecord" v-show="type==6">
+        <router-link to="/moreService/drawingsRecord"
+                     v-show="type==6">
           <span style="font-size:1rem;color:#fff;font-weight:600;">提款记录</span>
         </router-link>
-        <p v-show="type==1" @click="choosePeriod">
+        <p v-show="type==1"
+           @click="choosePeriod">
           {{timeText}}
-          <img src="../../../../img/bet_record/today.png" alt="">
+          <img src="../../../../img/bet_record/today.png"
+               alt="">
         </p>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 export default {
   props: ["title", "type", "isShow", "timeText"],
   data() {
@@ -35,15 +52,18 @@ export default {
       defaultClass: "center_content",
       titleData: ["个人信息", "等级头衔"],
       isActive: 0,
-      hasBorder: false,
+      hasBorder: false
     };
+  },
+  computed: {
+    ...mapState(['isfestival'])
   },
   methods: {
     goBack() {
-      console.log(this.$router.currentRoute.fullPath);
+      // console.log(this.$router.currentRoute.fullPath);
       if (this.$router.currentRoute.fullPath == "/betting") {
         this.$router.push("/home");
-      }  else {
+      } else {
         this.$router.back();
       }
     },
@@ -59,16 +79,25 @@ export default {
     },
     refreshData() {
       this.$emit("executeRefresh");
-    },
+    }
   },
   created() {
-    let titleArr = ["accountInfo", "drawingsRecord", "rechargeRecord","betRecords","agencyDeals","agencyBetting"];
-    titleArr.forEach(item => {
-      let isExist =
-        this.$router.currentRoute.path.indexOf(item) == -1 ? false : true;
-      if (isExist) this.hasBorder = true;
-    });
-  },
+    const titleArr = [
+      "zhanghumingxi",
+      "tikuanmingxi",
+      "chongzhijilu",
+      "goucaijilu",
+      "dailijiaoyijilu",
+      "dailitouzhujilu"
+    ];
+    const isExist = titleArr.includes(this.$router.currentRoute.name);
+    console.log(isExist);
+    if (isExist) this.hasBorder = true;
+    // titleArr.forEach(item => {
+    //   let isExist =
+    //     this.$router.currentRoute.path.includes(item)
+    // })
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -86,15 +115,20 @@ export default {
     // margin-top: poTorem(-48px);
     background: url(../../../../img/phone_header.png);
     @include between;
+    &.public_head_pig {
+      @include pigbg;
+    }
     .back_btn {
-      width: poTorem(100px);
+      width: 18%;
       padding-left: 1rem;
+      text-align: left;
       img {
         height: poTorem(20px);
+        vertical-align: -0.2rem;
       }
     }
     .center_content {
-      width: poTorem(181px);
+      flex: 1;
       font-size: poTorem(18px);
       color: #fff;
       font-weight: 900;
@@ -129,14 +163,14 @@ export default {
       }
       .active {
         background-color: #fff;
-        color: #ff7c34;
+        color: $mainColor;
       }
     }
     .right_menu {
-      width: poTorem(100px);
+      width: 18%;
       // width: poTorem(20px);
       // height: poTorem(20px);
-      text-align: right;
+      text-align: center;
       img {
         height: poTorem(25px);
       }

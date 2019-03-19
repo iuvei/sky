@@ -1,9 +1,32 @@
 <template>
   <div class="deal_pw">
-    <input type="tel" slot="left" v-model="first" maxlength='1' placeholder="-" v-on:input="del($event)">
-    <input type="tel" slot="left" v-model="second" maxlength='1' v-focus="first" placeholder="-" v-on:input="del($event)">
-    <input type="tel" slot="left" v-model="third" maxlength='1' v-focus="second" placeholder="-" v-on:input="del($event)">
-    <input type="tel" slot="left" v-model="forth" maxlength='1' v-focus="third" placeholder="-" v-on:input="del($event)">
+    <input type="tel"
+           slot="left"
+           v-model="first"
+           maxlength='1'
+           placeholder="-"
+           v-on:input="del($event)">
+    <input type="tel"
+           slot="left"
+           v-model="second"
+           maxlength='1'
+           v-focus="first"
+           placeholder="-"
+           v-on:input="del($event)">
+    <input type="tel"
+           slot="left"
+           v-model="third"
+           maxlength='1'
+           v-focus="second"
+           placeholder="-"
+           v-on:input="del($event)">
+    <input type="tel"
+           slot="left"
+           v-model="forth"
+           maxlength='1'
+           v-focus="third"
+           placeholder="-"
+           v-on:input="del($event)">
   </div>
 </template>
 <script>
@@ -11,32 +34,33 @@ export default {
   directives: {
     focus: {
       update(el, val) {
-        if (val.value != "-" && val.value != "" && val.oldValue == "")
+        if (val.value != "-" && val.value != "" && val.oldValue == "") {
           el.focus();
-      },
-    },
+        }
+      }
+    }
   },
   data() {
     return {
       first: "",
       second: "",
       third: "",
-      forth: "",
+      forth: ""
     };
   },
   activated() {
-    this.first = ''
-    this.second = ''
-    this.third = ''
-    this.forth = ''
+    this.first = "";
+    this.second = "";
+    this.third = "";
+    this.forth = "";
   },
   methods: {
-    del (e){
-      if (e.target.value == '' & e.target.previousElementSibling != null){
-        e.target.previousElementSibling.focus()
+    del(e) {
+      if ((e.target.value == "") & (e.target.previousElementSibling != null)) {
+        e.target.previousElementSibling.focus();
       }
     },
-    theFirst(v) {
+    theFirst() {
       if (this.first == "") this.first = "-";
     },
     theSecond() {
@@ -47,8 +71,8 @@ export default {
     },
     theForth() {
       if (this.forth == "") this.forth = "-";
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

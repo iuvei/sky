@@ -1,5 +1,5 @@
 <template>
-<!-- 用于购彩记录 -->
+  <!-- 用于购彩记录 -->
   <div class="purchaseRecords">
     <!-- 头部 -->
     <div class="purchaseRecords_head">
@@ -9,26 +9,20 @@
       <span class="title">投注记录</span>
       <div class="right">
         <div class="icon_list">
-            <span>当天</span>
+          <span>当天</span>
         </div>
         <div class="icon icon-daosanjiao">
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
   data() {
-    return {
-
-    };
+    return {};
   },
-  computed: {
-  
-
-
-  },
+  computed: {},
   methods: {}
 };
 </script>
@@ -49,30 +43,29 @@ export default {
     }
     .title {
       margin-right: poTorem(-75px);
-       color: #fff;
+      color: #fff;
       font-weight: bolder;
       font-size: poTorem(19px);
     }
 
     .right {
-        width: poTorem(98px);
-         color: #fff;
-    justify-content: space-around;
+      width: poTorem(98px);
+      color: #fff;
+      justify-content: space-around;
       align-items: center;
       font-size: poTorem(16px);
       font-weight: bolder;
 
       .icon_list {
-          width: poTorem(65px);
+        width: poTorem(65px);
         height: poTorem(18px);
         justify-content: space-around;
         align-items: center;
-          text-align: right;
+        text-align: right;
       }
 
       .icon {
-    
-          display: flex;
+        display: flex;
         width: poTorem(14px);
         height: poTorem(7px);
         justify-content: space-around;
@@ -83,7 +76,5 @@ export default {
       }
     }
   }
- 
-  
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="rechargeDetails_main_body">
-    <publicHead :title="funcName" :type="2"></publicHead>
+    <publicHead :title="funcName"
+                :type="2"></publicHead>
     <div class="order_info">
       <!-- <p class="title_word">订单内容</p> -->
       <div class="tag">
@@ -13,8 +14,8 @@
           <span>{{allData.type}}</span>
         </p>
         <p>
-          <span>入款金额：</span>
-          <span>{{allData.price}}</span>
+          <span>实际存款</span>
+          <span>{{allData.pay_price}}</span>
         </p>
         <p>
           <span>入款优惠：</span>
@@ -23,6 +24,10 @@
         <p v-if="allData.price_first">
           <span>首存优惠：</span>
           <span>{{allData.price_first}}</span>
+        </p>
+        <p>
+          <span>实际到账：</span>
+          <span>{{allData.price}}</span>
         </p>
         <p>
           <span>入款状态：</span>
@@ -47,41 +52,50 @@
         <p class="special">{{allData.status}}</p>
         <p class="special">{{allData.pay_time}}</p>
         <p>{{allData.index_mark?allData.index_mark:'无'}}</p> -->
-        <!-- <p>是</p>
+      <!-- <p>是</p>
         <p>五星_直选复式</p> -->
       <!-- </div> -->
     </div>
   </div>
 </template>
 <script>
-import publicHead from '../moreService/publicHead'
+import publicHead from "../moreService/publicHead";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '详情',
-      allData: '',
-      recordTime: ''
-    }
+      funcName: "详情",
+      allData: "",
+      recordTime: ""
+    };
   },
-  activated(){
-    this.allData = this.$route.params
-    let timestamp = this.allData.pay_time*1000
-    let assignTime = new Date(timestamp),
-        y = assignTime.getFullYear(),
-        M = assignTime.getMonth() + 1,
-        d = assignTime.getDate(),
-        h = assignTime.getHours(),
-        m = assignTime.getMinutes(),
-        s = assignTime.getSeconds(),
-        add0 = (m) => {
-          return m > 9 ? m : '0' + m
-        }
-    this.recordTime = y + '-' + add0(M) + '-' + add0(d) + " " + add0(h) + ":" + add0(m) + ":" + add0(s)
-  },
-}
+  activated() {
+    this.allData = this.$route.params;
+    const timestamp = this.allData.pay_time * 1000;
+    const assignTime = new Date(timestamp),
+      y = assignTime.getFullYear(),
+      M = assignTime.getMonth() + 1,
+      d = assignTime.getDate(),
+      h = assignTime.getHours(),
+      m = assignTime.getMinutes(),
+      s = assignTime.getSeconds(),
+      add0 = m => m > 9 ? m : "0" + m;
+    this.recordTime =
+      y +
+      "-" +
+      add0(M) +
+      "-" +
+      add0(d) +
+      " " +
+      add0(h) +
+      ":" +
+      add0(m) +
+      ":" +
+      add0(s);
+  }
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -91,7 +105,7 @@ export default {
     // padding: poTorem(20px);
     .title_word {
       padding-left: poTorem(5px);
-      border-left: poTorem(5px) solid #ff7c34;
+      border-left: poTorem(5px) solid $mainColor;
       font-size: poTorem(20px);
       color: #313131;
       height: poTorem(18px);
@@ -127,7 +141,6 @@ export default {
       p {
         border-bottom: poTorem(1px) solid #666;
       }
-      
     }
     // .tag, .content {
     //   display: inline-block;

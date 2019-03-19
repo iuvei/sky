@@ -2,7 +2,11 @@
   <div class="countdown_comp">
     <span>
       <span v-show="closeIsShow">第{{(issueNum+ '').slice(-4)}}期投注截止时间:</span>
-      <AppCountDown ref="stopless" :time="stopless" timetype="second" done-text="封盘" :callback="endCallback">
+      <AppCountDown ref="stopless"
+                    :time="stopless"
+                    timetype="second"
+                    done-text="封盘"
+                    :callback="endCallback">
         <span style="color:red;">{%h}:{%m}:{%s}</span>
       </AppCountDown>
     </span>
@@ -10,7 +14,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
   data() {
     return {
@@ -20,35 +23,35 @@ export default {
       closeIsShow: true,
       resTimer: Function,
       stopless: 0
-    }
+    };
   },
   activated() {
-    clearInterval(this.$refs.stopless.timer)
-    this.getBasicData()
+    clearInterval(this.$refs.stopless.timer);
+    this.getBasicData();
   },
   deactivated() {
-    clearInterval(this.$refs.stopless.timer)
+    clearInterval(this.$refs.stopless.timer);
   },
   watch: {
     issueNum(val) {
-      this.$emit('activedData', val)
+      this.$emit("activedData", val);
     }
   },
   methods: {
     async getBasicData() {
-      let res = await this.getData()
+      const res = await this.getData();
       //  this.closeIsShow = false
-      this.issueNum = res[0].next[0].qishu
-      this.stopless = res[0].next[0].stopless
+      this.issueNum = res[0].next[0].qishu;
+      this.stopless = res[0].next[0].stopless;
       // console.log('我是倒计时')
       // clearInterval(this.$refs.stopless.timer)
       // this.$refs.stopless.run()
     },
     async getData() {
-      return this.$ajax('request', {
-        ac: 'getCplogList',
+      return this.$ajax("request", {
+        ac: "getCplogList",
         tag: this.$store.state.betting.name_tag
-      })
+      });
       // then(closeData => {
       //   this.closeIsShow = false
       //   this.issueNum = closeData[0].next[0].qishu
@@ -68,28 +71,28 @@ export default {
       // })
     },
     async endCallback() {
-      let res = await this.getData()
-      this.$dialog.toast({ mes: '已进入下一期' })
-      this.$emit('toNextQi')
-      let stopTime = res[0].next[0].stopless
-      console.log('stopless', res[0].next[0].stopless)
+      const res = await this.getData();
+      this.$dialog.toast({ mes: "已进入下一期" });
+      this.$emit("toNextQi");
+      const stopTime = res[0].next[0].stopless;
+      console.log("stopless", res[0].next[0].stopless);
       if (stopTime > 1) {
-        this.issueNum = res[0].next[0].qishu
+        this.issueNum = res[0].next[0].qishu;
         this.stopless =
-          typeof this.stopless === 'number'
+          typeof this.stopless === "number"
             ? res[0].next[0].stopless.toString()
-            : res[0].next[0].stopless
+            : res[0].next[0].stopless;
       } else {
-        this.issueNum = res[0].next[1].qishu
+        this.issueNum = res[0].next[1].qishu;
         this.stopless =
-          typeof this.stopless === 'number'
+          typeof this.stopless === "number"
             ? res[0].next[1].stopless.toString()
-            : res[0].next[1].stopless
+            : res[0].next[1].stopless;
       }
       // console.log('我也是倒计时')
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";

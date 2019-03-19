@@ -4,32 +4,52 @@
     <FootballHeader title='选择联赛'> </FootballHeader>
     <!-- menu -->
     <ul class="menu">
-      <li v-for="(item,key) in quickData" :key="key" :class="{active:key==liKey}" @click="clickLi(key)">{{item}}</li>
+      <li v-for="(item,key) in quickData"
+          :key="key"
+          :class="{active:key==liKey}"
+          @click="clickLi(key)">{{item}}</li>
     </ul>
     <!-- main -->
     <div class="other-block">
       <yd-accordion class="main">
-        <yd-accordion-item title="热门联赛" class="group" open>
-          <div slot="icon" class="hot-icon">
-            <img :src="require('~/img/football/hot.png')" alt="">
+        <yd-accordion-item title="热门联赛"
+                           class="group"
+                           open>
+          <div slot="icon"
+               class="hot-icon">
+            <img :src="require('~/img/football/hot.png')"
+                 alt="">
           </div>
-          <FootballLeagueGroup :data='hotLeagueData' @changeCheckbox="changeCheckbox"></FootballLeagueGroup>
+          <FootballLeagueGroup :data='hotLeagueData'
+                               @changeCheckbox="changeCheckbox"></FootballLeagueGroup>
         </yd-accordion-item>
       </yd-accordion>
       <yd-accordion class="main">
-        <yd-accordion-item title="其它" class="group" open>
-          <div slot="icon" class="hot-icon">
-            <img :src="require('~/img/football/other.png')" alt="">
+        <yd-accordion-item title="其它"
+                           class="group"
+                           open>
+          <div slot="icon"
+               class="hot-icon">
+            <img :src="require('~/img/football/other.png')"
+                 alt="">
           </div>
-          <FootballLeagueGroup :data='leagueData' @changeCheckbox="changeCheckbox"></FootballLeagueGroup>
+          <FootballLeagueGroup :data='leagueData'
+                               @changeCheckbox="changeCheckbox"></FootballLeagueGroup>
         </yd-accordion-item>
       </yd-accordion>
     </div>
 
     <!-- foot -->
     <footer>
-      <yd-button size="large" type="hollow" color="#7d7d7d" @click.native="cancel">取消</yd-button>
-      <yd-button size="large" type="primary" color="#fff" bgcolor="#ff7c34" @click.native="submit">确定</yd-button>
+      <yd-button size="large"
+                 type="hollow"
+                 color="#7d7d7d"
+                 @click.native="cancel">取消</yd-button>
+      <yd-button size="large"
+                 type="primary"
+                 color="#fff"
+                 bgcolor="#ef4f4f"
+                 @click.native="submit">确定</yd-button>
     </footer>
   </div>
 </template>
@@ -79,7 +99,10 @@ export default {
       this.$router.go(-1);
     },
     async togetSportLeagueList() {
-      let ret = await this.getSportLeagueList();
+      this.allData = [];
+      this.hotLeagueData = [];
+      this.leagueData = [];
+      const ret = await this.getSportLeagueList();
       if (!ret) return;
       this.hotLeagueData = ret.filter(v => {
         if (v.is_hot) {
@@ -110,7 +133,7 @@ export default {
           break;
       }
     },
-    changeCheckbox(val) {
+    changeCheckbox() {
       this.liKey = 4;
     }
   },
@@ -125,7 +148,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../../css/resources.scss";
+@import "~css/resources.scss";
 .football-league {
   .menu {
     @include between;
@@ -142,7 +165,7 @@ export default {
     }
     .active {
       color: #fff;
-      background-color: #ff7c34;
+      background-color: $mainColor;
     }
   }
   .main {

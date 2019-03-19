@@ -6,61 +6,100 @@
           <div class="big_box">
             <div class="icon">
               <!-- <img :src="sysinfo.upload_url + '/' + sysinfo.website  + '/Uploads/cpicon/' + data.tag + '.png' " alt="图呢"> -->
-              <img :src="data.icon" alt="图呢">
+              <img :src="data.icon"
+                   alt="图呢">
             </div>
             <div class="content">
               <div class="content_top">
                 <span class="game_name">{{data.game_name}}</span>
               </div>
               <div class="content_middle">
-                <span v-if="['ssc', 'qxc'].includes(data.js_tag)" v-for="(items,indexs) in balls" :key="indexs" :class="[{active:  items == ''},classFun(data.js_tag)]">
+                <span v-if="['ssc', 'qxc'].includes(data.js_tag)"
+                      v-for="(items,indexs) in balls"
+                      :key="indexs"
+                      :class="[{active:  items == ''},classFun(data.js_tag)]">
                   {{items == '' ? '正在开奖...' : items}}
                 </span>
-                <span v-if="data.js_tag=='k3'" v-for="(items,indexs) in balls" :key="indexs" :class="[{active: items == ''},classFun(data.js_tag),`kt${items}`]">
+                <span v-if="data.js_tag=='k3'"
+                      v-for="(items,indexs) in balls"
+                      :key="indexs"
+                      :class="[{active: items == ''},classFun(data.js_tag),`kt${items}`]">
                   {{items == '' ? '正在开奖...' : ''}}
                 </span>
-                <span v-if="['pk10', 'pkniuniu'].includes(data.js_tag)" v-for="(items,indexs) in balls" :style="{background:`${pk10bjys(parseInt(items))}`}" :key="indexs" :class="[{active: items == ''},classFun(data.js_tag),'pk10']">
+                <span v-if="['pk10', 'pkniuniu'].includes(data.js_tag)"
+                      v-for="(items,indexs) in balls"
+                      :style="{background:`${pk10bjys(parseInt(items))}`}"
+                      :key="indexs"
+                      :class="[{active: items == ''},classFun(data.js_tag),'pk10']">
                   {{items == '' ? '正在开奖...' : items}}
                 </span>
-                <span v-if="data.js_tag=='lhc'" v-for="(items,indexs) in balls" :style="{background:`${ballToColor(parseInt(items))}`}" :key="indexs" :class="[{active:  items == ''},classFun(data.js_tag)]">
+                <span v-if="data.js_tag=='lhc'"
+                      v-for="(items,indexs) in balls"
+                      :style="{background:`${ballToColor(parseInt(items))}`}"
+                      :key="indexs"
+                      :class="[{active:  items == ''},classFun(data.js_tag)]">
                   <i v-if="indexs == 5 && items != ''">+</i>
                   {{items == '' ? '正在开奖...' : items}}
                 </span>
-                <span v-if="data.js_tag=='pcdd'" v-for="(items,indexs) in balls" :style="{background:`${pcddcolor(parseInt(items),indexs)}`}" :key="indexs" :class="[{['color-ball-'+items]: indexs === 3},{active: items == ''},classFun(data.js_tag)]">
+                <span v-if="data.js_tag=='pcdd'"
+                      v-for="(items,indexs) in balls"
+                      :style="{background:`${pcddcolor(parseInt(items),indexs)}`}"
+                      :key="indexs"
+                      :class="[{['color-ball-'+items]: indexs === 3},{active: items == ''},classFun(data.js_tag)]">
                   <i v-if="indexs == 2 && items != ''">=</i>
                   <i v-if="indexs == 1 && items != ''">+</i>
                   <i v-if="indexs == 0 && items != ''">+</i>
                   {{ items == '' ? '正在开奖...' : items }}
                 </span>
-                <span v-if="data.js_tag=='11x5'" v-for="(items,indexs) in balls" :key="indexs" :class="[{active: items == ''},classFun(data.js_tag)]">
+                <span v-if="data.js_tag=='11x5'"
+                      v-for="(items,indexs) in balls"
+                      :key="indexs"
+                      :class="[{active: items == ''},classFun(data.js_tag)]">
                   {{items == '' ? '正在开奖...' : items}}
                 </span>
-                <span v-if="data.js_tag=='3d'" v-for="(items,indexs) in balls" :key="indexs" :class="[{active: items == ''},classFun(data.js_tag)]">
+                <span v-if="data.js_tag=='3d'"
+                      v-for="(items,indexs) in balls"
+                      :key="indexs"
+                      :class="[{active: items == ''},classFun(data.js_tag)]">
                   {{items == '' ? '正在开奖...' : items}}
                 </span>
-                <span v-if="data.js_tag=='tzyx'" :class="{'tzyx':data.js_tag=='tzyx'}">
-									<span v-ds>{{returnz(balls[0])}}</span>
+                <span v-if="data.js_tag=='tzyx'"
+                      :class="{'tzyx':data.js_tag=='tzyx'}">
+                  <span v-ds>{{returnz(balls[0])}}</span>
                   <span v-ds>{{returnsz(balls[1])}}</span>
                   <span v-ds>{{returny(balls[2])}}</span>
-								</span>
-                <span v-if="data.js_tag=='xync'" class="xync">
-                  <span class="Colorno" v-for="(items,indexs) in balls" :key="indexs">
-                    <img :src="require('../../../img/xync_background/lucky_ball_'+ items +'.png')" alt="图片">
+                </span>
+                <span v-if="data.js_tag=='xync'"
+                      class="xync">
+                  <span class="Colorno"
+                        v-for="(items,indexs) in balls"
+                        :key="indexs">
+                    <img :src="require('../../../img/xync_background/lucky_ball_'+ items +'.png')"
+                         alt="图片">
                   </span>
                 </span>
-                <span v-if="data.js_tag=='xypk'" class="xync">
-                  <span class="Colorno" v-for="(items,indexs) in balls" :key="indexs">
-                    <img :src="require('../../../img/xingyunpuke/puke_'+ items +'.png')" alt="图片" style="margin: 0; height: 1.8rem;">
+                <span v-if="data.js_tag=='xypk'"
+                      class="xync">
+                  <span class="Colorno"
+                        v-for="(items,indexs) in balls"
+                        :key="indexs">
+                    <img :src="require('../../../img/xingyunpuke/puke_'+ items +'.png')"
+                         alt="图片"
+                         style="margin: 0; height: 1.8rem;">
                   </span>
                 </span>
               </div>
               <div class="content_bottom">
-                <span v-for="(items,indexs) in data.prev" v-if="indexs == 0" :key="indexs">第{{items.qishu}}期</span>
-                <span class="right_time" v-if="data.length !=0">{{data.prev[0].opentime | dateFrm}}</span>
+                <span v-for="(items,indexs) in data.prev"
+                      v-if="indexs == 0"
+                      :key="indexs">第{{items.qishu}}期</span>
+                <span class="right_time"
+                      v-if="data.length !=0">{{data.prev[0].opentime | dateFrm}}</span>
               </div>
             </div>
             <div class="triangle">
-              <img :src="icon_src" alt="">
+              <img :src="icon_src"
+                   alt="">
             </div>
           </div>
         </div>
@@ -75,7 +114,7 @@ import { mapState } from "vuex";
 import { BallToColor2, BallToColorpcdd } from "../../../js/xglhc.data.2017";
 import { pk10bjys } from "../../../js/pk10color";
 import dayjs from "dayjs";
-const redArr = ["左", "右"];
+
 const thArr = ["0"],
   thszArr = ["1"];
 export default {
@@ -101,7 +140,7 @@ export default {
     }
   },
   filters: {
-    dateFrm: function(opentime) {
+    dateFrm(opentime) {
       return dayjs(opentime * 1000).format("YYYY-MM-DD HH:mm");
     }
   },
@@ -112,7 +151,7 @@ export default {
       timer: Function,
       content: "",
       changeRed: 0,
-      icon_src: require('../../../../src/img/right_jiantou.png')
+      icon_src: require("../../../../src/img/right_jiantou.png")
     };
   },
   computed: {
@@ -158,7 +197,8 @@ export default {
           game_name: this.data.game_name,
           js_tag: this.data.js_tag,
           speed: this.data.speed,
-          enable: this.data.enable
+          enable: this.data.enable,
+          yearid: this.data.yearid
         }
       });
       // }
@@ -192,7 +232,7 @@ export default {
     }
   },
   watch: {
-    datas: function(val) {
+    datas(val) {
       this.data = val;
       this.balls = this.data.prev[0].balls.split("+");
     }
@@ -305,16 +345,16 @@ export default {
             display: inline-block;
             @include around;
             width: 50%;
-            div {
-              width: 1.8rem;
-              height: 1.8rem;
-              margin-left: poTorem(10px);
-              // padding-left: poTorem(7px);
-              border: poTorem(1px) solid rgb(221, 221, 221);
-              border-radius: 50%;
-              text-align: center;
-              line-height: poTorem(26.8px);
-            }
+            // div {
+            //   width: 1.8rem;
+            //   height: 1.8rem;
+            //   margin-left: poTorem(10px);
+            //   // padding-left: poTorem(7px);
+            //   border: poTorem(1px) solid rgb(221, 221, 221);
+            //   border-radius: 50%;
+            //   text-align: center;
+            //   line-height: poTorem(26.8px);
+            // }
             .left_to {
               background: #e3e1e1;
             }

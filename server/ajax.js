@@ -51,6 +51,10 @@ export default (obj, isShowErr = true, strings = 'request') =>
         } else if (res.data.msg === 45000) {
           store.commit(types.SET_MAINTAINED, res.data)
           resolve(res.data.data)
+        } else if (res.data.msg === 40020) {
+          router.replace('/forbiddenIP')
+          store.commit(types.SET_MAINTAINED, { msg: 40020 })
+          resolve(res.data.data)
         } else if (res.data.msg === 50003) {
           store.commit('football/MODIFY_FIELD', { maintained: res.data })
           router.push('/football/maintained')

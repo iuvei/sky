@@ -1,25 +1,39 @@
 <template>
   <div class="bankcardManage_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="main_content">
       <router-link to='/moreService/bindingBankcard'>
-        <yd-cell-item arrow class="add-card" @click="go">
-          <div class="to_binding" slot="right">
+        <yd-cell-item arrow
+                      class="add-card"
+                      @click="go">
+          <div class="to_binding"
+               slot="right">
             <span>
-              <img src="../../../../img/security_center/add_bankcard.png" alt="">
+              <img src="../../../../img/security_center/add_bankcard.png"
+                   alt="">
             </span>
             <span>添加银行卡</span>
           </div>
         </yd-cell-item>
       </router-link>
       <div class="bank_card_list">
-        <div v-for="(item, index) in cardList" :key="index" :class="[{'active': cardIndex==index}, 'bank_lists']" @click="callMenu(item, index)">
-          <img :src="`/assets/recharge/bank/${item.bank_type>30?'-1':item.bank_type}.png`" alt="" class="bank_card">
-          <img :src="require('../../../../img/security_center/default_mark.png')" alt="" class="default_mark" v-show="item.is_default==1">
+        <div v-for="(item, index) in cardList"
+             :key="index"
+             :class="[{'active': cardIndex==index}, 'bank_lists']"
+             @click="callMenu(item, index)">
+          <img :src="`/assets/recharge/bank/${item.bank_type>30?'-1':item.bank_type}.png`"
+               alt=""
+               class="bank_card">
+          <img :src="require('../../../../img/security_center/default_mark.png')"
+               alt=""
+               class="default_mark"
+               v-show="item.is_default==1">
 
           <div class="info">
             <div class="img">
-              <img :src="`/assets/recharge/bank_logo/${item.bank_type>30?'-1':item.bank_type}.png`" alt="">
+              <img :src="`/assets/recharge/bank_logo/${item.bank_type>30?'-1':item.bank_type}.png`"
+                   alt="">
             </div>
             <div class="txt">
               <div>{{item.bank_typename}}</div>
@@ -30,10 +44,16 @@
         </div>
       </div>
     </div>
-    <yd-actionsheet :items="cardOptions" v-model="isShowOptions" cancel="取消"></yd-actionsheet>
-    <yd-popup v-model="popIsShow" position="center" width="80%" class="password_win">
+    <yd-actionsheet :items="cardOptions"
+                    v-model="isShowOptions"
+                    cancel="取消"></yd-actionsheet>
+    <yd-popup v-model="popIsShow"
+              position="center"
+              width="80%"
+              class="password_win">
       <p>请输入交易安全码</p>
-      <input type="tel" v-model="dealPW">
+      <input type="tel"
+             v-model="dealPW">
       <p>
         <button @click="popIsShow=false">取消</button>
         <button @click="deleteCard">确定</button>
@@ -42,115 +62,125 @@
   </div>
 </template>
 <script>
-import publicHead from './publicHead'
+import publicHead from "./publicHead";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   data() {
     return {
-      funcName: '银行卡',
+      funcName: "银行卡",
       cardList: [],
-      bgImgSrc: '',
+      bgImgSrc: "",
       cardOptions: [],
       isShowOptions: false,
-      cardContent: '',
+      cardContent: "",
       cardIndex: 0,
       popIsShow: false,
-      dealPW: '',
-    }
+      dealPW: ""
+    };
   },
   activated() {
-    this.$dialog.loading.open('正在加载中···')
-    this.dealPW = ''
-    this.getData()
+    this.$dialog.loading.open("正在加载中···");
+    this.dealPW = "";
+    this.getData();
   },
   methods: {
     go() {
-      this.$router.push('/moreService/bindingBankcard')
+      this.$router.push("/moreService/bindingBankcard");
     },
 
     getData() {
-      this.$ajax('request', {
-        ac: 'getUserBankCard',
+      this.$ajax("request", {
+        ac: "getUserBankCard"
       }).then(res => {
-        this.cardList = res
-        this.$dialog.loading.close()
-      })
+        this.cardList = res;
+        this.$dialog.loading.close();
+        const temp = this.cardList.filter(i => i.id === this.$route.params.id);
+        if (temp) {
+          this.cardList.forEach(i => {
+            if (i.id === this.$route.params.id) {
+              i = Object.assign(i, this.$route.params);
+            }
+          });
+        } else {
+          this.cardList.push(this.$route.params);
+        }
+      });
     },
     callMenu(a, i) {
-      this.isShowOptions = true
-      this.cardContent = a
-      this.cardIndex = i
-      console.log(i)
-      let m = [
+      this.isShowOptions = true;
+      this.cardContent = a;
+      this.cardIndex = i;
+      console.log(i);
+      const m = [
         {
-          label: '设为默认银行卡',
+          label: "设为默认银行卡",
           callback: () => {
-            this.$dialog.loading.open('正在加载中···')
-            this.$ajax('request', {
-              ac: 'setUserBankDefault',
-              id: this.cardContent.id,
-            }).then(res => {
-              this.$dialog.alert({ mes: '修改成功!' })
+            this.$dialog.loading.open("正在加载中···");
+            this.$ajax("request", {
+              ac: "setUserBankDefault",
+              id: this.cardContent.id
+            }).then(() => {
+              this.$dialog.alert({ mes: "修改成功!" });
               for (let i = 0; i < this.cardList.length; i++) {
-                this.cardList[i].is_default = 0
+                this.cardList[i].is_default = 0;
               }
-              this.cardList[this.cardIndex].is_default = 1
-              this.$dialog.loading.close()
-            })
-          },
+              this.cardList[this.cardIndex].is_default = 1;
+              this.$dialog.loading.close();
+            });
+          }
         },
         {
-          label: '修改',
+          label: "修改",
           callback: () => {
             this.$router.push({
-              name: 'bangdingyinhangka',
-              params: this.cardContent,
-            })
-          },
+              name: "bangdingyinhangka",
+              params: this.cardContent
+            });
+          }
         },
         {
-          label: '解除绑定',
+          label: "解除绑定",
           callback: () => {
-            this.popIsShow = true
-          },
-        },
-      ]
+            this.popIsShow = true;
+          }
+        }
+      ];
       if (a.is_default == 1) {
-        m.shift()
-        this.cardOptions = m
+        m.shift();
+        this.cardOptions = m;
       } else {
-        this.cardOptions = m
+        this.cardOptions = m;
       }
     },
     deleteCard() {
-      if (this.dealPW == '') {
-        this.$dialog.alert({ mes: '安全码不能为空' })
+      if (this.dealPW == "") {
+        this.$dialog.alert({ mes: "安全码不能为空" });
       } else {
-        this.$ajax('request', {
-          ac: 'delUserBankCard',
+        this.$ajax("request", {
+          ac: "delUserBankCard",
           id: this.cardContent.id,
-          tk_pass: this.dealPW,
-        }).then(res => {
-          this.popIsShow = false
-          this.$dialog.loading.open('正在加载中···')
-          this.dealPW = ''
-          this.cardList.splice(this.cardIndex,1)
-          this.$dialog.loading.close()
+          tk_pass: this.dealPW
+        }).then(() => {
+          this.popIsShow = false;
+          this.$dialog.loading.open("正在加载中···");
+          this.dealPW = "";
+          this.cardList.splice(this.cardIndex, 1);
+          this.$dialog.loading.close();
           // this.getData()
-        })
+        });
       }
-    },
+    }
   },
   watch: {
     dealPW(value, old) {
       if (value.length > 4) {
-        this.dealPW = old
+        this.dealPW = old;
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";

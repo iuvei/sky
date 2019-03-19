@@ -21,8 +21,8 @@ function Calc_Zhushu_Obj() {
     const balls1 = ba[0].split('|')
     const balls2 = ba[1].split('|')
     if (
-      !checkArrIs(balls1, /[0-1][0-9]/) ||
-      !checkArrIs(balls2, /[0-1][0-9]/)
+      !checkArrIs(balls1, /^(([0][1-9]|[1][0])|([1-9]|[1][0]))$/) ||
+      !checkArrIs(balls2, /^(([0][1-9]|[1][0])|([1-9]|[1][0]))$/)
     ) {
       return 0
     }
@@ -65,9 +65,9 @@ function Calc_Zhushu_Obj() {
     const balls2 = ba[1].split('|')
     const balls3 = ba[2].split('|')
     if (
-      !checkArrIs(balls1, /[0-1][0-9]/) ||
-      !checkArrIs(balls2, /[0-1][0-9]/) ||
-      !checkArrIs(balls3, /[0-1][0-9]/)
+      !checkArrIs(balls1, /^(([0][1-9]|[1][0])|([1-9]|[1][0]))$/) ||
+      !checkArrIs(balls2, /^(([0][1-9]|[1][0])|([1-9]|[1][0]))$/) ||
+      !checkArrIs(balls3, /^(([0][1-9]|[1][0])|([1-9]|[1][0]))$/)
     ) {
       return 0
     }
@@ -295,6 +295,19 @@ const getCalcFuncByPlayID = playid => {
   }
 }
 
+const calcFunc = new Calc_Zhushu_Obj()
+
+const CalcObj = new Map([
+  [1, { name: '前一', calcFunc: calcFunc.calc_q1_zxfs }],
+  [2, { name: '前二直选复式', calcFunc: calcFunc.calc_q2_zxfs }],
+  [3, { name: '前二直选单式', calcFunc: calcFunc.calc_q2_zxds }],
+  [4, { name: '前三直选复式', calcFunc: calcFunc.calc_q3_zxfs }],
+  [5, { name: '前三直选单式', calcFunc: calcFunc.calc_q3_zxds }],
+  [6, { name: '定位胆', calcFunc: calcFunc.calc_dwd }],
+  [7, { name: '冠亚和', calcFunc: calcFunc.calc_gyh }],
+  [14, { name: '双面盘', calcFunc: calcFunc.calc_smp }],
+  [15, { name: '数字盘', calcFunc: calcFunc.calc_dwd }]
+])
 /**
  * 根据玩法返回其玩法的显示类型
  * @param {string} name 玩法
@@ -367,6 +380,7 @@ const getRenderTypeByPlayID = playid => {
 }
 
 export {
+  CalcObj,
   Calc_Zhushu_Obj,
   getCalcFuncByName,
   getCalcFuncByPlayID,

@@ -1,12 +1,13 @@
 <template>
   <div class="race-menu">
-    <div class="left" @click="left"></div>
+    <div class="left"
+         @click="left"></div>
     <div class="date">{{unixStamp.format('yyyy-MM-dd')}} {{unixStamp.format('W')}}</div>
-    <div class="right" @click="right"></div>
+    <div class="right"
+         @click="right"></div>
   </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
 export default {
   name: "FootballRaceMenu",
   props: ["unixStamp"],
@@ -16,26 +17,26 @@ export default {
   computed: {},
 
   methods: {
-    left(data) {
+    left() {
       this.$emit(
         "date",
         new Date(this.unixStamp.setDate(this.unixStamp.getDate() - 1))
       );
     },
-    right(data) {
+    right() {
       if (
         new Date(new Date().format("yyyy-MM-dd")).getTime() <
         new Date(this.unixStamp).getTime()
       ) {
-        return ''
+        return "";
       }
       this.$emit(
         "date",
         new Date(this.unixStamp.setDate(this.unixStamp.getDate() + 1))
       );
-    },
+    }
   },
-  mounted() {},
+  mounted() {}
 };
 </script>
 

@@ -1,8 +1,15 @@
 <template>
   <li class="item">
     <div>
-      <AppCheckbox :on='true' :off="false" :value='value' @change="changeCheckbox" onColor="#ff7c34" offColor="#7d7d7d">
-        <span slot class="label" :style="style">{{item.league_name}}</span>
+      <AppCheckbox :on='true'
+                   :off="false"
+                   :value='value'
+                   @change="changeCheckbox"
+                   onColor="$mainColor"
+                   offColor="#7d7d7d">
+        <span slot
+              class="label"
+              :style="style">{{item.league_name}}</span>
       </AppCheckbox>
     </div>
     <span> {{item.game_cnt}}</span>
@@ -15,31 +22,31 @@ export default {
   name: "FootballLeagueItem",
   props: {
     item: {
-      default: {},
+      default: {}
     },
     value: {
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
     style() {
-      return this.value ? { color: "#ff7c34" } : { color: "#7d7d7d" };
-    },
+      return this.value ? { color: "$mainColor" } : { color: "#7d7d7d" };
+    }
   },
   data() {
     return {
       tabType: 1,
-      inValue: true,
+      inValue: true
     };
   },
   methods: {
     changeCheckbox(val) {
       this.$emit("changeCheckbox", val, this.item);
     },
-    clickItem(key, item) {
+    clickItem(key) {
       this.tabType = key;
-    },
-  },
+    }
+  }
 };
 </script>
 

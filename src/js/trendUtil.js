@@ -6,7 +6,8 @@ const GameType = {
   DPC: Symbol(), // 低频彩 （福彩3D 排列三 ）
   PCDD: Symbol(), // PC蛋蛋 （新加披28 分分28 ）
   SIXHC: Symbol(), // 六合彩
-  PL3: Symbol() // 排列三
+  PL3: Symbol(), // 排列三
+  XYNC: Symbol() //  幸运农场
 }
 
 const gameMap = {
@@ -111,6 +112,9 @@ function getTrendTypeByName(name) {
     if (name.indexOf('28') >= 0) {
       return GameType.PCDD
     }
+    if (name.indexOf('幸运农场') >= 0) {
+      return GameType.XYNC
+    }
   }
   return GameType.SSC
 }
@@ -140,6 +144,8 @@ function getTrendDigitByType(gameType) {
       return getArrayByNum(6)
     case GameType.TEN1C5:
       return getArrayByNum(11)
+    case GameType.XYNC:
+      return getArrayByNum(20)
   }
 }
 

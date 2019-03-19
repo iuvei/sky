@@ -1,10 +1,13 @@
 <template>
-  <div class="new_scroll" @click="$router.push('/winList')">
+  <div class="new_scroll"
+       @click="$router.push('/winList')">
     <div class="scroll_head">
       <span>最新中奖榜</span>
     </div>
-    <ul ref="scroll_ul" :style="{ transform:`translateY(${top})`, transition }">
-      <li v-for="(item,index) in winData" :key="index">
+    <ul ref="scroll_ul"
+        :style="{ transform:`translateY(${top})`, transition }">
+      <li v-for="(item,index) in winData"
+          :key="index">
         <div>
           <div class="win_user">
             <span></span>
@@ -18,44 +21,44 @@
   </div>
 </template>
 <script>
-import api from '../../../../api/lottery'
+import api from "../../../../api/lottery";
 export default {
-  name: 'newScroll',
+  name: "newScroll",
   data() {
     return {
       activeIndex: 0,
       winData: []
-    }
+    };
   },
   computed: {
     top() {
-      return -this.activeIndex * 28 / 16 + 'rem'
+      return (-this.activeIndex * 28) / 16 + "rem";
     },
     transition() {
-      return this.activeIndex === 0 ? 'none' : 'all 1s'
+      return this.activeIndex === 0 ? "none" : "all 1s";
     }
   },
   async mounted() {
-    await this.getData()
+    await this.getData();
   },
   methods: {
     async getData() {
-      let res = await api.getUserWinList()
+      const res = await api.getUserWinList();
       if (res && Array.isArray(res.res) && res.res.length) {
-        this.winData = res.res
+        this.winData = res.res;
 
-        let scroll_ul = res.res.length / 2
-        setInterval(_ => {
+        const scroll_ul = res.res.length / 2;
+        setInterval(() => {
           if (this.activeIndex < scroll_ul) {
-            this.activeIndex += 1
+            this.activeIndex += 1;
           } else {
-            this.activeIndex = 0
+            this.activeIndex = 0;
           }
-        }, 2000)
+        }, 2000);
       }
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @function poTorem($px) {

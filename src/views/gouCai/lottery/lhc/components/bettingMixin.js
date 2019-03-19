@@ -39,7 +39,7 @@ const bettingMixin = {
       }
 
       this.setBetData({
-        type: 1, // 双面玩法,0为官方玩法
+        type: 0, // 双面玩法,0为官方玩法
         peilv: _peilv,
         peilvs: this.peilv,
         pl: this.pl,
@@ -52,7 +52,7 @@ const bettingMixin = {
         zhushu: this.zhushu, // 注数
         secondWanfa: this.secondWanfa,
         bettingArr: this.bettingArr,
-        gameid: this.routeList.lotter_id,
+        gameid: this.$route.params.lotter_id,
         playid: this.curPlayItem.playid,
         dataSource: this.dataSet,
         js_tag: this.$store.state.betting.js_tag,

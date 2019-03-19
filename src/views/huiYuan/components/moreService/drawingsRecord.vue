@@ -1,17 +1,31 @@
 <template>
   <div class="drawingsRecord_main_body">
-    <publicHead :title="funcName" :type="1" :timeText="chooseTimeText" @chooseTimeShow="changeState" @pullDown="optionsShow"></publicHead>
-    <div class="account_type" v-show="bgIsShow">
+    <publicHead :title="funcName"
+                :type="1"
+                :timeText="chooseTimeText"
+                @chooseTimeShow="changeState"
+                @pullDown="optionsShow"></publicHead>
+    <div class="account_type"
+         v-show="bgIsShow">
       <div :class="[{options_is_show: optionsIsShow}, defaultClass2]">
-        <p v-for="(item, index) in accountOptions" :key="index" @click="chooseType(item, index)" :class="{active: choosed==index}">{{item}}</p>
+        <p v-for="(item, index) in accountOptions"
+           :key="index"
+           @click="chooseType(item, index)"
+           :class="{active: choosed==index}">{{item}}</p>
       </div>
     </div>
     <div class="content_word">
-      <div class="empty" v-show="this.rechargeData==0">
-        <img src="../../../../img/bet_record/noRecords.png" alt="">
+      <div class="empty"
+           v-show="this.rechargeData==0">
+        <img src="../../../../img/bet_record/noRecords.png"
+             alt="">
         <p>暂无记录</p>
       </div>
-      <div class="hasContent" @click="toDetails(item)" v-show="this.rechargeData!=0" v-for="(item, index) in rechargeData" :key="index">
+      <div class="hasContent"
+           @click="toDetails(item)"
+           v-show="this.rechargeData!=0"
+           v-for="(item, index) in rechargeData"
+           :key="index">
         <div class="left">
           <p>出款</p>
           <p>单号：{{ item.order }}</p>
@@ -25,29 +39,33 @@
             <p>{{item.status}}</p>
           </div>
           <div>
-            <img src="../../../../img/bet_record/arrow.png" alt="">
+            <img src="../../../../img/bet_record/arrow.png"
+                 alt="">
           </div>
         </div>
       </div>
-      <p class="all_present" v-show="this.rechargeData!=0" @click="getNextData">{{allIsShow?'已显示全部':'查看更多'}}</p>
+      <p class="all_present"
+         v-show="this.rechargeData!=0"
+         @click="getNextData">{{allIsShow?'已显示全部':'查看更多'}}</p>
       <!-- <p class="all_present" v-if="allIsShow" @click="getNextData" v-show="this.rechargeData!=0">点击加载更多</p>
       <p class="all_present" v-else v-show="this.rechargeData!=0">已显示全部</p> -->
       <!-- <p class="all_present" v-show="false">已显示全部</p> -->
     </div>
-    <yd-actionsheet :items="timeOptions" v-model="choosedTime" class="changePeriod"></yd-actionsheet>
+    <yd-actionsheet :items="timeOptions"
+                    v-model="choosedTime"
+                    class="changePeriod"></yd-actionsheet>
   </div>
 </template>
 <script>
 import publicHead from "../moreService/publicHead";
-import { mapActions } from "vuex";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   data() {
     return {
       funcName: "提款记录",
-      chooseTimeText: '今天',
+      chooseTimeText: "今天",
       choosedTime: false,
       accountOptions: ["全部", "审核中", "已通过", "已取消"],
       optionsIsShow: false,
@@ -59,50 +77,50 @@ export default {
       allIsShow: true,
       status: 0,
       lasttime: 0,
-      timeOptions:[
+      timeOptions: [
         {
-          label: '今天',
+          label: "今天",
           callback: () => {
-            this.chooseTimeText = '今天'
-            this.lasttime = 0
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "今天";
+            this.lasttime = 0;
+            this.pageID = 0;
+            this.getData();
           }
         },
         {
-          label: '昨天',
+          label: "昨天",
           callback: () => {
-            this.chooseTimeText = '昨天'
-            this.lasttime = 1
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "昨天";
+            this.lasttime = 1;
+            this.pageID = 0;
+            this.getData();
           }
         },
         {
-          label: '本周',
+          label: "本周",
           callback: () => {
-            this.chooseTimeText = '本周'
-            this.lasttime = 2
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "本周";
+            this.lasttime = 2;
+            this.pageID = 0;
+            this.getData();
           }
         },
         {
-          label: '本月',
+          label: "本月",
           callback: () => {
-            this.chooseTimeText = '本月'
-            this.lasttime = 3
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "本月";
+            this.lasttime = 3;
+            this.pageID = 0;
+            this.getData();
           }
         },
         {
-          label: '上月',
+          label: "上月",
           callback: () => {
-            this.chooseTimeText = '上月'
-            this.lasttime = 4
-            this.pageID = 0
-            this.getData()
+            this.chooseTimeText = "上月";
+            this.lasttime = 4;
+            this.pageID = 0;
+            this.getData();
           }
         }
       ]
@@ -128,8 +146,8 @@ export default {
       });
     },
     chooseType(i, n) {
-      console.log(i)
-      console.log(n)
+      console.log(i);
+      console.log(n);
       this.allIsShow = true;
       this.pageID = 0;
       this.status = n;
@@ -148,14 +166,14 @@ export default {
       }, 0);
     },
     getNextData() {
-      if(this.allIsShow) {
-        return
+      if (this.allIsShow) {
+        return;
       }
       this.pageID++;
       this.$ajax("request", {
         ac: "getUserTKLog",
         status: this.status,
-        pageid: this.pageID,
+        pageid: this.pageID
       }).then(res => {
         console.log(res);
         this.rechargeData = this.rechargeData.concat(res);
@@ -167,9 +185,9 @@ export default {
     },
     toDetails(item) {
       this.$router.push({
-        name: 'tikuanxiangqing',
+        name: "tikuanxiangqing",
         params: item
-      })
+      });
     },
     refreshData() {
       this.pageID = 0;
@@ -177,9 +195,9 @@ export default {
       this.getData();
     },
     changeState() {
-      this.choosedTime = true
+      this.choosedTime = true;
     }
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -259,6 +277,7 @@ export default {
     font-weight: 400;
   }
   .account_type {
+    width: 100%;
     position: fixed;
     top: 3rem;
     height: 100%;

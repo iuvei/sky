@@ -6,7 +6,6 @@ function Calc_Zhushu_Obj() {
   // 三星直选复式
   this.calc_3x_zhxfs = function(balls) {
     // return 0;
-    // console.log("进来了"+balls)
     if (
       balls.length !== 3 ||
       balls[0] === '' ||
@@ -122,7 +121,6 @@ function Calc_Zhushu_Obj() {
 
   // 二星  前二直选复式
   this.calc_2x_q2zhxfs = function(ba) {
-    console.log(ba)
     if (ba.length < 2) {
       return 0
     }
@@ -296,7 +294,6 @@ function Calc_Zhushu_Obj() {
 
   // 顺子通选
   this.calc_sztx = function(ba) {
-    console.log(ba)
     if (ba.length < 1 || ba[0] === '') {
       return 0
     } else {
@@ -375,4 +372,28 @@ function Calc_Zhushu_Obj() {
   // END FUNCTION calc_zhushu_obj
 }
 
-export { Calc_Zhushu_Obj }
+const calc = new Calc_Zhushu_Obj()
+
+const CalcObj = new Map([
+  [1, { name: '三星直选复式', calcFn: calc.calc_3x_zhxfs }],
+  [2, { name: '三星直选单式', calcFn: calc.calc_3x_zhxds }],
+  [3, { name: '三星 和值', calcFn: calc.calc_3x_zhxhz }],
+  [4, { name: '三星 组三复式', calcFn: calc.calc_3x_zu3fs }],
+  [5, { name: '三星 组六复式', calcFn: calc.calc_3x_zu6fs }],
+  [6, { name: '三星 组三和值', calcFn: calc.calc_3x_zu3hz }],
+  [7, { name: '三星 组六和值', calcFn: calc.calc_3x_zu6hz }],
+  [8, { name: '二星  前二直选复式', calcFn: calc.calc_2x_q2zhxfs }],
+  [9, { name: '二星 后二直选复式', calcFn: calc.calc_2x_h2zhxfs }],
+  [10, { name: '二星 前二组选复式', calcFn: calc.calc_2x_q2zuxfs }],
+  [11, { name: '二星 后二组选复式', calcFn: calc.calc_2x_h2zuxfs }],
+  [12, { name: '定位胆 数字盘', calcFn: calc.calc_dwd_dwd }],
+  [13, { name: '不定位 一码', calcFn: calc.calc_bdw_1mbdw }],
+  [14, { name: '不定位 二码', calcFn: calc.calc_bdw_2mbdw }],
+  // [15, { name: '三星直选复式', calcFn: calc.calc_3x_zhxfs }],
+  // [16, { name: '三星直选复式', calcFn: calc.calc_3x_zhxfs }],
+  // [17, { name: '三星直选复式', calcFn: calc.calc_3x_zhxfs }],
+  [26, { name: '双面盘', calcFn: calc.calc_smp }],
+  [27, { name: '龙虎斗', calcFn: calc.calc_lhd }]
+])
+
+export { Calc_Zhushu_Obj, CalcObj }

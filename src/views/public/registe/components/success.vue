@@ -1,6 +1,6 @@
 <template>
   <div class="demo">
-    <div class="demo_head">
+    <div :class="[{'demo_head_pig':isfestival},'demo_head']">
       <router-link to="/home">
         <span class="iconfont icon-fanhui"></span>
       </router-link>
@@ -21,10 +21,14 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 export default {
   name: "",
   data() {
     return {};
+  },
+  computed: {
+    ...mapState(['isfestival'])
   },
   methods: {
     goBack() {
@@ -41,6 +45,9 @@ export default {
     height: poTorem(48px);
     width: 100%;
     background: url(../../../../img/phone_header.png) CENTER TOP;
+    &.demo_head_pig {
+      @include pigbg;
+    }
     .iconfont {
       font-size: poTorem(30px);
       padding-left: poTorem(10px);

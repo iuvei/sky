@@ -71,5 +71,38 @@ function getFiveBalls(balls) {
   return return_obj
 }
 
+class Calc {
+  get(playid, balls) {
+    switch (playid) {
+      case 21:
+        return balls.length > 5 ? 1 : 0
+      case 22:
+      case 26:
+      case 32:
+      case 33:
+      case 34:
+        return getTwoBalls(balls).length
+      case 23:
+      case 27:
+      case 30:
+      case 31:
+        return getThreeBalls(balls).length
+      case 24:
+      case 28:
+      case 35:
+        return getFourBalls(balls).length
+      case 25:
+      case 29:
+        return getFiveBalls(balls).length
+      case 8:
+        return balls.length >= 2 ? 1 : 0
+      default:
+        return balls.length
+    }
+  }
+}
+
+const CalcObj = new Calc()
+
 //  哎 没钱没文化 不高又不帅  不上进还不成熟稳重 既然连鸡巴都不大一点....这人生....
-export { getTwoBalls, getThreeBalls, getFourBalls, getFiveBalls }
+export { getTwoBalls, getThreeBalls, getFourBalls, getFiveBalls, CalcObj }

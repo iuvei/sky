@@ -1,32 +1,44 @@
 <template>
-  <yd-infinitescroll :callback="_callback" ref="infinitescrollDemo">
-    <yd-list theme="1" slot="list">
+  <yd-infinitescroll :callback="_callback"
+                     ref="infinitescrollDemo">
+    <yd-list theme="1"
+             slot="list"
+             class="yd_list">
       <ul class="left">
         <li class="title">
           <span>期号</span>
         </li>
-        <li v-for="(items, indexs) in list" :key="indexs">{{(items.qishu+'').substr(-4)}}期</li>
+        <li v-for="(items, indexs) in list"
+            :key="indexs">{{(items.qishu+'').substr(-4)}}期</li>
       </ul>
       <ul class="left_number">
         <li class="title">
           <span>开奖号码</span>
         </li>
-        <li v-for="(item,index) in list" :key="index">
+        <li v-for="(item,index) in list"
+            :key="index">
           <!-- <span class="Colorno" v-for="(items,indexs) in item.balls.split('+')" :key="indexs" :class="[{active: items == ''},`kt${items}`]">
             {{items == '' ? '正在开奖' : items}}
           </span> -->
 
-          <span class="Colorno" v-for="(items,indexs) in item.balls.split('+')" :key="indexs" v-if="item.balls.length > 1">
-            <img :src="require('../../../../img/xync_background/lucky_ball_'+ items +'.png')" alt="图片">
+          <span class="Colorno"
+                v-for="(items,indexs) in item.balls.split('+')"
+                :key="indexs"
+                v-if="item.balls.length > 1">
+            <img :src="require('../../../../img/xync_background/lucky_ball_'+ items +'.png')"
+                 alt="图片">
           </span>
           <span v-else>正在开奖</span>
         </li>
       </ul>
       <div class="right">
         <ul>
-          <li v-for="(item,index) in dataprev" :key="index">{{item.text}}</li>
+          <li v-for="(item,index) in dataprev"
+              :key="index">{{item.text}}</li>
         </ul>
-        <ul class="content" v-for="(items,indexs) in list" :key="indexs">
+        <ul class="content"
+            v-for="(items,indexs) in list"
+            :key="indexs">
           <li>{{items.balls ? ballxyzh((items.balls)).join(''):'-'}}</li>
           <li>{{items.balls ? returnState(items.balls).join(''):'-'}}</li>
           <li>{{items.balls ? returnStateds(items.balls).join(''):'-'}}</li>
@@ -38,13 +50,11 @@
     </yd-list>
     <!-- 数据全部加载完毕显示 -->
     <span slot="doneTip">不要在拉了,没有数据啦~~</span>
-    <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+    <img slot="loadingTip"
+         src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
   </yd-infinitescroll>
 </template>
 <script>
-import { trend_get } from "../../../../../api/user";
-import { mapState } from "vuex";
-import axios from "axios";
 export default {
   props: ["indexFlag", "datas"],
   data() {
@@ -82,12 +92,12 @@ export default {
       this.val = val;
     },
     ballxyzh(balls) {
-      let arr = [],
-        _balls = balls;
+      const arr = [];
+      let _balls = balls;
       if (typeof _balls === "string") {
         _balls = balls.split("+");
       }
-      let sum =
+      const sum =
         parseInt(_balls[0]) +
         parseInt(_balls[1]) +
         parseInt(_balls[2]) +
@@ -101,10 +111,10 @@ export default {
     },
     returnState(balls) {
       if (balls) {
-        let sum = (typeof balls === "string" ? balls.split("+") : balls)
+        const sum = (typeof balls === "string" ? balls.split("+") : balls)
           .map(x => parseInt(x))
           .reduce((a, b) => a + b);
-        let arr = [];
+        const arr = [];
         arr.push(sum > 84 ? "大" : "小");
         return arr;
       } else {
@@ -113,10 +123,10 @@ export default {
     },
     returnStateds(balls) {
       if (balls) {
-        let sum = (typeof balls === "string" ? balls.split("+") : balls)
+        const sum = (typeof balls === "string" ? balls.split("+") : balls)
           .map(x => parseInt(x))
           .reduce((a, b) => a + b);
-        let arr = [];
+        const arr = [];
         arr.push(sum % 2 === 0 ? "双" : "单");
         return arr;
       } else {
@@ -125,10 +135,10 @@ export default {
     },
     returnStatewdx(balls) {
       if (balls) {
-        let sum = (typeof balls === "string" ? balls.split("+") : balls)
+        const sum = (typeof balls === "string" ? balls.split("+") : balls)
           .map(x => parseInt(x))
           .reduce((a, b) => a + b);
-        let arr = [],
+        const arr = [],
           w = sum + "",
           wdx = parseInt(w[w.length - 1], 10);
         arr.push(wdx > 4 ? "大" : "小");
@@ -138,12 +148,12 @@ export default {
       }
     },
     ballxylh(balls) {
-      let arr = [],
-        _balls = balls;
+      const arr = [];
+      let _balls = balls;
       if (typeof _balls === "string") {
         _balls = balls.split("+");
       }
-      let sumw = parseInt(_balls[0]),
+      const sumw = parseInt(_balls[0]),
         suma = parseInt(_balls[7]);
       arr.push(sumw > suma ? "龙" : "虎");
       return arr;
@@ -181,17 +191,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "~css/resources.scss";
-.yd-list {
+.yd_list {
   overflow: hidden;
   margin: 0;
   padding: 0;
   .left {
     float: left;
     list-style: none;
+    width: 16%;
     li {
-      width: poTorem(65px);
+      width: 100%;
       height: poTorem(35px);
-      font-size: poTorem(14px);
+      font-size: 0.9rem;
       line-height: poTorem(35px);
       color: rgb(103, 99, 99);
       text-align: center;
@@ -220,10 +231,11 @@ export default {
     float: left;
     list-style: none;
     overflow: auto;
+    width: 52%;
     li {
-      width: poTorem(224px);
+      width: 100%;
       height: poTorem(35px);
-      font-size: poTorem(14px);
+      font-size: 0.9rem;
       line-height: poTorem(35px);
       color: rgb(103, 99, 99);
       text-align: center;
@@ -244,7 +256,6 @@ export default {
       border-right: poTorem(1px) solid rgb(221, 221, 221);
       span {
         display: inline-block;
-        width: poTorem(150px);
         line-height: poTorem(35px);
         &:first-child {
           align-self: flex-end;
@@ -257,16 +268,16 @@ export default {
   }
   .right {
     float: right;
-    width: poTorem(125px);
     overflow: auto;
+    width: 32%;
     ul {
       @include between;
-      width: poTorem(325px);
+      width: 170%;
       li {
-        flex: 0 0 poTorem(65px);
+        flex: 1;
         text-align: center;
         height: poTorem(35px);
-        font-size: poTorem(14px);
+        font-size: 0.9rem;
         line-height: poTorem(35px);
         color: #666;
         border-top: poTorem(1px) solid rgb(221, 221, 221);

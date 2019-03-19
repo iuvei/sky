@@ -1,11 +1,17 @@
 <template>
   <div class="gettingRecord_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="main_content">
       <div class="hasContent">
         <yd-accordion accordion>
-          <yd-accordion-item title="本月" open icon  @click.native="getData(0)">
-            <div class="info" v-for="(item, key) in thisMonth" :key="key">
+          <yd-accordion-item title="本月"
+                             open
+                             icon
+                             @click.native="getData(0)">
+            <div class="info"
+                 v-for="(item, key) in thisMonth"
+                 :key="key">
               <div class="left">
                 <p>累计签到{{item.sign_days}}天奖励</p>
                 <p :style="item.status==='未领取'?'color:#E73A42':''">{{item.status}}</p>
@@ -18,8 +24,11 @@
               </div>
             </div>
           </yd-accordion-item>
-          <yd-accordion-item :title="SectionToChinese(new Date().getMonth()) + '月'" @click.native="getData(1)">
-            <div class="info" v-for="(item, key) in upMonth" :key="key">
+          <yd-accordion-item :title="SectionToChinese(new Date().getMonth()) + '月'"
+                             @click.native="getData(1)">
+            <div class="info"
+                 v-for="(item, key) in upMonth"
+                 :key="key">
               <div class="left">
                 <p>累计签到{{item.sign_days}}天奖励</p>
                 <p :style="item.status==='未领取'?'color:#E73A42':''">{{item.status}}</p>
@@ -32,8 +41,11 @@
               </div>
             </div>
           </yd-accordion-item>
-          <yd-accordion-item :title="SectionToChinese(new Date().getMonth()-1) + '月'" @click.native="getData(2)">
-            <div class="info" v-for="(item, key) in lastMonth" :key="key">
+          <yd-accordion-item :title="SectionToChinese(new Date().getMonth()-1) + '月'"
+                             @click.native="getData(2)">
+            <div class="info"
+                 v-for="(item, key) in lastMonth"
+                 :key="key">
               <div class="left">
                 <p>累计签到{{item.sign_days}}天奖励</p>
                 <p :style="item.status==='未领取'?'color:#E73A42':''">{{item.status}}</p>
@@ -52,56 +64,68 @@
   </div>
 </template>
 <script>
-import publicHead from '../moreService/publicHead'
+import publicHead from "../moreService/publicHead";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: '领取记录',
+      funcName: "领取记录",
       thisMonth: [],
       upMonth: [],
       lastMonth: [],
-      gettingState: [],
-    }
+      gettingState: []
+    };
   },
   mounted() {
-    this.getData(0)
+    this.getData(0);
   },
   methods: {
-    getData (n) {
-      this.$dialog.loading.open(' ')
-      this.$ajax('request', {
-        ac: 'UserSignAwardLog',
+    getData(n) {
+      this.$dialog.loading.open(" ");
+      this.$ajax("request", {
+        ac: "UserSignAwardLog",
         date: n
       }).then(res => {
-        if(n === 0) {
-          this.thisMonth = res
-        } else if(n === 1) {
-          this.upMonth = res
+        if (n === 0) {
+          this.thisMonth = res;
+        } else if (n === 1) {
+          this.upMonth = res;
         } else if (n === 2) {
-          this.lastMonth = res
+          this.lastMonth = res;
         }
-        this.gettingState = res.box
-        this.$dialog.loading.close()
-      })
+        this.gettingState = res.box;
+        this.$dialog.loading.close();
+      });
     },
-    SectionToChinese(section){
-      let chnNumChar = ["零","一","二","三","四","五","六","七","八","九"];
-      let chnUnitSection = ["","万","亿","万亿","亿亿"];
-      let chnUnitChar = ["","十","百","千"];
-      let strIns = '', chnStr = '';
+    SectionToChinese(section) {
+      const chnNumChar = [
+        "零",
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六",
+        "七",
+        "八",
+        "九"
+      ];
+      // const chnUnitSection = ["", "万", "亿", "万亿", "亿亿"];
+      const chnUnitChar = ["", "十", "百", "千"];
+      let strIns = "",
+        chnStr = "";
       let unitPos = 0;
       let zero = true;
-      while(section > 0){
-        let v = section % 10;
-        if(v === 0){
-          if(!zero){
+      while (section > 0) {
+        const v = section % 10;
+        if (v === 0) {
+          if (!zero) {
             zero = true;
             chnStr = chnNumChar[v] + chnStr;
           }
-        }else{
+        } else {
           zero = false;
           strIns = chnNumChar[v];
           strIns += chnUnitChar[unitPos];
@@ -113,7 +137,7 @@ export default {
       return chnStr;
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
@@ -141,8 +165,8 @@ export default {
       .info {
         width: 100%;
         height: 3.5rem;
-        border-bottom: 1px solid rgb(229,229,229);
-        &:last-child{
+        border-bottom: 1px solid rgb(229, 229, 229);
+        &:last-child {
           border-bottom: none;
         }
       }

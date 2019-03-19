@@ -1,5 +1,7 @@
 <template>
-  <footer class="picking" :class="{fadeInUp:allPlayFooter}" v-show="allPlayFooter">
+  <footer class="picking"
+          :class="{fadeInUp:allPlayFooter}"
+          v-show="allPlayFooter">
     <div v-if="gameType === 3 && zhgg_preview">
       <div class="picking-active">
         <div class="picking-active-money">
@@ -7,7 +9,8 @@
           <span class="value">@{{getPl}}</span>
           <span>{{tip}}</span>
         </div>
-        <div class="picking-active-submit" @click="previewClick">下一步</div>
+        <div class="picking-active-submit"
+             @click="previewClick">下一步</div>
       </div>
     </div>
     <div v-else>
@@ -18,29 +21,36 @@
           <span class="value">@{{getPl}}</span>
         </div>
         <div>
-          <AppCheckbox :value='is_better' @change="changeCheckbox" onColor="#313131" offColor="#7d7d7d">
-            <span slot class="label">自动接受较佳赔率</span>
+          <AppCheckbox :value='is_better'
+                       @change="changeCheckbox"
+                       onColor="#313131"
+                       offColor="#7d7d7d">
+            <span slot
+                  class="label">自动接受较佳赔率</span>
           </AppCheckbox>
         </div>
       </div>
       <!-- 投注 -->
       <div class="picking-active">
         <div class="picking-active-money">
-          <input type="number" v-model.number="money" @input="updateMoney" @click="input_focus">
+          <input type="number"
+                 v-model.number="money"
+                 @input="updateMoney"
+                 @click="input_focus">
           <span>
             元，可赢
             <span class="money">{{win}}</span>
             元
           </span>
         </div>
-        <div class="picking-active-submit" @click="bettingClick">下注</div>
+        <div class="picking-active-submit"
+             @click="bettingClick">下注</div>
       </div>
     </div>
   </footer>
 </template>
 
 <script>
-import reduce from "lodash/reduce";
 import debounce from "lodash/debounce";
 import { mapState, mapActions, mapGetters } from "vuex";
 const wangfas = ["HC", "HHC", "GL", "HGL"];
@@ -51,7 +61,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters("football", ["getPl", 'getAllPlaySelected']),
+    ...mapGetters("football", ["getPl", "getAllPlaySelected"]),
     ...mapState("football", [
       "is_better",
       "money",
@@ -62,7 +72,7 @@ export default {
       "zhgg_preview"
     ]),
     allPlayFooter() {
-      let show = this.getAllPlaySelected && this.bet_data.length;
+      const show = this.getAllPlaySelected && this.bet_data.length;
       return show;
     },
     tip() {
@@ -75,7 +85,7 @@ export default {
     },
     win() {
       let bet_pl = this.getPl;
-      let wanfa = (this.bet_data[0] && this.bet_data[0].play_method) || "";
+      const wanfa = (this.bet_data[0] && this.bet_data[0].play_method) || "";
       if (!wangfas.includes(wanfa)) {
         bet_pl = bet_pl - 1;
       }
@@ -102,7 +112,7 @@ export default {
       target.value = "";
     },
     updateMoney({ target }) {
-      let money = Math.round(target.value * 1) || "";
+      const money = Math.round(target.value * 1) || "";
       target.value = money;
       this.modifyFootballField({ money });
     },
@@ -110,17 +120,18 @@ export default {
       this.modifyFootballField({ is_better: val });
     },
     previewClick() {
-      if (this.bet_txt < 3 || this.bet_txt > 10)
+      if (this.bet_txt < 3 || this.bet_txt > 10) {
         return this.$dialog.toast({
           mes: "不符合串关要求"
         });
+      }
 
       this.queryComputed(["reset"]);
       this.modifyFootballField({ zhgg_preview: false });
       this.$router.push({ name: "zhggPreview" });
     },
     bettingClick: debounce(async function() {
-      let res = await this.betting();
+      const res = await this.betting();
       if (res && res.id_list && res.id_list.length > 0) {
         this.$dialog.toast({
           mes: "下注成功！",
@@ -128,7 +139,7 @@ export default {
           timeout: 1000
         });
 
-        let obj = {
+        const obj = {
           money: 2,
           bet_data: [],
           is_better: true

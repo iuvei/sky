@@ -60,8 +60,8 @@ export default {
     border-bottom: solid poTorem(1px) #d2d2d2;
   }
   .active {
-    color: #ff7c34;
-    border-bottom: 1px solid #ff7c34;
+    color: $mainColor;
+    border-bottom: 1px solid $mainColor;
   }
 }
 </style>

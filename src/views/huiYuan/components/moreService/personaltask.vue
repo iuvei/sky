@@ -1,8 +1,12 @@
 <template>
   <div class="personaltask_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="task">
-      <div class="item" v-for="(i,key) in data" :key="key"  @click="tofulfil(i.tag,i.status)">
+      <div class="item"
+           v-for="(i,key) in data"
+           :key="key"
+           @click="tofulfil(i.tag,i.status)">
         <i></i>
         <p>{{i.title}}</p>
         <p>+{{i.addexp}} 成长值</p>
@@ -60,16 +64,16 @@
   </div>
 </template>
 <script>
-import publicHead from './publicHead'
-import { mapState, mapActions, mapMutations } from "vuex";
+import publicHead from "./publicHead";
+import { mapState } from "vuex";
 export default {
-  components : {
+  components: {
     publicHead
   },
   computed: {
     ...mapState({
-      userinfo: state => state.userinfo.accountInfo,
-    }),
+      userinfo: state => state.userinfo.accountInfo
+    })
     // is_tk() {
     //   return this.userinfo.tkpass_ok;
     // },
@@ -97,54 +101,54 @@ export default {
   },
   data() {
     return {
-      funcName: '任务礼包',
-      data:[]
-    }
+      funcName: "任务礼包",
+      data: []
+    };
   },
   activated() {
-    this.getData()
+    this.getData();
   },
   methods: {
     // 用户晋级活动数据
-    getData (){
+    getData() {
       this.$dialog.loading.open(" ");
       this.$ajax("request", {
-        ac: "GetUserEventRiseInfo",
+        ac: "GetUserEventRiseInfo"
       }).then(res => {
-        console.log(res)
-        this.data = res.task_list
+        console.log(res);
+        this.data = res.task_list;
         this.$dialog.loading.close();
       });
     },
-    tofulfil(tag,i){
-      if(i == 1) {
-        return
+    tofulfil(tag, i) {
+      if (i == 1) {
+        return;
       }
-      if(tag == 'sign'){
-        this.$router.push('/moreService/signIn')
-      }else if(tag == 'realname'){
-        this.$router.push('/moreService/correctRealName')
-      }else if(tag == 'wechat'){
-        this.$router.push('/moreService/bindingWechat')
-      }else if(tag == 'qq'){
-        this.$router.push('/moreService/bindingQQ')
-      }else if(tag == 'email'){
-        this.$router.push('/moreService/bindingEmail')
-      }else if(tag == 'question'){
-        this.$router.push('/moreService/correctQuestion')
-      }else if(tag == 'bank'){
-        this.$router.push('/moreService/bankcardManage')
-      } else if(tag == 'phone'){
-        this.$router.push('/moreService/bindingCellphone')
+      if (tag == "sign") {
+        this.$router.push("/moreService/signIn");
+      } else if (tag == "realname") {
+        this.$router.push("/moreService/correctRealName");
+      } else if (tag == "wechat") {
+        this.$router.push("/moreService/bindingWechat");
+      } else if (tag == "qq") {
+        this.$router.push("/moreService/bindingQQ");
+      } else if (tag == "email") {
+        this.$router.push("/moreService/bindingEmail");
+      } else if (tag == "question") {
+        this.$router.push("/moreService/correctQuestion");
+      } else if (tag == "bank") {
+        this.$router.push("/moreService/bankcardManage");
+      } else if (tag == "phone") {
+        this.$router.push("/moreService/bindingCellphone");
       }
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
-.personaltask_main_body{
-  background-color: #F5F5F5;
+.personaltask_main_body {
+  background-color: #f5f5f5;
   .task {
     padding-left: poTorem(20px);
     background-color: #fff;
@@ -167,7 +171,7 @@ export default {
         display: inline-block;
         width: poTorem(25px);
         height: poTorem(25px);
-        background: url('../../../../img/grade_gift.png') no-repeat;
+        background: url("../../../../img/grade_gift.png") no-repeat;
         background-size: 100%;
         position: absolute;
         top: 50%;
@@ -187,9 +191,9 @@ export default {
         transform: translateY(-50%);
         border-radius: poTorem(5px);
       }
-      p{
+      p {
         line-height: poTorem(25px);
-        &:nth-child(3){
+        &:nth-child(3) {
           color: #959595;
         }
       }

@@ -3,18 +3,20 @@
     <FootballHeader title='详情'> </FootballHeader>
     <div class="details">
       <div class="icon">
-        <img src="../../../img/football/football_icon.png" alt="">
+        <img :src="pageData.icon"
+             alt="">
       </div>
       <div class="info">
         <p>{{pageData.sport_key==='FT'?'足球':pageData.sport_key==='BK'?'篮球':pageData.sport_key==='TN'?'网球':pageData.sport_key==='BS'?'网球':'排球'}}
-          <span  :class="pageData.status===0?'orange':pageData.status===1?'green':pageData.status===2?'red':''">{{(pageData.win_price || 0).toFixed(2)}}元</span>
+          <span :class="allData.status===0?'orange':allData.status===1?'green':allData.status===2?'red':''">{{(pageData.win_price || 0).toFixed(2)}}元</span>
         </p>
         <p>普通投注
-          <span :class="pageData.status===0?'orange':pageData.status===1?'green':pageData.status===2?'red':''">{{pageData.status===0?'待开奖':pageData.status===1?'已中奖':pageData.status===2?'未中奖':pageData.status===3?'和局':pageData.status===4?'已撤单':'已结束'}}</span>
+          <span :class="allData.status===0?'orange':allData.status===1?'green':allData.status===2?'red':''">{{allData.status===0?'待开奖':allData.status===1?'已中奖':allData.status===2?'未中奖':allData.status===3?'和局':allData.status===4?'已撤单':allData.status==5?'危险球判定中':'危险球撤单'}}</span>
         </p>
       </div>
     </div>
-    <div class="details_info" v-if="allData.game_type == 3">
+    <div class="details_info other-block"
+         v-if="allData.game_type == 3">
       <p class="title_word">订单内容</p>
       <div class="tag">
         <p>订单号</p>
@@ -26,21 +28,27 @@
         <p>{{allData.betslip_id}}</p>
         <p>{{(pageData.price || 0).toFixed(2)}}元</p>
         <p>{{allData.bet_info.length}}串1</p>
-        <p>{{date}}</p>
+        <p>{{getTime(pageData.bet_time)}}</p>
       </div>
-      <p class="title_word" style="margin:1.25rem 0">我的投注</p>
+      <p class="title_word"
+         style="margin:1.25rem 0">我的投注</p>
       <div class="betting">
-        <div class="bet_info" v-for="(item,key) in allData.bet_info" :key="key">
+        <div class="bet_info"
+             v-for="(item,key) in allData.bet_info"
+             :key="key">
           <p>{{item.play_method}}</p>
           <span v-show="item.is_corner ===1">角球数</span>
           <p>{{item.team}}</p>
           <p>{{item.bet_content}}
             <span>@{{item.new_odds}}</span>
+            <i :class="item.win_status===0?'green':item.win_status===1?'green':item.win_status===2?'red':item.win_status===3?'red':'orange'">{{item.win_status===0?'全赢':item.win_status===1?'赢一半':item.win_status===2?'输一半':item.win_status===3?'全输':item.win_status===4?'和局':'待开奖'}}</i>
           </p>
+          <p>{{'开赛时间 '+getTime(item.begin_time)}}</p>
         </div>
       </div>
     </div>
-    <div class="details_info" v-else>
+    <div class="details_info other-block"
+         v-else>
       <p class="title_word">订单内容</p>
       <div class="tag">
         <p>订单号</p>
@@ -64,9 +72,10 @@
         <p>单关</p>
         <p>{{pageData.HTG}}</p>
         <p>{{pageData.TG}}</p>
-        <p>{{date}}</p>
+        <p>{{getTime(pageData.bet_time)}}</p>
       </div>
-      <p class="title_word" style="margin:1.25rem 0">我的投注</p>
+      <p class="title_word"
+         style="margin:1.25rem 0">我的投注</p>
       <div class="betting">
         <div class="bet_info">
           <p>{{pageData.play_method}}</p>
@@ -75,6 +84,7 @@
           <p>{{pageData.bet_content}}
             <span>@{{pageData.new_odds}}</span>
           </p>
+          <p>{{'开赛时间 '+getTime(pageData.begin_time)}}</p>
         </div>
       </div>
     </div>
@@ -88,32 +98,46 @@ export default {
     return {
       funcName: "详情",
       allData: {
-        bet_info:[]
+        bet_info: []
       },
       recordTime: "",
-      date:''
+      date: ""
     };
   },
-  computed:{
-    pageData(){
-      return  this.allData.bet_info[0]|| {}
+  computed: {
+    pageData() {
+      return this.allData.bet_info[0] || {};
     }
   },
   activated() {
-    this.allData = this.$route.params.item
-    let timestamp = this.allData.bet_info[0].bet_time
-    let assignTime = new Date(timestamp),
+    this.allData = this.$route.params.item;
+    console.log(this.allData);
+  },
+  methods: {
+    getTime(time) {
+      const assignTime = new Date(time),
         y = assignTime.getFullYear(),
         M = assignTime.getMonth() + 1,
         d = assignTime.getDate(),
         h = assignTime.getHours(),
         m = assignTime.getMinutes(),
         s = assignTime.getSeconds(),
-        add0 = (m) => {
-          return m > 9 ? m : '0' + m
-        }
-    this.date = y + '-' + add0(M) + '-' + add0(d) + " " + add0(h) + ":" + add0(m) + ":" + add0(s)
-  },
+        add0 = m => m > 9 ? m : "0" + m;
+      return (
+        y +
+        "-" +
+        add0(M) +
+        "-" +
+        add0(d) +
+        " " +
+        add0(h) +
+        ":" +
+        add0(m) +
+        ":" +
+        add0(s)
+      );
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -151,7 +175,7 @@ export default {
     padding: poTorem(20px);
     .title_word {
       padding-left: poTorem(5px);
-      border-left: 0.4rem solid #ff7c34;
+      border-left: 0.4rem solid $mainColor;
       font-size: poTorem(20px);
       color: #313131;
     }
@@ -213,24 +237,27 @@ export default {
         padding: 0.5rem 0;
         position: relative;
         border-bottom: 1px dashed #ccc;
-        &:last-child{
+        &:last-child {
           border-bottom: none;
         }
         p {
           font-size: 1rem;
           line-height: 2rem;
-          &:first-child{
+          &:first-child {
             display: inline-block;
           }
           span {
             color: #e33939;
           }
+          i {
+            float: right;
+          }
         }
-        >span{
+        > span {
           display: inline-block;
           font-size: 0.9rem;
           line-height: 1.5rem;
-          background-color: #ff7c34;
+          background-color: $mainColor;
           color: #fff;
           border-radius: 0.2rem;
           padding: 0 0.5rem;
@@ -239,13 +266,13 @@ export default {
     }
   }
   .orange {
-    color: #ff7c34
+    color: $mainColor;
   }
   .green {
-    color: green
+    color: green;
   }
   .red {
-    color: red
+    color: red;
   }
 }
 </style>

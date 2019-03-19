@@ -1,60 +1,18 @@
 <template>
   <!-- 投注界面 -->
   <div class="footballMulti-betting">
-    <!-- {{hhcData}}<br> {{hglData}}
+    <!-- {{hcData}}<br> {{glData}}
     <br>
     <br>{{selectedKey}} -->
 
-    <!-- 半场-->
-    <div class="one-game one-game-single" v-if="Object.keys(hhcData).length || Object.keys(hglData).length">
-      <yd-flexbox class="wanfa-title">
-        <div class="orange">{{game.team_score}}</div>
-        <yd-flexbox-item>
-          <span class="orange">上半场</span>
-          {{game.rolling_time || moment(game.begin_time)}}
-        </yd-flexbox-item>
-        <div class="fixed-width">让球</div>
-        <div class="fixed-width">大/小</div>
-      </yd-flexbox>
-      <yd-flexbox>
-        <yd-flexbox-item class="vhcenter">
-          <div class="team">{{game.h}} {{game.is_neutral?'[中]':'[主]'}}</div>
-          <div class="team">{{game.v}}</div>
-        </yd-flexbox-item>
-        <div class="fixed-width">
-          <!-- 让球 -->
-          <div :class="['is-betting', 'column',{selected: selectedKey.includes([gameKey+'-'+game.schedule_id,'HHC',idx,el.k].join('||'))}]" v-for="(el,idx) in hhcData" :key="el" @click="selectBet('HHC',idx,el.k)">
-            <p class="one-color-green" v-if="el.k && el.k.includes('-')">{{el.k.replace('-','')}}</p>
-            <p>{{el.p || '/'}}</p>
-            <i class="pl-float" v-one-html="el.p"></i>
-          </div>
-        </div>
-        <div class="fixed-width">
-          <!-- 大小 -->
-          <yd-flexbox :class="['is-betting',{selected: selectedKey.includes([gameKey+'-'+game.schedule_id,'HGL',idx,el.k].join('||'))}]" v-for="(el,idx) in hglData" :key="el" @click.native="selectBet('HGL',idx,el.k)">
-            <p style="padding-left:0.2rem;">{{idx === 'OV'?'大':'小'}}</p>
-            <yd-flexbox-item>
-              <p class="one-color-green">{{el.k}}</p>
-              <p>{{el.p || '/'}}</p>
-            </yd-flexbox-item>
-
-            <i class="pl-float" v-one-html="el.p"></i>
-          </yd-flexbox>
-        </div>
-      </yd-flexbox>
-      <div class="wanfa-title" @click="allGame()">
-        所有玩法
-        <img src="~img/football/more-game.png" alt="" style="width: .8rem;transform: rotateZ(-90deg);">
-      </div>
-    </div>
-
     <!-- 全场 -->
-    <div class="one-game one-game-single" v-if="Object.keys(hcData).length || Object.keys(glData).length">
+    <div class="one-game one-game-single"
+         v-if="hcData.filter(el=>el).length || glData.filter(el=>el).length">
       <yd-flexbox class="wanfa-title">
         <div class="orange">{{game.team_score}}</div>
         <yd-flexbox-item>{{game.rolling_time || moment(game.begin_time)}}</yd-flexbox-item>
-        <div class="fixed-width">让球</div>
-        <div class="fixed-width">大/小</div>
+        <div class="fixed-width">{{sport_id==2003?'独赢':'让球'}}</div>
+        <div class="fixed-width">{{sport_id==2003?'让盘':'大/小'}}</div>
       </yd-flexbox>
       <yd-flexbox>
         <yd-flexbox-item class="vhcenter">
@@ -62,113 +20,179 @@
           <div class="team">{{game.v}}</div>
         </yd-flexbox-item>
         <div class="fixed-width">
-          <!-- 让球 -->
-          <div :class="['is-betting column',{selected: selectedKey.includes([gameKey+'-'+game.schedule_id,'HC',idx,el.k].join('||'))}]" v-for="(el,idx) in hcData" :key="el" @click="selectBet('HC',idx,el.k)">
-            <p class="one-color-green" v-if="el.k && el.k.includes('-')">{{el.k.replace('-','')}}</p>
-            <p>{{el.p || '/'}}</p>
-            <i class="pl-float" v-one-html="el.p"></i>
+          <!-- 让球 独赢-->
+          <div :class="['is-betting column',{'lock-dist-bg': !el || !(el.p*1)},{selected: ifSelected(el, idx, 0)}]"
+               v-for="(el,idx) in hcData"
+               :key="el"
+               @click="selectBet(el, idx, 0)">
+            <template v-if="el && el.p && el.p !='/'">
+              <p class="one-color-green"
+                 v-if="el.k && el.k.includes('-')">{{el.k.replace('-','')}}</p>
+              <p>{{getOdds(el.p)}}</p>
+              <!-- el.p || '/' -->
+              <i class="pl-float"
+                 v-one-html="el.p"></i>
+            </template>
+            <template v-else>
+              <img src="~img/football/lock-dist.png"
+                   style="width: 1.2rem;" />
+            </template>
           </div>
         </div>
         <div class="fixed-width">
-          <!-- 大小 -->
-          <yd-flexbox :class="['is-betting',{selected: selectedKey.includes([gameKey+'-'+game.schedule_id,'GL',idx,el.k].join('||'))}]" v-for="(el,idx) in glData" :key="el" @click.native="selectBet('GL',idx,el.k)">
-            <p style="padding-left:0.2rem;">{{idx === 'OV'?'大':'小'}}</p>
-            <yd-flexbox-item>
-              <p class="one-color-green">{{el.k}}</p>
-              <p>{{el.p || '/'}}</p>
-            </yd-flexbox-item>
-
-            <i class="pl-float" v-one-html="el.p"></i>
+          <!-- 大小 让盘-->
+          <yd-flexbox :class="['is-betting',{'lock-dist-bg': !el || !(el.p*1)},{selected: ifSelected(el, idx, 1)}]"
+                      v-for="(el,idx) in glData"
+                      :key="el"
+                      @click.native="selectBet(el, idx, 1)">
+            <template v-if="el && el.p && el.p !='/'">
+              <p v-if="sport_id!==2003"
+                 style="padding:0 0.2rem;">{{idx === 0 ?'大':'小'}}</p>
+              <yd-flexbox-item>
+                <p class="one-color-green">{{getK(el.k)}}</p>
+                <p>{{getOdds(el.p)}}</p>
+              </yd-flexbox-item>
+              <i class="pl-float"
+                 v-one-html="el.p"></i>
+            </template>
+            <template v-else>
+              <img src="~img/football/lock-dist.png"
+                   style="width: 1.2rem;" />
+            </template>
           </yd-flexbox>
         </div>
       </yd-flexbox>
-      <div class="wanfa-title" @click="allGame()">
-        所有玩法
-        <img src="~img/football/more-game.png" alt="" style="width: .8rem;transform: rotateZ(-90deg);">
+      <div class="wanfa-title"
+           @click="allGame()">
+        <!-- v-if="!isMulti" -->
+        所有玩法（{{game.all_bet_cnt * 1 || 0}}）
+        <img src="~img/football/more-game.png"
+             alt=""
+             style="width: .8rem;transform: rotateZ(-90deg);">
       </div>
     </div>
 
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
-import { playPMs, BTLists, getItem } from './allPlay/allPlay.const.js'
-import dayjs from 'dayjs'
+import { mapActions, mapState } from "vuex";
+// import { playPMs, BTLists, getItem } from './allPlay/allPlay.const.js'
+import dayjs from "dayjs";
 
 export default {
-  name: 'footballMulti_betting',
-  props: ['gameKey', 'game'],
+  name: "footballMulti_betting",
+  props: ["gameKey", "game", "leagueName"],
   data() {
     return {
       // path => bet_data
       // bet_obj:{}
-    }
+    };
   },
   computed: {
-    ...mapState('football', [
-      'money',
-      'sport_id',
-      'gameType',
-      'bet_obj',
-      'multiSelected'
+    ...mapState("football", [
+      "money",
+      "sport_id",
+      // "gameType",
+      "playType",
+      "bet_obj",
+      "multiSelected",
+      "bet_odds"
     ]),
-    hhcData() {
-      return this.game.bet_data.HHC || {}
+    // 综合过关
+    isMulti() {
+      // 旧版是this.gameType === 3
+      return this.playType === 4;
     },
-    hglData() {
-      return this.game.bet_data.HGL || {}
-    },
+    // 让球或独赢
     hcData() {
-      return this.game.bet_data.HC || {}
+      let data = this.game.bet_data.HC || {};
+      data = [data.H && data.H[0], data.V && data.V[0]];
+      if (this.sport_id === 2003) {
+        data = this.winData;
+      }
+      return data;
     },
+    // 大小或让盘
     glData() {
-      return this.game.bet_data.GL || {}
+      let data = this.game.bet_data.GL || {};
+      data = [data.OV && data.OV[0], data.UN && data.UN[0]];
+      if (this.sport_id === 2003) {
+        data = this.shcData;
+      }
+      return data;
+    },
+    // 独赢
+    winData() {
+      const data = this.game.bet_data["1X2"] || ["", ""];
+      data.sort((a, b) => a.k > b.k);
+      return data;
+    },
+    // 让盘
+    shcData() {
+      let data = this.game.bet_data.SHC || {};
+      data = [data.H && data.H[0], data.V && data.V[0]];
+      return data;
+    },
+    palyKeys() {
+      let palyKeys = ["HC", "GL"];
+      if (this.sport_id === 2003) palyKeys = ["1X2", "SHC"];
+      return palyKeys;
     },
     // 选中的投注
     selectedKey: {
       get() {
-        return this.multiSelected
+        return this.multiSelected;
       },
       set(selectedKey) {
         // console.error('selectedKey:',selectedKey)
         // 底部信息
-        let bet_txt = ''
-        if (this.gameType === 3) {
-          bet_txt = selectedKey.length
+        let bet_txt = "";
+        if (this.isMulti) {
+          bet_txt = selectedKey.length;
         } else if (selectedKey[0]) {
-          const path = selectedKey[0].split('||')
-          const arg = path.slice(1, path.length)
-          let data = this.game.bet_data[arg[0]][arg[1]] || {}
+          const path = selectedKey[0].split("||");
+          const arg = path.slice(1, path.length);
+          let data = this.game.bet_data[arg[0]];
+          // 1X2数组结构
+          if (["1X2"].includes(arg[0])) {
+            data = data.filter(el => el.k === arg[1])[0] || {};
+          } else {
+            data = data[arg[1]][0] || {};
+          }
           switch (arg[0]) {
-            case 'HHC':
-            case 'HC':
-              bet_txt = this.game[arg[1].toLowerCase()]
-              if (data.k && data.k.includes('-')) {
-                bet_txt += data.k.replace('-', '')
+            case "HHC":
+            case "HC":
+            case "SHC":
+              bet_txt = this.game[arg[1].toLowerCase()];
+              if (data.k && data.k.includes("-")) {
+                bet_txt += data.k.replace("-", "");
               }
-              break
-            case 'HGL':
-            case 'GL':
-              bet_txt = arg[1] === 'OV' ? '大' : '小'
-              bet_txt += data.k
-              break
+              break;
+            case "HGL":
+            case "GL":
+              bet_txt = arg[1] === "OV" ? "大" : "小";
+              bet_txt += data.k;
+              break;
+            case "1X2":
+              bet_txt = this.game[arg[1].toLowerCase()];
+              break;
           }
         }
 
-        let bet_data = selectedKey.map(el => this.bet_obj[el].bet_data)
+        const bet_data = selectedKey.map(el => this.bet_obj[el].bet_data);
 
-        let params = {
+        const params = {
           allPlay_schedule_id_prefix:
-            this.gameKey + '-' + this.game.schedule_id,
+            this.gameKey + "-" + this.game.schedule_id,
           footer: !!selectedKey.length,
           min_stake: this.game.min_stake,
           max_stake: this.game.max_stake,
           bet_txt,
           bet_data,
           multiSelected: selectedKey
-        }
+        };
         // console.error(params);
-        this.modifyFootballField(params)
+        this.modifyFootballField(params);
       }
     }
   },
@@ -176,13 +200,13 @@ export default {
     oneHtml: {
       // bind(el, { value, oldValue }, vnode) {
       // },
-      update(el, { value, oldValue }, vnode) {
-        let className = el.classList
-        className.remove('p_up', 'p_down')
+      update(el, { value, oldValue }) {
+        const className = el.classList;
+        className.remove("p_up", "p_down");
         if (value && oldValue && value > oldValue) {
-          className.add('pl-up')
+          className.add("pl-up");
         } else if (value && oldValue && value < oldValue) {
-          className.add('pl-down')
+          className.add("pl-down");
         }
       }
     }
@@ -190,9 +214,52 @@ export default {
   activated() {},
   deactivated() {},
   methods: {
-    ...mapActions('football', ['modifyFootballField']),
+    ...mapActions("football", ["modifyFootballField"]),
+    // 处理让盘里的k值
+    getK(k) {
+      if (this.sport_id === 2003) {
+        if (k.includes("-")) return k.replace("-", "");
+        return "";
+      }
+      return k;
+    },
+    // if mt == HC or GL
+    // if hk > 1 eur = hk+1
+    // 欧洲盘处理
+    getOdds(p) {
+      if (this.bet_odds == 1 && this.playType === 0 && p > 1) {
+        return (p * 1 + 1).toFixed(2);
+      }
+      return p || "/";
+    },
+    ifSelected(data, idx, index) {
+      // el && selectedKey.includes([gameKey+'-'+game.schedule_id,'HC',idx&&'V'||'H',el.k].join('||'))
+      // el && selectedKey.includes([gameKey+'-'+game.schedule_id,'GL',idx&&'UN'||'OV',el.k].join('||'))
+      if (!data || !(data.p * 1)) return;
+      const palyKey = this.palyKeys[index];
+      let teamKey = "";
+      switch (palyKey) {
+        case "HC":
+        case "SHC":
+          teamKey = (idx && "V") || "H";
+          break;
+        case "GL":
+          teamKey = (idx && "UN") || "OV";
+          break;
+        case "1X2":
+          teamKey = this.winData[idx].k;
+          break;
+      }
+      let path = [this.gameKey + "-" + this.game.schedule_id, palyKey, teamKey];
+      if (teamKey !== data.k) {
+        path = [...path, data.k];
+      }
+      path = path.join("||");
+      const selected = data && this.selectedKey.includes(path);
+      return selected;
+    },
     moment(t) {
-      return dayjs(t).format('MM/DD HH:mm')
+      return dayjs(t).format("MM/DD HH:mm");
     },
     allGame() {
       // return this.$dialog.toast({
@@ -203,38 +270,64 @@ export default {
         this.gameKey + "-" + this.game.schedule_id,
         this.game
       ];
+      allPlayTeam.league_name = this.leagueName;
       this.modifyFootballField({ allPlay_schedule_id_prefix, allPlayTeam });
       this.$router.push("/football/allPlay");
     },
-    selectBet(...arg) {
-      // console.error(arg);
-      const data = this.game.bet_data[arg[0]][arg[1]]
-      const schedule_id = this.game.schedule_id
-      // console.error(schedule_id);
-      const path = this.gameKey + '-' + schedule_id + '||' + arg.join('||')
-      let select = data.p > 0
-      if (!select) {
-        return this.$dialog.toast({
-          mes: '赔率异常'
-        })
+    selectBet(data, idx, index) {
+      if (!data || !(data.p * 1)) return;
+      const palyKey = this.palyKeys[index];
+      let teamKey = "";
+      let arg = [];
+      switch (palyKey) {
+        case "HC":
+        case "SHC":
+          teamKey = (idx && "V") || "H";
+          break;
+        case "GL":
+          teamKey = (idx && "UN") || "OV";
+          break;
+        case "1X2":
+          teamKey = this.winData[idx].k;
+          break;
       }
+      arg = [palyKey, teamKey];
+      if (teamKey !== data.k) {
+        arg = [...arg, data.k];
+      }
+
+      // 'HC',idx&&'V'||'H', el&&el.k|| 'nodata'
+      // 'GL',idx&&'UN'||'OV',el&&el.k|| 'nodata'
+      // console.error(arg);
+      // const data = this.game.bet_data[arg[0]][arg[1]][0]
+      const schedule_id = this.game.schedule_id;
+      // console.error(schedule_id);
+      const path = this.gameKey + "-" + schedule_id + "||" + arg.join("||");
+      // let select = data.p > 0
+      // if (!select) {
+      //   return this.$dialog.toast({
+      //     mes: '赔率异常'
+      //   })
+      // }
       // 同一场赛事只能投一注
-      let selectedKey = JSON.parse(JSON.stringify(this.multiSelected))
-      let idx = selectedKey.findIndex(el => el.includes(schedule_id))
+      let selectedKey = JSON.parse(JSON.stringify(this.multiSelected));
+      const idx_2 = selectedKey.findIndex(el => el.includes(schedule_id));
       // 综合过关
-      if (this.gameType === 3) {
-        if (idx !== -1 && selectedKey[idx] === path) selectedKey.splice(idx, 1)
-        else if (idx !== -1 && selectedKey[idx] !== path) {
-          selectedKey.splice(idx, 1, path)
-        } else selectedKey.push(path)
+      if (this.isMulti) {
+        if (idx_2 !== -1 && selectedKey[idx_2] === path) {
+          selectedKey.splice(idx_2, 1);
+        } else if (idx_2 !== -1 && selectedKey[idx_2] !== path) {
+          selectedKey.splice(idx_2, 1, path);
+        } else selectedKey.push(path);
       } else {
-        selectedKey = idx !== -1 && selectedKey[idx] === path ? [] : [path]
+        selectedKey = idx_2 !== -1 && selectedKey[idx_2] === path ? [] : [path];
       }
 
       // 先保存当前选中的下注信息
-      let bet_obj = JSON.parse(JSON.stringify(this.bet_obj))
-      bet_obj[path] = {}
+      const bet_obj = JSON.parse(JSON.stringify(this.bet_obj));
+      bet_obj[path] = {};
       bet_obj[path].bet_data = {
+        bet_odds: (this.playType === 0 && this.bet_odds) || 0,
         history_id: this.game.history_id,
         k: data.k,
         p: data.p,
@@ -242,28 +335,32 @@ export default {
         price: this.money,
         schedule_id: this.game.schedule_id,
         sport_id: this.sport_id,
-        team: arg[1],
+        team: arg[1] === data.k ? "" : arg[1],
         team_score: this.game.team_score
-      }
-      this.modifyFootballField({ bet_obj })
+      };
+      this.modifyFootballField({ bet_obj });
 
-      this.selectedKey = selectedKey
+      this.selectedKey = selectedKey;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
+@import "~css/resources.scss";
 .footballMulti-betting {
   user-select: none;
   text-align: left;
   font-size: 1rem;
   // padding: 0 0.7rem 0.7rem;
-  &:first-of-type {
-    padding-top: 0.7rem;
+  // &:first-of-type {
+  //   padding-top: 0.7rem;
+  // }
+  .lock-dist-bg {
+    background-color: #f9f7f6;
   }
   .orange {
-    color: #ff7c34;
+    color: $mainColor;
   }
   .pl-float {
     width: 1rem;
@@ -282,14 +379,17 @@ export default {
     background-image: url(~img/football/p_down.png);
   }
   .is-betting.selected {
-    color: #ef0404;
+    background-color: #ef0404;
+    color: #ffffff;
+    font-weight: 600;
     border-color: #ef0404 !important;
     .one-color-green {
-      color: #ef0404;
+      color: #ffffff;
     }
   }
   .fixed-width {
     width: 6rem;
+    text-align: center;
   }
   .vhcenter {
     display: flex;
@@ -310,6 +410,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 0.2rem;
   }
   .column {
     flex-direction: column;
@@ -321,6 +422,7 @@ export default {
     }
   }
   .one-game {
+    margin-bottom: 0.7rem;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
     .wanfa-title {
@@ -331,6 +433,7 @@ export default {
       background-color: #f5f5f5;
       border-top-left-radius: 0.5rem;
       border-top-right-radius: 0.5rem;
+      text-align: center;
     }
   }
 }

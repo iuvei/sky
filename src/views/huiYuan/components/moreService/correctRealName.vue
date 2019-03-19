@@ -1,20 +1,29 @@
 <template>
   <div class="correctLoginPW_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <!-- <AppHeader :title="funcName" :type='1' :clickRouter='clickRouter'></AppHeader> -->
     <div class="content">
       <yd-cell-group class="form_ipt">
         <yd-cell-item v-show="isShow">
           <span slot="left">旧姓名</span>
-          <input slot="right" type="text" :placeholder="oldName" v-model="oldName1">
+          <input slot="right"
+                 type="text"
+                 :placeholder="oldName"
+                 v-model="oldName1">
         </yd-cell-item>
         <yd-cell-item>
           <span slot="left">{{txt}}</span>
-          <input slot="right" type="text" placeholder="请输入真实的姓名" v-model="newName">
+          <input slot="right"
+                 type="text"
+                 placeholder="请输入真实的姓名"
+                 v-model="newName">
         </yd-cell-item>
       </yd-cell-group>
-      <p class="tips" v-show="isShow">请填写真实的姓名</p>
-      <p class="tips" v-show="!isShow">填写真实的姓名与便于提款验证</p>
+      <p class="tips"
+         v-show="isShow">请填写真实的姓名</p>
+      <p class="tips"
+         v-show="!isShow">填写真实的姓名与便于提款验证</p>
       <p class="btn">
         <button @click="correctName">{{isShow?'立即修改':'确定'}}</button>
       </p>
@@ -26,7 +35,7 @@ import publicHead from "../moreService/publicHead";
 import { mapState } from "vuex";
 export default {
   components: {
-    publicHead,
+    publicHead
   },
   data() {
     return {
@@ -35,13 +44,13 @@ export default {
       oldName1: "",
       newName: "",
       isShow: true,
-      txt: '姓名'
+      txt: "姓名"
     };
   },
   computed: {
     ...mapState({
-      userinfo: state => state.userinfo,
-    }),
+      userinfo: state => state.userinfo
+    })
   },
   methods: {
     clickRouter() {
@@ -56,51 +65,51 @@ export default {
         ac: "updateUserInfo",
         oldname: this.oldName1,
         realname: this.newName,
-        type: 1,
-      }).then(res => {
+        type: 1
+      }).then(() => {
         this.$dialog.alert({ mes: "已经提交过修改真实姓名审核申请!" });
 
         this.$ajax("request", {
           ac: "encodeLogin",
-          code: this.$store.state.userinfo.accountInfo.code,
+          code: this.$store.state.userinfo.accountInfo.code
         }).then(res => {
           console.log(res);
           this.$store.commit("GET_USERINFO", {
             accountInfo: res,
-            isLogin: true,
+            isLogin: true
           });
           this.$router.back();
         });
       });
-    },
+    }
   },
   activated() {
-    this.oldName = ""
-    this.oldName1 = ""
-    this.newName = ""
+    this.oldName = "";
+    this.oldName1 = "";
+    this.newName = "";
     console.log(this.$route);
     this.$dialog.loading.open(" ");
     if (this.userinfo.accountInfo.real_name) {
       this.isShow = true;
-      this.txt = '新的姓名'
+      this.txt = "新的姓名";
       this.oldName = this.userinfo.accountInfo.real_name;
     } else {
       this.isShow = false;
-      this.txt = '姓名'
+      this.txt = "姓名";
       this.funcName = "设置真实姓名";
     }
     this.$dialog.loading.close();
   },
   mounted() {
     console.log(this.$route);
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
 .correctLoginPW_main_body {
   .content {
-    height: poTorem(688px);
+    height: 100%;
     background-color: #eee;
     padding: poTorem(20px);
     .form_ipt {
@@ -123,7 +132,7 @@ export default {
         font-size: poTorem(16px);
         line-height: poTorem(16px);
         color: #fff;
-        background-color: #ff7c34;
+        background-color: $mainColor;
         border-radius: poTorem(5px);
         outline: none;
         border: none;

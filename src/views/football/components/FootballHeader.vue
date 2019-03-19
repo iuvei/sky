@@ -1,44 +1,50 @@
 <template>
   <header class="head">
     <div class="head_con">
-      <div @click="router" class="left">
+      <div @click="router"
+           class="left">
         <div class="icon"></div>
       </div>
 
-      <div class="title" @click="toclickTitle">
-        <i>{{title}}</i>
-        <i class="trangle" v-if="clickTitle"></i>
+      <div class="title"
+           @click="toclickTitle">
+        <i v-if="title">{{title}}</i>
+        <i class="trangle"
+           v-if="clickTitle"></i>
+        <slot name="title"></slot>
       </div>
       <div class="switch">
-        <div v-if="clickCategory" class="cate">
-          <span>
+        <div v-if="clickCategory"
+             class="cate">
+          <span v-if="!hiddenTime">
             <!-- <app-count-down :time="time" :callback="countDownCallback" :click="countDownClick" ref="countDown"></app-count-down> -->
             <FootballTime></FootballTime>
           </span>
           <i @click="clickCategory"></i>
         </div>
         <!-- <div > -->
-        <slot v-else name="right"></slot>
+        <slot v-else
+              name="right"></slot>
         <!-- </div> -->
       </div>
     </div>
   </header>
 </template>
 <script>
-import debounce from 'lodash/debounce'
-import { mapActions, mapState } from 'vuex'
-import FootballTime from './FootballTime'
+import debounce from "lodash/debounce";
+import { mapState } from "vuex";
+import FootballTime from "./FootballTime";
 export default {
-  name: 'footballHeader',
+  name: "footballHeader",
   components: { FootballTime },
-  props: ['clickRouter', 'clickTitle', 'clickCategory', 'title'],
+  props: ["clickRouter", "clickTitle", "clickCategory", "title", "hiddenTime"],
   data() {
-    return {}
+    return {};
   },
   computed: {
-    ...mapState('football', ['gameType', 'playType']),
+    ...mapState("football", ["gameType", "playType"]),
     time() {
-      return this.gameType === 0 ? 30 : 180
+      return this.gameType === 0 ? 30 : 180;
     }
   },
   // watch: {
@@ -59,23 +65,23 @@ export default {
   methods: {
     router() {
       if (this.clickRouter) {
-        this.clickRouter()
-        return
+        this.clickRouter();
+        return;
       }
-      this.$router.go(-1)
+      this.$router.go(-1);
     },
     toclickTitle() {
-      if (this.clickTitle) this.clickTitle()
+      if (this.clickTitle) this.clickTitle();
     },
     countDownCallback: debounce(function() {
-      let countDown = this.$refs.countDown
-      if (!countDown) return
-      countDown.str = countDown.time
-      countDown.run()
-      this.bus.$emit('countDown-click')
+      const countDown = this.$refs.countDown;
+      if (!countDown) return;
+      countDown.str = countDown.time;
+      countDown.run();
+      this.bus.$emit("countDown-click");
     }, 100)
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";
@@ -106,11 +112,15 @@ export default {
       background-size: poTorem(20px) poTorem(20px);
     }
     .title {
+      flex: 1;
       text-align: center;
       font-size: poTorem(16px);
       color: #fff;
       font-weight: bolder;
-      @include center;
+      @include around;
+      .active {
+        color: #fbfb05;
+      }
       i {
         font-size: poTorem(20px);
       }
@@ -119,8 +129,8 @@ export default {
         height: 0px;
         border-bottom: solid poTorem(6px) #ffffff;
         border-right: solid poTorem(6px) #ffffff;
-        border-top: solid poTorem(6px) #ff7c34;
-        border-left: solid poTorem(6px) #ff7c34;
+        border-top: solid poTorem(6px) $mainColor;
+        border-left: solid poTorem(6px) $mainColor;
         margin-left: poTorem(5px);
       }
     }

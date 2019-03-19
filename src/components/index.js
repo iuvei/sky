@@ -5,6 +5,8 @@ import AppModel from './AppModel'
 import AppMenu from './AppMenu'
 import AppEmpty from './AppEmpty'
 import AppCountDown from './AppCountDown'
+import BaseMsgBadge from '../views/chatRoom/message/components/BaseMsg'
+import Throttle from '../js/throttle'
 
 const plugins = [
   AppCheckbox,
@@ -12,7 +14,9 @@ const plugins = [
   AppModel,
   AppMenu,
   AppCountDown,
-  AppEmpty
+  AppEmpty,
+  BaseMsgBadge
 ]
 
 plugins.forEach(plugin => Vue.use(plugin))
+Vue.prototype.$Throttle = new Throttle()

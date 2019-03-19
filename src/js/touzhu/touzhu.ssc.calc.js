@@ -645,8 +645,14 @@ function Calc_Zhushu_Obj() {
     for (let i = 0; i < ba.length; i++) {
       const res = ba[i].split(/[\|\/]/)
       if (res.length === 3 && checkArrIs(res, /^([0-9]|[0][0-9])$/)) {
-        const a = res[0] * 1, b = res[1] * 1, c = res[2] * 1
-        if ((a === b && a !== c) || (a === c && a !== b) || (b === c && a !== b)) {
+        const a = res[0] * 1,
+          b = res[1] * 1,
+          c = res[2] * 1
+        if (
+          (a === b && a !== c) ||
+          (a === c && a !== b) ||
+          (b === c && a !== b)
+        ) {
           zhushu++
         }
       }
@@ -684,7 +690,11 @@ function Calc_Zhushu_Obj() {
     for (let i = 0; i < ba.length; i++) {
       const res = ba[i].split(/[\|\/]/)
       if (res.length === 3 && checkArrIs(res, /^([0-9]|[0][0-9])$/)) {
-        if (res[0] * 1 !== res[1] * 1 && res[1] * 1 !== res[2] * 1 && res[0] * 1 !== res[2] * 1) {
+        if (
+          res[0] * 1 !== res[1] * 1 &&
+          res[1] * 1 !== res[2] * 1 &&
+          res[0] * 1 !== res[2] * 1
+        ) {
           zhushu++
         }
       }
@@ -912,7 +922,11 @@ function Calc_Zhushu_Obj() {
     let zhushu = 0
     for (let i = 0; i < ba.length; i++) {
       const res = ba[i].split(/[\|\/]/)
-      if (res.length === 2 && checkArrIs(res, /^([0-9]|[0][0-9])$/) && res[0] * 1 !== res[1] * 1) {
+      if (
+        res.length === 2 &&
+        checkArrIs(res, /^([0-9]|[0][0-9])$/) &&
+        res[0] * 1 !== res[1] * 1
+      ) {
         zhushu++
       }
     }
@@ -1434,8 +1448,14 @@ function Calc_Zhushu_Obj() {
     for (let i = 1; i < ba.length; i++) {
       const res = ba[i].split(/[\|\/]/)
       if (res.length === 3 && checkArrIs(res, /^([0-9]|[0][0-9])$/)) {
-        const a = res[0] * 1, b = res[1] * 1, c = res[2] * 1
-        if ((a === b && a !== c) || (a === c && a !== b) || (b === c && a !== b)) {
+        const a = res[0] * 1,
+          b = res[1] * 1,
+          c = res[2] * 1
+        if (
+          (a === b && a !== c) ||
+          (a === c && a !== b) ||
+          (b === c && a !== b)
+        ) {
           zhushu++
         }
       }
@@ -1940,7 +1960,166 @@ const getRenderTypeByPlayID = playid => {
   }
 }
 
+const calc = new Calc_Zhushu_Obj()
+
+const CalcObj = new Map([
+  [1, { name: '直选复式', wanfa: '五星直选复式', clacFn: calc.calc_5x_zxfs }],
+  [2, { name: '直选单式', wanfa: '五星直选单式', clacFn: calc.calc_5x_zxds }],
+  [3, { name: '直选复式', wanfa: '四星直选复式', clacFn: calc.calc_4x_zxfs }],
+  [4, { name: '直选单式', wanfa: '四星直选单式', clacFn: calc.calc_4x_zxds }],
+  [5, { name: '后三复选', wanfa: '后三组选复式', clacFn: calc.calc_h3_zxfs }],
+  [6, { name: 'XX单式', fanfa: 'XX单式', clacFn: calc.calc_h3_zxds }],
+  [7, { name: '后三组合', wanfa: '后三组合', clacFn: calc.calc_h3_zh }],
+  [8, { name: '直选和值', wanfa: '后三直选和值', clacFn: calc.calc_h3_zxhz }],
+  [9, { name: '直选跨度', wanfa: '后三直选跨度', clacFn: calc.calc_h3_zxkd }],
+  [10, { name: '组三复式', wanfa: '后三组三复式', clacFn: calc.calc_h3_z3fs }],
+  [11, { name: 'XX单式', wanfa: 'XX单式', clacFn: calc.calc_h3_z3ds }],
+  [12, { name: '组六复式', wanfa: '后三组六复式', clacFn: calc.calc_h3_z6fs }],
+  [13, { name: '组六单式', wanfa: '后三组六单式', clacFn: calc.calc_h3_z6ds }],
+  [16, { name: '组选包胆', wanfa: '后三组选包胆', clacFn: calc.calc_h3_zuxbd }],
+  [17, { name: '和值尾数', wanfa: '后三和值尾数', clacFn: calc.calc_h3_sumws }],
+  [18, { name: '特殊号', wanfa: '后三特殊号', clacFn: calc.calc_h3_tsh }],
+  [19, { name: '直选复式', wanfa: '前三直选复式', clacFn: calc.calc_h3_zxfs }],
+  [20, { name: '直选单式', wanfa: '前三直选单式', clacFn: calc.calc_h3_zxds }],
+  [21, { name: '前三组合', wanfa: '前三组合', clacFn: calc.calc_h3_zh }],
+  [22, { name: '直选和值', wanfa: '前三直选和值', clacFn: calc.calc_h3_zxhz }],
+  [23, { name: '直选跨度', wanfa: '前三直选跨度', clacFn: calc.calc_h3_zxkd }],
+  [24, { name: '组三复式', wanfa: '前三组三复式', clacFn: calc.calc_h3_z3fs }],
+  [25, { name: '组三单式', wanfa: '前三组三单式', clacFn: calc.calc_h3_z3ds }],
+  [26, { name: '组六复式', wanfa: '前三组六复式', clacFn: calc.calc_h3_z6fs }],
+  [27, { name: '组六单式', wanfa: '前三组六单式', clacFn: calc.calc_h3_z6ds }],
+  [30, { name: '组选包胆', wanfa: '前三组选包胆', clacFn: calc.calc_h3_zuxbd }],
+  [31, { name: '和值尾数', wanfa: '前三和值尾数', clacFn: calc.calc_h3_sumws }],
+  [32, { name: '特殊号', wanfa: '前三特殊号', clacFn: calc.calc_h3_tsh }],
+  [33, { name: '直选复式', wanfa: '前二直选复式', clacFn: calc.calc_q2_zxfs }],
+  [34, { name: '直选单式', wanfa: '前二直选单式', clacFn: calc.calc_q2_zxds }],
+  [35, { name: '直选和值', wanfa: '前二直选和值', clacFn: calc.calc_q2_zhxhz }],
+  [36, { name: '直选跨度', wanfa: '前二直选跨度', clacFn: calc.calc_q2_zxkd }],
+  [37, { name: '组选复式', wanfa: '前二组选复式', clacFn: calc.calc_q2_zuxfs }],
+  [38, { name: '组选单式', wanfa: '前二组选单式', clacFn: calc.calc_q2_zuxds }],
+  [39, { name: '组选和值', wanfa: '前二组选和值', clacFn: calc.calc_q2_zuxhz }],
+  [40, { name: '组选包胆', wanfa: '前二组选包胆', clacFn: calc.calc_q2_zuxbd }],
+  [41, { name: '数字盘', wanfa: '数字盘', clacFn: calc.calc_dwd }],
+  [42, { name: '前三一码', wanfa: '前三一码', clacFn: calc.calc_bdw_31m }],
+  [43, { name: '前三二码', wanfa: '前三二码', clacFn: calc.calc_bdw_32m }],
+  [44, { name: '后三一码', wanfa: '后三一码', clacFn: calc.calc_bdw_31m }],
+  [45, { name: '后三二码', wanfa: '后三二码', clacFn: calc.calc_bdw_32m }],
+  [46, { name: '前四一码', wanfa: '前四一码', clacFn: calc.calc_bdw_31m }],
+  [47, { name: '前四二码', wanfa: '前四二码', clacFn: calc.calc_bdw_32m }],
+  [48, { name: '后四一码', wanfa: '后四一码', clacFn: calc.calc_bdw_31m }],
+  [49, { name: '后四二码', wanfa: '后四二码', clacFn: calc.calc_bdw_32m }],
+  [50, { name: '五星一码', wanfa: '五星一码', clacFn: calc.calc_bdw_31m }],
+  [51, { name: '五星二码', wanfa: '五星二码', clacFn: calc.calc_bdw_32m }],
+  [52, { name: '五星三码', wanfa: '五星三码', clacFn: calc.calc_bdw_33m }],
+
+  [53, { name: '五星三码XX', wanfa: '五星三码', clacFn: calc.calc_q2_dxds }],
+  [54, { name: '五星三码XX', wanfa: '五星三码', clacFn: calc.calc_h2_dxds }],
+  [55, { name: '五星三码XX', wanfa: '五星三码', clacFn: calc.calc_q3_dxds }],
+  [56, { name: '五星三码XX', wanfa: '五星三码', clacFn: calc.calc_h3_dxds }],
+
+  [
+    82,
+    {
+      name: '五星直选组合',
+      wanfa: '五星直选组合',
+      clacFunc: calc.calc_5x_zxzh
+    }
+  ],
+  [83, { name: '组选120', wanfa: '五星-组选120', clacFn: calc.calc_5x_zx120 }],
+  [84, { name: '组选60', wanfa: '五星-组选60', clacFn: calc.calc_5x_zx60 }],
+  [85, { name: '组选30', wanfa: '五星-组选30', clacFn: calc.calc_5x_zx30 }],
+  [86, { name: '组选20', wanfa: '五星-组选20', clacFn: calc.calc_5x_zx20 }],
+  [87, { name: '组选10', wanfa: '五星-组选10', clacFn: calc.calc_5x_zx10 }],
+  [88, { name: '组选5', wanfa: '五星-组选5', clacFn: calc.calc_5x_zx5 }],
+  [89, { name: '后四组合', wanfa: '后四-直选组合', clacFn: calc.calc_4x_zxzh }],
+  [90, { name: '组选24', wanfa: '后四-组选24', clacFn: calc.calc_4x_zx24 }],
+  [91, { name: '组选12', wanfa: '后四-组选12', clacFn: calc.calc_4x_zx12 }],
+  [92, { name: '组选6', wanfa: '后四-组选6', clacFn: calc.calc_4x_zx6 }],
+  [93, { name: '组选4', wanfa: '后四-组选4', clacFn: calc.calc_4x_zx4 }],
+  [94, { name: '直选复式', wanfa: '前四-直选复式', clacFn: calc.calc_4x_zxfs }],
+  [95, { name: '直选单式', wanfa: '前四-直选单式', clacFn: calc.calc_4x_zxds }],
+  [96, { name: '前四组合', wanfa: '前四-直选组合', clacFn: calc.calc_4x_zxzh }],
+  [97, { name: '组选24', wanfa: '前四-组选24', clacFn: calc.calc_4x_zx24 }],
+  [98, { name: '组选12', wanfa: '前四-组选12', clacFn: calc.calc_4x_zx12 }],
+  [99, { name: '组选6', wanfa: '前四-组选6', clacFn: calc.calc_4x_zx6 }],
+  [100, { name: '组选4', wanfa: '前四-组选4', clacFn: calc.calc_4x_zx4 }],
+  [101, { name: '直选复式', wanfa: '中三直选复式', clacFn: calc.calc_h3_zxfs }],
+  [102, { name: '直选单式', wanfa: '中三直选单式', clacFn: calc.calc_h3_zxds }],
+  [103, { name: '中三组合', wanfa: '中三组合', clacFn: calc.calc_h3_zh }],
+  [104, { name: '直选和值', wanfa: '中三直选和值', clacFn: calc.calc_h3_zxhz }],
+  [105, { name: '直选跨度', wanfa: '中三直选跨度', clacFn: calc.calc_h3_zxkd }],
+  [106, { name: '组三复式', wanfa: '中三组三复式', clacFn: calc.calc_h3_z3fs }],
+  [107, { name: '组三单式', wanfa: '中三组三单式', clacFn: calc.calc_h3_z3ds }],
+  [108, { name: '组六复式', wanfa: '中三组六复式', clacFn: calc.calc_h3_z6fs }],
+  [109, { name: '组六单式', wanfa: '中三组六单式', clacFn: calc.calc_h3_z6ds }],
+  [
+    112,
+    { name: '组选包胆', wanfa: '中三组选包胆', clacFn: calc.calc_h3_zuxbd }
+  ],
+  [
+    113,
+    { name: '和值尾数', wanfa: '中三和值尾数', clacFn: calc.calc_h3_sumws }
+  ],
+  [114, { name: '特殊号', wanfa: '中三特殊号', clacFn: calc.calc_h3_tsh }],
+  [115, { name: '直选复式', wanfa: '后二直选复式', clacFn: calc.calc_q2_zxfs }],
+  [116, { name: '直选单式', wanfa: '后二直选单式', clacFn: calc.calc_q2_zxds }],
+  [
+    117,
+    { name: '直选和值', wanfa: '后二直选和值', clacFn: calc.calc_q2_zhxhz }
+  ],
+  [118, { name: '直选跨度', wanfa: '后二直选跨度', clacFn: calc.calc_q2_zxkd }],
+  [
+    119,
+    { name: '组选复式', wanfa: '后二组选复式', clacFn: calc.calc_q2_zuxfs }
+  ],
+  [
+    120,
+    { name: '组选单式', wanfa: '后二组选单式', clacFn: calc.calc_q2_zuxds }
+  ],
+  [
+    121,
+    { name: '组选和值', wanfa: '后二组选和值', clacFn: calc.calc_q2_zuxhz }
+  ],
+  [
+    122,
+    { name: '组选包胆', wanfa: '后二组选包胆', clacFn: calc.calc_q2_zuxbd }
+  ],
+  [128, { name: '双面盘', wanfa: '双面盘', clacFn: calc.calc_smp }],
+  [129, { name: '龙虎斗', wanfa: '龙虎斗', clacFn: calc.calc_lhd }],
+  [130, { name: '趣味', wanfa: '趣味', clacFn: calc.calc_qw }],
+  [131, { name: '牛牛', wanfa: '牛牛', clacFn: calc.calc_nn }]
+])
+
+const isDanshi = function(playid) {
+  return [
+    2,
+    4,
+    6,
+    11,
+    13,
+    20,
+    25,
+    27,
+    34,
+    38,
+    58,
+    61,
+    64,
+    67,
+    69,
+    73,
+    95,
+    102,
+    107,
+    109,
+    116,
+    120
+  ].includes(playid)
+}
+
 export {
+  isDanshi,
+  CalcObj,
   Calc_Zhushu_Obj,
   getCalcFuncByName,
   getRenderTypeByName,

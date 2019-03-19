@@ -2,16 +2,10 @@
  * 使用ydui第三方插件
  */
 import Vue from 'vue'
-// import YDUI from 'vue-ydui'
-// Vue.use(YDUI)
 import 'vue-ydui/dist/ydui.base.css'
 import 'vue-ydui/dist/ydui.rem.css'
-import { Button, ButtonGroup } from 'vue-ydui/dist/lib.rem/button'
-import {
-  NavBar,
-  NavBarBackIcon,
-  NavBarNextIcon
-} from 'vue-ydui/dist/lib.rem/navbar'
+import { Button } from 'vue-ydui/dist/lib.rem/button'
+import { NavBar } from 'vue-ydui/dist/lib.rem/navbar'
 import { TabBar, TabBarItem } from 'vue-ydui/dist/lib.rem/tabbar'
 import { Slider, SliderItem } from 'vue-ydui/dist/lib.rem/slider'
 import { Tab, TabPanel } from 'vue-ydui/dist/lib.rem/tab'
@@ -29,7 +23,6 @@ import { CountDown } from 'vue-ydui/dist/lib.rem/countdown'
 import { ActionSheet } from 'vue-ydui/dist/lib.rem/actionsheet'
 import { Accordion, AccordionItem } from 'vue-ydui/dist/lib.rem/accordion'
 import { Spinner } from 'vue-ydui/dist/lib.rem/spinner'
-import { CountUp } from 'vue-ydui/dist/lib.rem/countup'
 import { FlexBox, FlexBoxItem } from 'vue-ydui/dist/lib.rem/flexbox'
 import { Icons } from 'vue-ydui/dist/lib.rem/icons'
 import { GridsGroup, GridsItem } from 'vue-ydui/dist/lib.rem/grids'
@@ -40,7 +33,6 @@ import { InfiniteScroll } from 'vue-ydui/dist/lib.rem/infinitescroll'
 import { Switch } from 'vue-ydui/dist/lib.rem/switch'
 import { Layout } from 'vue-ydui/dist/lib.rem/layout'
 import { ListTheme, ListItem, ListOther } from 'vue-ydui/dist/lib.rem/list'
-// import { ScrollNav, ScrollNavPanel } from 'vue-ydui/dist/lib.rem/scrollnav'
 import { ScrollTab, ScrollTabPanel } from 'vue-ydui/dist/lib.rem/scrolltab'
 import { DateTime } from 'vue-ydui/dist/lib.rem/datetime'
 import { Badge } from 'vue-ydui/dist/lib.rem/badge'
@@ -57,8 +49,6 @@ Vue.component(PullRefresh.name, PullRefresh)
 Vue.component(Badge.name, Badge)
 Vue.component(ScrollTab.name, ScrollTab)
 Vue.component(ScrollTabPanel.name, ScrollTabPanel)
-// Vue.component(ScrollNav.name, ScrollNav)
-// Vue.component(ScrollNavPanel.name, ScrollNavPanel)
 Vue.component(ListTheme.name, ListTheme)
 Vue.component(ListItem.name, ListItem)
 Vue.component(ListOther.name, ListOther)
@@ -74,7 +64,6 @@ Vue.component(GridsItem.name, GridsItem)
 Vue.component(Icons.name, Icons)
 Vue.component(FlexBox.name, FlexBox)
 Vue.component(FlexBoxItem.name, FlexBoxItem)
-Vue.component(CountUp.name, CountUp)
 Vue.component(Spinner.name, Spinner)
 Vue.component(InfiniteScroll.name, InfiniteScroll)
 Vue.component(Switch.name, Switch)
@@ -90,10 +79,7 @@ Vue.component(TabBarItem.name, TabBarItem)
 Vue.component(Tab.name, Tab)
 Vue.component(TabPanel.name, TabPanel)
 Vue.component(NavBar.name, NavBar)
-Vue.component(NavBarBackIcon.name, NavBarBackIcon)
-Vue.component(NavBarNextIcon.name, NavBarNextIcon)
 Vue.component(Button.name, Button)
-Vue.component(ButtonGroup.name, ButtonGroup)
 Vue.component(Slider.name, Slider)
 Vue.component(SliderItem.name, SliderItem)
 Vue.component(Tab.name, Tab)
@@ -106,7 +92,4 @@ Vue.prototype.$dialog = {
   toast: Toast,
   notify: Notify,
   loading: Loading
-}
-Window.prototype.$get = num => {
-  console.log(num / 720 * 414)
 }

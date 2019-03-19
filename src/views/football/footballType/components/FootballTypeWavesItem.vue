@@ -13,40 +13,60 @@
         <div class="H">
           <div class="cell-name t">主</div>
           <div class="cell-data">
-            <div v-for="(item,key) in itemData.H" :key="key" class="t-body-cell t" @click="clickCell(item,'H'+key)" :class="{red:active==='H'+key}">
+            <div v-for="(item,key) in itemData.H"
+                 :key="key"
+                 class="t-body-cell t"
+                 @click="clickCell(item,'H'+key)"
+                 :class="{red:active==='H'+key}">
               <span>{{item.k}}</span>
               <span>{{item.p}}</span>
-              <i class="icon" v-one-html="item.p"></i>
+              <i class="icon"
+                 v-one-html="item.p"></i>
             </div>
           </div>
         </div>
         <div class="V">
           <div class="cell-name t">客</div>
           <div class="cell-data">
-            <div v-for="(item,key) in itemData.V" :key="key" class="t-body-cell t" @click="clickCell(item,'V'+key)" :class="{red:active==='V'+key}">
+            <div v-for="(item,key) in itemData.V"
+                 :key="key"
+                 class="t-body-cell t"
+                 @click="clickCell(item,'V'+key)"
+                 :class="{red:active==='V'+key}">
               <span>{{item.k}}</span>
               <span>{{item.p}}</span>
-              <i class="icon" v-one-html="item.p"></i>
+              <i class="icon"
+                 v-one-html="item.p"></i>
             </div>
           </div>
         </div>
         <div class="X">
           <div class="cell-name t">平</div>
           <div class="cell-data">
-            <div v-for="(item,key) in itemData.X" :key="key" class="t-body-cell t" @click="clickCell(item,'X'+key)" :class="{red:active==='X'+key}">
+            <div v-for="(item,key) in itemData.X"
+                 :key="key"
+                 class="t-body-cell t"
+                 @click="clickCell(item,'X'+key)"
+                 :class="{red:active==='X'+key}">
               <span>{{item.k}}</span>
               <span>{{item.p}}</span>
-              <i class="icon" v-one-html="item.p"></i>
+              <i class="icon"
+                 v-one-html="item.p"></i>
             </div>
           </div>
         </div>
 
       </div>
       <div class="t-body-right">
-        <div v-for="item in itemData.O" :key="item.k" class="other" @click="clickCell(item,'O')" :class="{red:active==='O'}">
+        <div v-for="item in itemData.O"
+             :key="item.k"
+             class="other"
+             @click="clickCell(item,'O')"
+             :class="{red:active==='O'}">
           <span>其他</span>
           <span>{{item.p}}</span>
-          <i class="icon" v-one-html="item.p"></i>
+          <i class="icon"
+             v-one-html="item.p"></i>
         </div>
         <!-- <div class="other" @click="clickCell(item,'V'+key)">
           <span>其他</span>
@@ -59,44 +79,44 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from "vuex";
 export default {
-  name: 'FootballTypeWavesItem',
-  props: ['data', 'league', 'item', 'type'],
+  name: "FootballTypeWavesItem",
+  props: ["data", "league", "item", "type"],
   data() {
     return {
-      activeCell: '',
-    }
+      activeCell: ""
+    };
   },
   computed: {
     date() {
-      return new Date(this.data.begin_time).format('MM-dd hh:mm')
+      return new Date(this.data.begin_time).format("MM-dd hh:mm");
     },
     active() {
       if (this.data.history_id === this.item.active) {
-        return this.activeCell
+        return this.activeCell;
       }
-      return false
+      return false;
     },
     itemData() {
-      let bet = this.data.bet_data
-      if (this.type == 'TCS') {
-        return bet.TCS
+      const bet = this.data.bet_data;
+      if (this.type == "TCS") {
+        return bet.TCS;
       } else {
         // HTCS
-        bet.HTCS.X = bet.HTCS.X || []
+        bet.HTCS.X = bet.HTCS.X || [];
         if (bet.HTCS.H.length < 10) {
-          bet.HTCS.H = [...bet.HTCS.H, ...new Array(4).fill({})]
+          bet.HTCS.H = [...bet.HTCS.H, ...new Array(4).fill({})];
         }
         if (bet.HTCS.V.length < 10) {
-          bet.HTCS.V = [...bet.HTCS.V, ...new Array(4).fill({})]
+          bet.HTCS.V = [...bet.HTCS.V, ...new Array(4).fill({})];
         }
         if (bet.HTCS.X.length < 5) {
-          bet.HTCS.X = [...bet.HTCS.X, ...new Array(1).fill({})]
+          bet.HTCS.X = [...bet.HTCS.X, ...new Array(1).fill({})];
         }
-        return bet.HTCS
+        return bet.HTCS;
       }
-    },
+    }
   },
 
   methods: {
@@ -104,18 +124,18 @@ export default {
     clickCell(cell, key) {
       // console.log()
       if (!cell.p) {
-        return
+        return;
       }
-      this.activeCell = key
-      if (key == 'O') {
-        cell.k_txt = '其他'
+      this.activeCell = key;
+      if (key == "O") {
+        cell.k_txt = "其他";
       }
       this.modifyFootballField({
         min_stake: this.data.min_stake,
         max_stake: this.data.max_stake
       });
       this.$emit(
-        'clickCell',
+        "clickCell",
         Object.assign(
           {
             schedule_id: this.data.schedule_id,
@@ -124,32 +144,32 @@ export default {
             team: key.substring(0, 1),
             h: this.data.h,
             v: this.data.v,
-            k_txt: cell.k,
+            k_txt: cell.k
           },
           cell
         )
-      )
-    },
+      );
+    }
   },
   directives: {
     oneHtml: {
       bind() {},
-      update(el, { value, oldValue }, vnode, oldv) {
-        let className = el.classList
-        className.remove('p_up', 'p_down')
+      update(el, { value, oldValue }) {
+        const className = el.classList;
+        className.remove("p_up", "p_down");
         if (value * 1 > oldValue * 1) {
-          className.add('p_up')
+          className.add("p_up");
         }
         if (value * 1 < oldValue * 1) {
-          className.add('p_down')
+          className.add("p_down");
         }
-      },
-    },
+      }
+    }
   },
   activated() {
-    this.key
-  },
-}
+    this.key;
+  }
+};
 </script>
 
 <style lang="scss" scoped>

@@ -1,9 +1,14 @@
 <template>
   <yd-cell-group>
-    <yd-cell-item arrow v-for="(item, index) in data" :key="index" @click.native="clickItem(item)">
-      <div class="pay_option" slot="left">
+    <yd-cell-item arrow
+                  v-for="(item, index) in data"
+                  :key="index"
+                  @click.native="clickItem(item)">
+      <div class="pay_option"
+           slot="left">
         <div>
-          <img :src="'/assets/recharge/bank_logo/'+item.id+'.png'" alt="">
+          <img :src="'/assets/recharge/bank_logo/'+item.id+'.png'"
+               alt="">
         </div>
         <div slot="left">
           <p class="first_row">{{item.name}}</p>
@@ -19,15 +24,15 @@ export default {
     return {
       bankLogoSrc: "",
       bankName: "中国银行",
-      data1: [{ name: "中国银行", src: "", id: 1 }],
+      data1: [{ name: "中国银行", src: "", id: 1 }]
     };
   },
   methods: {
     clickItem(item) {
       // onlinePay
       this.$emit("clickItem", item);
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

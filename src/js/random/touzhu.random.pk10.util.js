@@ -5,19 +5,9 @@ import {
 } from '~/js/touzhu/touzhu.pk10.calc'
 import { RenderTypes } from './commonTypes'
 import danshiUtil from '~/js/touzhu/danshi.util'
+import getDwdArr from '../touzhu/util'
 const zhushuFunc = new Calc_Zhushu_Obj()
 const pk10Util = {
-  getDwdArr(arr) {
-    // 所有的定位胆都需要单独计算一个位置参数
-    // 只要当前行有值，就取当前行的2次方数，和即为位置数组
-    let c = 0
-    arr.forEach((x, i) => {
-      if (x.length) {
-        c += Math.pow(2, i)
-      }
-    })
-    return [c.toString()].concat(arr)
-  },
   // 计算注数
   calcZhushu(playid, oneDimValuesArr, twoDimNamesArr, towDimValuesArr) {
     const func = getCalcFuncByPlayID(playid)
@@ -33,7 +23,7 @@ const pk10Util = {
       // playName.includes("数字盘") ||
       // playName.includes("双面盘")
     ) {
-      towDimValuesArr = this.getDwdArr(towDimValuesArr).filter(x => x.length)
+      towDimValuesArr = getDwdArr(towDimValuesArr).filter(x => x.length)
       return zhushuFunc[func](towDimValuesArr)
     }
   },
@@ -129,7 +119,7 @@ const pk10Util = {
       formatShowStr,
       // 定位胆专用取值
       dwdValuesArr:
-        peilvType === RenderTypes.DWD ? this.getDwdArr(towDimValuesArr) : [],
+        peilvType === RenderTypes.DWD ? getDwdArr(towDimValuesArr) : [],
       wanfa: betData.wanfa, // 玩法
       zhushu: _zhushu, // 注数
       gameid: betData.gameid,

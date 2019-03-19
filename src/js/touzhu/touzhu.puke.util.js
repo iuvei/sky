@@ -3,68 +3,68 @@ const { RenderTypes } = require('./commonTypes')
 // 根据名称获取计算注数的方法
 const getCalcFuncByName = name => {
   switch (name) {
-  case '三星直选复式':
-  case '三星_直选复式':
-    return 'calc_3x_zhxfs'
-  case '三星直选单式':
-  case '三星_直选单式':
-    return 'calc_3x_zhxds'
-  case '三星直选和值':
-  case '三星_直选和值':
-    return 'calc_3x_zhxhz'
-  case '组三复式':
-  case '三星_组三复式':
-    return 'calc_3x_zu3fs'
-  case '组六复式':
-  case '三星_组六复式':
-    return 'calc_3x_zu6fs'
-  case '组三和值':
-  case '三星_组三和值':
-    return 'calc_3x_zu3hz'
-  case '组六和值':
-  case '三星_组六和值':
-    return 'calc_3x_zu6hz'
-  case '前二直选复式':
-    return 'calc_2x_q2zhxfs'
-  case '前二组选复式':
-    return 'calc_2x_q2zuxfs'
-  case '后二直选复式':
-    return 'calc_2x_h2zhxfs'
-  case '后二组选复式':
-    return 'calc_2x_h2zuxfs'
-  case '一码不定位':
-    return 'calc_bdw_1mbdw'
-  case '二码不定位':
-    return 'calc_bdw_2mbdw'
-  case '定位胆':
-    return 'calc_dwd_dwd'
-  case '双面盘':
-    return 'calc_smp'
-  case '龙虎斗':
-    return 'calc_lhd'
+    case '三星直选复式':
+    case '三星_直选复式':
+      return 'calc_3x_zhxfs'
+    case '三星直选单式':
+    case '三星_直选单式':
+      return 'calc_3x_zhxds'
+    case '三星直选和值':
+    case '三星_直选和值':
+      return 'calc_3x_zhxhz'
+    case '组三复式':
+    case '三星_组三复式':
+      return 'calc_3x_zu3fs'
+    case '组六复式':
+    case '三星_组六复式':
+      return 'calc_3x_zu6fs'
+    case '组三和值':
+    case '三星_组三和值':
+      return 'calc_3x_zu3hz'
+    case '组六和值':
+    case '三星_组六和值':
+      return 'calc_3x_zu6hz'
+    case '前二直选复式':
+      return 'calc_2x_q2zhxfs'
+    case '前二组选复式':
+      return 'calc_2x_q2zuxfs'
+    case '后二直选复式':
+      return 'calc_2x_h2zhxfs'
+    case '后二组选复式':
+      return 'calc_2x_h2zuxfs'
+    case '一码不定位':
+      return 'calc_bdw_1mbdw'
+    case '二码不定位':
+      return 'calc_bdw_2mbdw'
+    case '定位胆':
+      return 'calc_dwd_dwd'
+    case '双面盘':
+      return 'calc_smp'
+    case '龙虎斗':
+      return 'calc_lhd'
   }
 }
 
 const getCalcFuncByPlayID = playid => {
   switch (playid) {
-  case 1: // 包选/单选/任选一
-  case 2:
-  case 3:
-  case 4:
-  case 5:
-  case 6:
-  case 7:
-    return 'calc_danchengzhu'
-  case 8: // 任选二
-    return 'calc_renxuantwo'
-  case 9: // 任选三
-    return 'calc_renxuanthree'
-  case 10: // 任选四
-    return 'calc_renxuanfour'
-  case 11: // 任选五
-    return 'calc_renxuanfive'
-  case 12: // 任选六
-    return 'clac_renxunasix'
+    case 1: // 包选/单选/任选一
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+      return 'calc_danchengzhu'
+    case 8: // 任选二
+      return 'calc_renxuantwo'
+    case 9: // 任选三
+      return 'calc_renxuanthree'
+    case 10: // 任选四
+      return 'calc_renxuanfour'
+    case 11: // 任选五
+      return 'calc_renxuanfive'
+    case 12: // 任选六
+      return 'clac_renxunasix'
   }
 }
 
@@ -98,20 +98,20 @@ const getRenderTypeByName = name => {
 
 const getRenderTypeByPlayID = playid => {
   switch (playid) {
-  case 1: // 包选
-  case 2: // 单选
-  case 3: // 单选
-  case 4: // 单选
-  case 5: // 单选
-  case 6: // 单选
-  case 7: //任选一
-    return RenderTypes.SINGLE_ROW_MUTI_PEILV
-  case 8: // 任选二到六
-  case 9: // 任选二到六
-  case 10: // 任选二到六
-  case 11: // 任选二到六
-  case 12: // 任选二到六
-    return RenderTypes.SINGLE_ROW_SINGLE_PEILV
+    case 1: // 包选
+    case 2: // 单选
+    case 3: // 单选
+    case 4: // 单选
+    case 5: // 单选
+    case 6: // 单选
+    case 7: // 任选一
+      return RenderTypes.SINGLE_ROW_MUTI_PEILV
+    case 8: // 任选二到六
+    case 9: // 任选二到六
+    case 10: // 任选二到六
+    case 11: // 任选二到六
+    case 12: // 任选二到六
+      return RenderTypes.SINGLE_ROW_SINGLE_PEILV
   }
 }
 
@@ -165,31 +165,31 @@ const getCalcDataByName = (name, columns, arr1, arr2, val1, val2) => {
   }
 
   switch (name) {
-  case '三星直选复式':
-  case '三星_直选复式':
-  case '前二直选复式':
-  case '后二直选复式':
-  case '定位胆':
-    return getMutiData(columns, arr1, val1, val2)
-  case '三星_直选和值':
-  case '三星直选和值':
-  case '组三复式':
-  case '三星_组三复式':
-  case '组六复式':
-  case '三星_组六复式':
-  case '组三和值':
-  case '三星_组三和值':
-  case '组六和值':
-  case '三星_组六和值':
-  case '前二组选复式':
-  case '后二组选复式':
-  case '一码不定位':
-  case '二码不定位':
-  case '前二大小单双':
-  case '后二大小单双':
-  case '双面盘':
-  case '龙虎斗':
-    return getSingleData(arr2, val2)
+    case '三星直选复式':
+    case '三星_直选复式':
+    case '前二直选复式':
+    case '后二直选复式':
+    case '定位胆':
+      return getMutiData(columns, arr1, val1, val2)
+    case '三星_直选和值':
+    case '三星直选和值':
+    case '组三复式':
+    case '三星_组三复式':
+    case '组六复式':
+    case '三星_组六复式':
+    case '组三和值':
+    case '三星_组三和值':
+    case '组六和值':
+    case '三星_组六和值':
+    case '前二组选复式':
+    case '后二组选复式':
+    case '一码不定位':
+    case '二码不定位':
+    case '前二大小单双':
+    case '后二大小单双':
+    case '双面盘':
+    case '龙虎斗':
+      return getSingleData(arr2, val2)
   }
 }
 
@@ -234,25 +234,25 @@ const getCalcDataByPlayID = (playid, columns, arr1, arr2, val1, val2) => {
   }
 
   switch (playid) {
-  case 1: // '三星直选复式':
-  case 8: // '前二直选复式':
-  case 9: // '后二直选复式':
-  case 12: // '定位胆': 数字盘
-    return getMutiData(columns, arr1, val1, val2)
-  case 3: // '三星_直选和值':
-  case 4: // '组三复式':
-  case 5: // '组六复式':
-  case 6: // '组三和值':
-  case 7: // '组六和值':
-  case 10: // '前二组选复式':
-  case 11: // '后二组选复式':
-  case 13: // '一码不定位':
-  case 14: // '二码不定位':
-  case 15: // '前二大小单双':
-  case 16: // '后二大小单双':
-  case 26: // '双面盘':
-  case 27: // '龙虎斗':
-    return getSingleData(arr2, val2)
+    case 1: // '三星直选复式':
+    case 8: // '前二直选复式':
+    case 9: // '后二直选复式':
+    case 12: // '定位胆': 数字盘
+      return getMutiData(columns, arr1, val1, val2)
+    case 3: // '三星_直选和值':
+    case 4: // '组三复式':
+    case 5: // '组六复式':
+    case 6: // '组三和值':
+    case 7: // '组六和值':
+    case 10: // '前二组选复式':
+    case 11: // '后二组选复式':
+    case 13: // '一码不定位':
+    case 14: // '二码不定位':
+    case 15: // '前二大小单双':
+    case 16: // '后二大小单双':
+    case 26: // '双面盘':
+    case 27: // '龙虎斗':
+      return getSingleData(arr2, val2)
   }
 }
 

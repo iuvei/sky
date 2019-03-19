@@ -64,7 +64,7 @@ export default {
     toDetails(item) {
       // console.log("object", item);
       this.$router.push({
-        name: "goucaixiangqing",
+        name: "dailigoucaixiangqing",
         params: item,
       });
     },

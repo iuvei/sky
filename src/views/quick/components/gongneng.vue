@@ -25,7 +25,7 @@
         </yd-tab-panel>
         <yd-tab-panel label="彩票">
         </yd-tab-panel>
-        <yd-tab-panel label="体育彩">
+        <yd-tab-panel label="皇冠体育">
         </yd-tab-panel>
       </yd-tab>
       <!-- <span class="feature_top">全部功能</span> -->
@@ -53,8 +53,8 @@ export default {
     return {
       tabkey: 0,
       gnls,
-      lotterys: [], //彩票
-      sports: [], //体彩
+      lotterys: [], // 彩票
+      sports: [], // 体彩
       closeTip: false,
       quick_icon: require("img/shouye/quick.png"),
       moveAble: true, // 是否可移动
@@ -76,13 +76,12 @@ export default {
       switch (this.tabkey) {
         case 0:
           return gnls;
-          break;
+
         case 1:
           return this.lotterys;
-          break;
+
         case 2:
           return this.sports;
-          break;
       }
     }
   },
@@ -94,18 +93,18 @@ export default {
   deactivated() {},
   methods: {
     ...mapActions("quick", ["saveQuick"]),
-    selected(item, index) {
+    selected(item) {
       if (this.addQuicks_temp.includes(item)) return;
-      this.addQuicks_temp=[...this.addQuicks_temp, item];
+      this.addQuicks_temp = [...this.addQuicks_temp, item];
     },
     async getGameList() {
-      let data = (await api.getGameList()) || [];
+      const data = (await api.getGameList()) || [];
       // console.error(data);
-      data.map(item => {
+      data.forEach(item => {
         // 去掉维护状态的彩票
         if (item.enable !== 2) {
           // type: 1彩票  2体彩   没有就是功能类
-          let path = {
+          const path = {
             name: item.js_tag,
             params: {
               lotter_id: item.game_id,
@@ -114,14 +113,14 @@ export default {
               js_tag: item.js_tag
             }
           };
-          let el = {
+          const el = {
             type: item.type,
             text: item.game_name,
             addgn: item.game_id,
             src: item.icon,
             path
           };
-          if (item.type == 2) {
+          if (item.type === 2) {
             this.sports.push(el);
           } else {
             this.lotterys.push(el);
@@ -131,7 +130,7 @@ export default {
     },
     delFeature(item, index) {
       if (!this.addQuicks_temp.includes(item)) return;
-      let temp = Object.assign([], this.addQuicks_temp)
+      const temp = Object.assign([], this.addQuicks_temp);
       temp.splice(index, 1);
       this.addQuicks_temp = temp;
       //   if (!this.addQuicks_temp.length) {
@@ -292,12 +291,12 @@ body {
         height: poTorem(23px);
         line-height: poTorem(23px);
         font-size: poTorem(15px);
-        color: #ff7c34;
+        color: $mainColor;
         // align-items: center;
         text-align: center;
         border-radius: poTorem(25px);
         margin-right: 1rem;
-        border: 1px solid #ff7c34;
+        border: 1px solid $mainColor;
         // padding: 0 poTorem(px);
       }
     }

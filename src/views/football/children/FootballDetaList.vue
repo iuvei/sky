@@ -2,10 +2,15 @@
   <div class="footballDetaiList_main_body">
     <div class="tit">{{data.league_name}}</div>
     <div class="item">
-      <div class="cent" v-for="(item,indexs,key) in data.schedule" :key="key">
+      <div class="cent"
+           v-for="(item,indexs,key) in data.schedule"
+           :key="key">
         <p class="title">{{item.h}}</p>
         <yd-grids-group :rows="2">
-          <yd-grids-item v-for="(i,indexss,key) in item.bet_data.CHP" :key="key" @click.native="select($event,item)" :class="['items', (indexs + '' +indexss),{selected: footer&&selectedKey === indexs + '' + indexss }]">
+          <yd-grids-item v-for="(i,indexss,key) in item.bet_data.CHP"
+                         :key="key"
+                         @click.native="select($event,item)"
+                         :class="['items', (indexs + '' +indexss),{selected: footer&&selectedKey === indexs + '' + indexss }]">
             <span slot="text">{{i.k}}</span>
             <b slot="text">{{i.p}}</b>
           </yd-grids-item>
@@ -15,60 +20,64 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
       // funcName: "详情",
-      data:[],
+      data: [],
       recordTime: "",
       bet_data: {},
-      selectedKey: '',
+      selectedKey: ""
     };
   },
-  computed:{
-    // pageData(){
-    //   return  this.data|| {}
-    // }
-  },
+
   computed: {
-    ...mapState('football', ['footer', 'sport_id', 'money']),
+    ...mapState("football", ["footer", "sport_id", "money"])
   },
   mounted() {
-    this.modifyFootballField({ footer: false })
+    this.modifyFootballField({ footer: false });
   },
   activated() {
-    this.data = this.$route.params
-    console.log(this.data)
+    this.data = this.$route.params;
+    console.log(this.data);
   },
-  methods:{
-    ...mapActions('football', [
-      'modifyFootballField',
-      'getSportMobileGameList',
-      'queryComputed',
+  methods: {
+    ...mapActions("football", [
+      "modifyFootballField",
+      "getSportMobileGameList",
+      "queryComputed"
     ]),
     select(e, item) {
-      let obj = e.target.closest('.items')
-      if (e.target.closest('.items').className.indexOf('selected') === -1) {
-        //选中
+      const obj = e.target.closest(".items");
+      if (e.target.closest(".items").className.indexOf("selected") === -1) {
+        // 选中
         this.selectedKey = e.target
-          .closest('.items')
-          .className.replace(/[^0-9]/gi, '')
-        this.bet_data.history_id = item.history_id
-        this.bet_data.schedule_id = item.schedule_id
-        this.bet_data.k = obj.children[0].children[0].innerText
-        this.bet_data.p = obj.children[0].children[1].innerText
-        this.bet_data.play_method = 'CHP'
-        this.bet_data.price = this.money,
-        this.bet_data.sport_id = this.sport_id,
-        this.bet_data.team = '',
-        this.bet_data.team_score = item.team_score,
-        this.modifyFootballField({min_stake: item.min_stake,max_stake: item.max_stak,footer: true ,'bet_txt': this.bet_data.k,'bet_pl':this.bet_data.p,bet_data:[this.bet_data]});
-      } else { //取消
-        this.selectedKey = ''
-        this.modifyFootballField({ footer: false })
+          .closest(".items")
+          .className.replace(/[^0-9]/gi, "");
+        this.bet_data.history_id = item.history_id;
+        this.bet_data.schedule_id = item.schedule_id;
+        this.bet_data.k = obj.children[0].children[0].innerText;
+        this.bet_data.p = obj.children[0].children[1].innerText;
+        this.bet_data.play_method = "CHP";
+        (this.bet_data.price = this.money),
+        (this.bet_data.sport_id = this.sport_id),
+        (this.bet_data.team = ""),
+        (this.bet_data.team_score = item.team_score),
+        this.modifyFootballField({
+          min_stake: item.min_stake,
+          max_stake: item.max_stak,
+          footer: true,
+          bet_txt: this.bet_data.k,
+          bet_pl: this.bet_data.p,
+          bet_data: [this.bet_data]
+        });
+      } else {
+        // 取消
+        this.selectedKey = "";
+        this.modifyFootballField({ footer: false });
       }
-    },
+    }
   }
 };
 </script>

@@ -3,7 +3,8 @@
     <publicHead :title="funcName"></publicHead>
     <div class="content">
       <div class="box">
-        <img src="../../../../img/downloadApp/appIcon.png" alt="">
+        <img src="../../../../img/downloadApp/appIcon.png"
+             alt="">
       </div>
       <div class="box">
         <p>下载好彩彩票APP</p>
@@ -12,13 +13,15 @@
       <div class="box">
         <div class="select_sys">
           <span>
-            <img src="../../../../img/downloadApp/IOS.png" alt="">
+            <img src="../../../../img/downloadApp/IOS.png"
+                 alt="">
           </span>
           <a href="https://itunes.apple.com/cn/app/id1331282994">点击下载IOS版</a>
         </div>
         <div class="select_sys">
           <span>
-            <img src="../../../../img/downloadApp/android.png" alt="">
+            <img src="../../../../img/downloadApp/android.png"
+                 alt="">
           </span>
           <a href="http://appandroid.0567x.com/haocaiaa.apk">点击下载Android版</a>
         </div>
@@ -27,17 +30,17 @@
   </div>
 </template>
 <script>
-import publicHead from '../moreService/publicHead'
+import publicHead from "../moreService/publicHead";
 export default {
-  components : {
+  components: {
     publicHead
   },
   data() {
     return {
-      funcName: 'APP下载'
-    }
+      funcName: "APP下载"
+    };
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";

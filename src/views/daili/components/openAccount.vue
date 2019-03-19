@@ -1,61 +1,104 @@
 <template>
   <div class="openAccount_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
     <div class="openAccount_main_content">
-      <yd-tab class="betRecord" :callback="getData" v-model="tabActive">
-        <yd-tab-panel label="返点设置" :tabkey="0" :active="swicthToSecond==0">
+      <yd-tab class="betRecord"
+              :callback="getData"
+              v-model="tabActive">
+        <yd-tab-panel label="返点设置"
+                      :tabkey="0"
+                      :active="swicthToSecond==0">
           <div class="title">
             <p class="type">
-              <span :class="[{'active':typeIndex==index}, 'default']" v-for="(item, index) in titleData" :key="index" @click="chooseType(index)">{{item}}</span>
+              <span :class="[{'active':typeIndex==index}, 'default']"
+                    v-for="(item, index) in titleData"
+                    :key="index"
+                    @click="chooseType(index)">{{item}}</span>
             </p>
-            <p class="check_table" @click="$router.push('/agency/returnRateTable')">点击查看返点赔率表</p>
+            <p class="check_table"
+               @click="$router.push('/agency/returnRateTable')">点击查看返点赔率表</p>
           </div>
           <div class="lottery_rate">
-            <settingReturn v-for="(item, index) in listData" :key="index" :baseData="item" :ref="item.ref"></settingReturn>
+            <settingReturn v-for="(item, index) in listData"
+                           :key="index"
+                           :baseData="item"
+                           :ref="item.ref"></settingReturn>
           </div>
           <div class="bottom">
             <!-- <p class="chooseDomain" @click="isShow=true">{{domainTxt}}</p> -->
-            <p class="createCode" @click="createCode">创建邀请码</p>
+            <p class="createCode"
+               @click="createCode">创建邀请码</p>
           </div>
-          <yd-actionsheet :items="domainOptions" v-model="isShow" class="changePeriod"></yd-actionsheet>
+          <yd-actionsheet :items="domainOptions"
+                          v-model="isShow"
+                          class="changePeriod"></yd-actionsheet>
         </yd-tab-panel>
-        <yd-tab-panel label="邀请码管理" :tabkey="1" :active="swicthToSecond==1">
+        <yd-tab-panel label="邀请码管理"
+                      :tabkey="1"
+                      :active="swicthToSecond==1">
           <div class="title">
             <p class="type">
-              <span :class="[{'active':centerTypeIndex==index}, 'default']" v-for="(item, index) in titleData" :key="index" @click="centerType(index)">{{item}}</span>
+              <span :class="[{'active':centerTypeIndex==index}, 'default']"
+                    v-for="(item, index) in titleData"
+                    :key="index"
+                    @click="centerType(index)">{{item}}</span>
             </p>
-            <p class="check_table" @click="$router.push('/agency/returnRateTable')">点击查看返点赔率表</p>
+            <p class="check_table"
+               @click="$router.push('/agency/returnRateTable')">点击查看返点赔率表</p>
           </div>
-          <div v-for="(item, index) in invitationCode" :key="index" class="owned_code">
+          <div v-for="(item, index) in invitationCode"
+               :key="index"
+               class="owned_code">
             <p class="text">{{item.param}}</p>
-            <p class="funcBtn" v-clipboard:copy="item.param" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</p>
+            <p class="funcBtn"
+               v-clipboard:copy="item.param"
+               v-clipboard:success="onCopy"
+               v-clipboard:error="onError">复制</p>
             <!-- <p class="domain_name">{{item.link}}</p>
             <p class="funcBtn" v-clipboard:copy="item.link" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</p> -->
-            <p class="funcBtn" @click="openDetail(item)">详情</p>
+            <p class="funcBtn"
+               @click="openDetail(item)">详情</p>
             <p class="create_time">{{item.time}}</p>
           </div>
-          <p class="no_invitation_code" v-show="!invitationCode.length">暂无数据</p>
-          <p class="no_invitation_code" v-show="invitationCode.length">已显示全部</p>
+          <p class="no_invitation_code"
+             v-show="!invitationCode.length">暂无数据</p>
+          <p class="no_invitation_code"
+             v-show="invitationCode.length">已显示全部</p>
         </yd-tab-panel>
-        <yd-tab-panel label="域名管理" :tabkey="2" :active="swicthToSecond==2">
+        <yd-tab-panel label="域名管理"
+                      :tabkey="2"
+                      :active="swicthToSecond==2">
           <div class="third_head">
             <p @click="thirdIsShow=true">{{thirdTxt}}</p>
             <p @click="$router.push('/agency/addNewDomain')">+ 添加域名</p>
           </div>
-          <div v-for="(item, index) in domainData" :key="index" class="alive_domain">
+          <div v-for="(item, index) in domainData"
+               :key="index"
+               class="alive_domain">
             <p>{{item.enom}}</p>
             <p>{{item.bind_param}}</p>
-             <!-- 0=审核通过 1=拒绝 2=待审核  -->
+            <!-- 0=审核通过 1=拒绝 2=待审核  -->
             <p>{{item.status==1?'拒绝':item.status==2?'待审核':'审核通过'}}</p>
-            <p @click="showYaoQingMaOption(item)" :class="{'enable': !(!item.bind_param && item.status == 4)}">{{!item.bind_param && item.status == 4 ? '设置赔率' : ''}}</p>
+            <p @click="showYaoQingMaOption(item)"
+               :class="{'enable': !(!item.bind_param && item.status == 4)}">{{!item.bind_param && item.status == 4 ? '设置赔率' : ''}}</p>
           </div>
-          <p class="no_invitation_code" v-show="!domainOptions2.length">暂无数据</p>
-          <p class="no_invitation_code" v-show="domainOptions2.length">已显示全部</p>
+          <p class="no_invitation_code"
+             v-show="!domainOptions2.length">暂无数据</p>
+          <p class="no_invitation_code"
+             v-show="domainOptions2.length">已显示全部</p>
         </yd-tab-panel>
       </yd-tab>
-      <yd-actionsheet :items="domainOptions2" v-model="thirdIsShow" class="changePeriod"></yd-actionsheet>
-      <yd-actionsheet :items="domainOptions3" v-model="yaoqingmaIsShow" class="changePeriod"></yd-actionsheet>
-      <yd-popup v-model="show" position="center" width="90%" class="pop_win">
+      <yd-actionsheet :items="domainOptions2"
+                      v-model="thirdIsShow"
+                      class="changePeriod"></yd-actionsheet>
+      <yd-actionsheet :items="domainOptions3"
+                      v-model="yaoqingmaIsShow"
+                      class="changePeriod"></yd-actionsheet>
+      <yd-popup v-model="show"
+                position="center"
+                width="90%"
+                class="pop_win">
         <p class="title">详情</p>
         <p class="content_intro">创建于{{filledContent.time}} 已注册：{{filledContent.reg_count}}人</p>
         <div class="content_box">
@@ -96,16 +139,25 @@
             </p>
           </div>
         </div>
-        <p class="close_btn" @click="show=false">确定</p>
+        <p class="close_btn"
+           @click="show=false">确定</p>
       </yd-popup>
-      <yd-popup v-model="hadYaoQingMaShow" position="center" width="90%" class="yao_qing_ma_win">
+      <yd-popup v-model="hadYaoQingMaShow"
+                position="center"
+                width="90%"
+                class="yao_qing_ma_win">
         <p class="title">请选择邀请码</p>
         <div class="content_box">
           <div class="yao_qing_ma_wrap left">
-            <p v-for="(item, index) in invitationCode" v-if="index < 20" :key="index" @click="choosedYaoQingMa(item, index)" :class="[{'active': itIndex == index},'yaoQingMa']">{{item.param}}</p>
+            <p v-for="(item, index) in invitationCode"
+               v-if="index < 20"
+               :key="index"
+               @click="choosedYaoQingMa(item, index)"
+               :class="[{'active': itIndex == index},'yaoQingMa']">{{item.param}}</p>
           </div>
         </div>
-        <p class="close_btn" @click="setYaoQingMa">确定</p>
+        <p class="close_btn"
+           @click="setYaoQingMa">确定</p>
       </yd-popup>
     </div>
   </div>
@@ -117,7 +169,7 @@ import { mapActions, mapState } from "vuex";
 export default {
   components: {
     publicHead,
-    settingReturn,
+    settingReturn
   },
   computed: mapState({
     fp_11x5: state => state.userinfo.accountInfo.fp_11x5,
@@ -125,8 +177,7 @@ export default {
     fp_k3: state => state.userinfo.accountInfo.fp_k3,
     fp_lhc: state => state.userinfo.accountInfo.fp_lhc,
     fp_pcdd: state => state.userinfo.accountInfo.fp_pcdd,
-    fp_pcdd: state => state.userinfo.accountInfo.fp_pcdd,
-    fp_ssc: state => state.userinfo.accountInfo.fp_ssc,
+    fp_ssc: state => state.userinfo.accountInfo.fp_ssc
   }),
   // computed: {
   //   ...mapState("userInfo/accountInfo", ["fp_11x5"]),
@@ -156,15 +207,15 @@ export default {
           label: "使用现有邀请码",
           callback: () => {
             this.getInvitationCode();
-            this.hadYaoQingMaShow = true
-          },
+            this.hadYaoQingMaShow = true;
+          }
         },
         {
           label: "设置新的邀请码",
           callback: () => {
-            this.tabActive = 0
-          },
-        },
+            this.tabActive = 0;
+          }
+        }
       ],
       domainData: [],
       listData: [
@@ -172,50 +223,50 @@ export default {
           name: "时时彩",
           ref: "vssc",
           percent: this.$store.state.userinfo.accountInfo.fp_ssc,
-          src: require("../../../img/daili/ssc.png"),
+          src: require("../../../img/daili/ssc.png")
         },
         {
           name: "快三",
           ref: "vk3",
           percent: this.$store.state.userinfo.accountInfo.fp_k3,
-          src: require("../../../img/daili/kuai3.png"),
+          src: require("../../../img/daili/kuai3.png")
         },
         {
           name: "11选5",
           ref: "v11x5",
           percent: this.$store.state.userinfo.accountInfo.fp_11x5,
-          src: require("../../../img/daili/11-5.png"),
+          src: require("../../../img/daili/11-5.png")
         },
         {
           name: "3D",
           ref: "v3d",
           percent: this.$store.state.userinfo.accountInfo.fp_3d,
-          src: require("../../../img/daili/3d.png"),
+          src: require("../../../img/daili/3d.png")
         },
         {
           name: "PK拾",
           percent: this.$store.state.userinfo.accountInfo.fp_pk10,
           ref: "vpk10",
-          src: require("../../../img/daili/PK拾.png"),
+          src: require("../../../img/daili/PK拾.png")
         },
         {
           name: "PC蛋蛋",
           ref: "vpcdd",
           percent: this.$store.state.userinfo.accountInfo.fp_pcdd,
-          src: require("../../../img/daili/xingyun28.png"),
+          src: require("../../../img/daili/xingyun28.png")
         },
         {
           name: "六合彩",
           ref: "vlhc",
           percent: this.$store.state.userinfo.accountInfo.fp_lhc,
-          src: require("../../../img/daili/liuhecai.png"),
+          src: require("../../../img/daili/liuhecai.png")
         },
         {
           name: "其他",
           ref: "vother",
           percent: this.$store.state.userinfo.accountInfo.fp_other,
-          src: require("../../../img/daili/qtcz.png"),
-        },
+          src: require("../../../img/daili/qtcz.png")
+        }
         // {
         //   name: "幸运农场",
         //   ref: "vxync",
@@ -249,7 +300,7 @@ export default {
             this.thirdTxt = "我的域名";
             this.domainManageIndex = 0;
             this.getAliveDomain();
-          },
+          }
         },
         {
           label: "下级域名",
@@ -257,11 +308,11 @@ export default {
             this.thirdTxt = "下级域名";
             this.domainManageIndex = 1;
             this.getAliveDomain();
-          },
-        },
+          }
+        }
       ],
       isShow: false,
-      thirdIsShow: false,
+      thirdIsShow: false
     };
   },
   mounted() {
@@ -273,25 +324,34 @@ export default {
       "getUsefulEnomList",
       "createJoinCode",
       "getUserEnomList",
-      "getUserJoinCodeList",
+      "getUserJoinCodeList"
     ]),
     // ...mapActions(),
-    onCopy(e) {
+    onCopy() {
       this.$dialog.toast({ mes: "复制成功" });
     },
     onError(e) {
       console.log(e);
     },
     async createCode() {
-      let arr = ["vssc", "vpcdd", "vk3", "vpk10", "v3d", "v11x5", "vlhc", "vother"];
-      let request = {
+      const arr = [
+        "vssc",
+        "vpcdd",
+        "vk3",
+        "vpk10",
+        "v3d",
+        "v11x5",
+        "vlhc",
+        "vother"
+      ];
+      const request = {
         actype: this.typeIndex,
-        eid: this.domainID,
+        eid: this.domainID
       };
       arr.forEach(v => {
-        request[v] = this.$refs[v][0].returnPercent + '';
+        request[v] = this.$refs[v][0].returnPercent + "";
       });
-      let res = await this.createJoinCode(request);
+      const res = await this.createJoinCode(request);
       if (res) {
         this.$dialog.alert({ mes: "创建成功,邀请码为" + res });
         this.getInvitationCode();
@@ -317,12 +377,14 @@ export default {
       this.$dialog.loading.open("正在加载中···");
       this.getUserJoinCodeList({
         actype: this.centerTypeIndex,
-        pageid: 0,
+        pageid: 0
       }).then(res => {
-        console.log(res)
-        res == (0 || null) ? (this.invitationCode = []) : (this.invitationCode = res);
-        if(Array.isArray(res) && res.length) {
-          this.domainID = res[0].id
+        console.log(res);
+        res == (0 || null)
+          ? (this.invitationCode = [])
+          : (this.invitationCode = res);
+        if (Array.isArray(res) && res.length) {
+          this.domainID = res[0].id;
         }
         this.$dialog.loading.close();
       });
@@ -334,7 +396,7 @@ export default {
     getAliveDomain() {
       this.$dialog.loading.open("正在加载中···");
       this.getUserEnomList({
-        actype: this.domainManageIndex,
+        actype: this.domainManageIndex
       }).then(res => {
         res == 0 ? (this.domainData = []) : (this.domainData = res);
         this.$dialog.loading.close();
@@ -349,45 +411,45 @@ export default {
             callback: () => {
               this.domainTxt = "使用默认";
               this.domainID = 0;
-            },
-          },
+            }
+          }
         ].concat(
-          res.map((item, index) => ({
+          res.map(item => ({
             label: item.enom,
             callback: () => {
               this.domainID = item.id;
               this.domainTxt = item.enom;
-            },
+            }
           }))
         );
         this.$dialog.loading.close();
       });
     },
     showYaoQingMaOption(i) {
-      if(!i.bind_param) {
-        this.yaoqingmaIsShow = true
-        this.accid = i.id
+      if (!i.bind_param) {
+        this.yaoqingmaIsShow = true;
+        this.accid = i.id;
       }
     },
     choosedYaoQingMa(n, i) {
-      console.log(n)
-      this.domainID = n.id
-      this.itIndex = i
+      console.log(n);
+      this.domainID = n.id;
+      this.itIndex = i;
     },
     setYaoQingMa() {
-      this.$dialog.loading.open(' ')
-      this.$ajax('request', {
-        ac: 'BindEnomParam',
+      this.$dialog.loading.open(" ");
+      this.$ajax("request", {
+        ac: "BindEnomParam",
         eid: this.domainID,
         id: this.accid
-      }).then(res => {
-        this.$dialog.toast({mes: '绑定成功'})
-        this.$dialog.loading.close()
-        this.hadYaoQingMaShow = false
-        this.getAliveDomain()
-      })
+      }).then(() => {
+        this.$dialog.toast({ mes: "绑定成功" });
+        this.$dialog.loading.close();
+        this.hadYaoQingMaShow = false;
+        this.getAliveDomain();
+      });
     }
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -425,14 +487,14 @@ export default {
           }
           .active {
             line-height: poTorem(28px);
-            background-color: #ff7c34;
+            background-color: $mainColor;
             color: #fff;
             border: none;
           }
         }
         .check_table {
           font-size: poTorem(14px);
-          color: #ff7c34;
+          color: $mainColor;
         }
       }
       .lottery_rate {
@@ -444,7 +506,7 @@ export default {
       .bottom {
         padding-top: poTorem(20px);
         padding-bottom: poTorem(20px);
-        width: poTorem(414px);
+        width: 100%;
         @include center;
         flex-wrap: wrap;
         position: fixed;
@@ -469,7 +531,7 @@ export default {
         // }
         .createCode {
           color: #fff;
-          background-color: #ff7c34;
+          background-color: $mainColor;
         }
       }
       .owned_code {
@@ -569,11 +631,12 @@ export default {
           }
         }
         .enable {
-          border: none!important;
+          border: none !important;
         }
       }
     }
-    .pop_win, .yao_qing_ma_win {
+    .pop_win,
+    .yao_qing_ma_win {
       .title {
         height: poTorem(45px);
         line-height: poTorem(45px);
@@ -627,7 +690,7 @@ export default {
             line-height: poTorem(34px);
           }
           .active {
-            background: url('~img/account/choosed.png') no-repeat bottom right;
+            background: url("~img/account/choosed.png") no-repeat bottom right;
             background-size: 1rem 1rem;
             border: poTorem(1px) solid #e33939;
           }
@@ -651,28 +714,28 @@ export default {
 }
 </style>
 <style lang="scss">
-  .yao_qing_ma_win {
-    .yd-popup-center {
-      max-height: 90%;
+.yao_qing_ma_win {
+  .yd-popup-center {
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    .yd-popup-content {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      .yd-popup-content {
+      div {
         flex: 1;
         display: flex;
         flex-direction: column;
-        div {
+        .content_box {
+          padding: 0;
           flex: 1;
           display: flex;
           flex-direction: column;
-          .content_box {
-            padding: 0;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-          }
         }
       }
     }
   }
+}
 </style>
 

@@ -2,12 +2,13 @@
   <div class="empty">
     <img src="~img/bet_record/noRecords.png" alt="">
     <p>暂无记录</p>
+    <slot name="other"></slot>
   </div>
 </template>
 
 <script>
 export default {
-  name: "AppEmpty",
+  name: "AppEmpty"
 };
 </script>
 

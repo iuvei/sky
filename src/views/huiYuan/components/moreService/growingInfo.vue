@@ -1,9 +1,12 @@
 <template>
   <div class="growinginfo_main_body">
-    <publicHead :title="funcName" :type="5"></publicHead>
-    <div class="box" v-show="tabNum==0">
+    <publicHead :title="funcName"
+                :type="5"></publicHead>
+    <div class="box"
+         v-show="tabNum==0">
       <div class="user_info">
-        <img :src="head_icon" alt="">
+        <img :src="head_icon"
+             alt="">
         <div>
           <p class="userInfo">
             <span style="vertical-align:-webkit-baseline-middle">{{username}}</span>
@@ -13,21 +16,33 @@
             </span> -->
           </p>
           <p class="userInfo">
-            <span>等级：<i class="vip_degree" style="font-style: italic;font-weight:600">LV.{{data.prevVip}}</i>&nbsp;&nbsp;成长值：<i class="vip_degree">{{data.exp}}</i></span>
+            <span>等级：
+              <i class="vip_degree"
+                 style="font-style: italic;font-weight:600">LV.{{data.prevVip}}</i>&nbsp;&nbsp;成长值：
+              <i class="vip_degree">{{data.exp}}</i>
+            </span>
             <!-- <span class="vip_degree">成长值：{{data.exp}}分</span> -->
           </p>
         </div>
         <p class="degree_detail">距离下一级还需要 {{data.nextExp - data.exp}} 成长值，可获得奖励</p>
         <div class="degree_line_box">
           <span>LV.{{data.prevVip}}</span>
-          <yd-progressbar type="line" :progress="progress" trail-width="6" stroke-width="6" trail-color="#FFA800" stroke-color="#ccc" class="degree_line"></yd-progressbar>
+          <yd-progressbar type="line"
+                          :progress="progress"
+                          trail-width="6"
+                          stroke-width="6"
+                          trail-color="#FFA800"
+                          stroke-color="#ccc"
+                          class="degree_line"></yd-progressbar>
           <span class="speed">{{parseInt(progress * 100)}}%</span>
           <span>LV.{{data.nextVip}}</span>
         </div>
       </div>
       <div class="growing">
         <p class="tit">成长值分类统计：</p>
-        <div class="item" v-for="(i,key) in list.exp_sum" :key="key">
+        <div class="item"
+             v-for="(i,key) in list.exp_sum"
+             :key="key">
           <span>{{i.title}}：</span>
           <i>{{i.exp}}</i>
         </div>
@@ -46,7 +61,9 @@
       </div>
       <div class="list">
         <p class="tit">奖励明细：</p>
-        <div class="item" v-for="(i,key) in list.exp_list" :key="key">
+        <div class="item"
+             v-for="(i,key) in list.exp_list"
+             :key="key">
           <span>{{i.title}}</span>
           <span>{{i.exp}}成长值</span>
           <span>{{i.date}}</span>
@@ -68,25 +85,24 @@
         </div> -->
       </div>
     </div>
-    <div class="box" v-show="tabNum==1">
+    <div class="box"
+         v-show="tabNum==1">
       <div class="head">
         <p>如何获取成长值：</p>
-        <span>充值：平台中，每充值1元可获取1成长值</span>
-        <span>打码：平台中，每投注1元可获取1成长值</span>
-        <span>任务：完成任务可以获得相应成长值</span>
+        <span v-for="(item,key) in rule.addInfo"
+              :key="key">{{item}}</span>
       </div>
       <div class="grade">
         <p>等级成长值对应</p>
         <div class="degree_title">
-          <span>等级</span>
-          <span>成长值</span>
-          <span>等级礼金</span>
-          <span>周俸禄</span>
-          <span>月俸禄</span>
+          <span v-for="(item,key) in rule.titleInfo"
+                :key="key">{{item}}</span>
         </div>
-        <div class="degree_intro" v-for="(item,key) in rule" :key="key">
+        <div class="degree_intro"
+             v-for="(item,key) in rule.paramInfo"
+             :key="key">
           <span>LV.{{item.vip}}</span>
-          <span>{{item.exp}}</span>
+          <span>{{item.exp &lt; 10000 ? item.exp : (item.exp/10000).toFixed(0) + '万'}}</span>
           <span>{{item.level_reward}}</span>
           <span>{{item.week_reward}}</span>
           <span>{{item.month_reward}}</span>
@@ -94,11 +110,13 @@
       </div>
     </div>
     <div class="foot">
-      <div @click="tab(0)" :class="(tabNum==0)?'active':''">
+      <div @click="tab(0)"
+           :class="(tabNum==0)?'active':''">
         <i :class="(tabNum==0)?'grade_info1':'grade_info2'"></i>
         <span>明细</span>
       </div>
-      <div @click="tab(1)" :class="(tabNum==1)?'active':''">
+      <div @click="tab(1)"
+           :class="(tabNum==1)?'active':''">
         <i :class="(tabNum==1)?'grade_1':'grade_2'"></i>
         <span>规则</span>
       </div>
@@ -106,11 +124,11 @@
   </div>
 </template>
 <script>
-import decodeFunc from '../../../shouYe/decode.js'
-import publicHead from './publicHead';
-import { mapState, mapActions, mapMutations } from "vuex";
+import decodeFunc from "../../../shouYe/decode.js";
+import publicHead from "./publicHead";
+import { mapState } from "vuex";
 export default {
-  components : {
+  components: {
     publicHead
   },
   computed: {
@@ -123,68 +141,68 @@ export default {
       },
       bank() {
         return this.$store.state.userinfo.accountInfo.bank_typename != "";
-      },
+      }
     }),
     head_icon() {
-      let iconUrl = this.$store.state.userinfo.accountInfo.head_icon
-      if(iconUrl !== '') {
-        return iconUrl
+      const iconUrl = this.$store.state.userinfo.accountInfo.head_icon;
+      if (iconUrl !== "") {
+        return iconUrl;
       } else {
-        let defaultIcon = require("../../../../img/head_icon.png")
-        return defaultIcon
+        const defaultIcon = require("../../../../img/head_icon.png");
+        return defaultIcon;
       }
     }
   },
   data() {
     return {
-      funcName: '成长明细',
-      data:[],
+      funcName: "成长明细",
+      data: [],
       progress: 0,
       img: require("../../../../img/bet_record/arrow.png"),
       headImg: "",
       tabNum: 0,
-      list:[],
-      rule:[]
-    }
+      list: [],
+      rule: []
+    };
   },
   activated() {
-    this.getData()
-    this.getUserExpTradLog()
-    this.getRiseViewInfoNew()
+    this.getData();
+    this.getUserExpTradLog();
+    this.getRiseViewInfoNew();
   },
   mixins: [decodeFunc],
   methods: {
-    getData (){
+    getData() {
       this.$dialog.loading.open(" ");
       this.$ajax("request", {
-        ac: "GetUserEventRiseInfo",
+        ac: "GetUserEventRiseInfo"
       }).then(res => {
-        this.data = res
-        this.progress = (res.exp/res.nextExp).toFixed(2)
+        this.data = res;
+        this.progress = (res.exp / res.nextExp).toFixed(2);
         this.$dialog.loading.close();
       });
     },
     // 晋级活动积分明细
-    getUserExpTradLog (){
+    getUserExpTradLog() {
       this.$dialog.loading.open(" ");
       this.$ajax("request", {
-        ac: "GetUserExpTradLog",
+        ac: "GetUserExpTradLog"
       }).then(res => {
-        console.log('晋级活动积分明细')
-        console.log(res)
-        this.list = res
+        console.log("晋级活动积分明细");
+        console.log(res);
+        this.list = res;
         this.$dialog.loading.close();
       });
     },
     // 晋级活动规则
-    getRiseViewInfoNew (){
+    getRiseViewInfoNew() {
       this.$dialog.loading.open(" ");
       this.$ajax("request", {
-        ac: "GetRiseViewInfoNew",
+        ac: "GetRiseViewInfoNew2"
       }).then(res => {
-        console.log('晋级活动规则')
-        console.log(res)
-        this.rule = res
+        console.log("晋级活动规则");
+        console.log(res);
+        this.rule = res;
         // var temp = document.createElement("div");
         // temp.innerHTML = this.decodeEvent(res)
         // var output = temp.innerText || temp.textContent;
@@ -195,16 +213,18 @@ export default {
       });
     },
     tab(n) {
-      this.funcName = (n==0)?'成长明细':'规则',
-      this.tabNum = n
+      (this.funcName = n == 0 ? "成长明细" : "规则"), (this.tabNum = n);
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../css/resources.scss";
-.growinginfo_main_body{
-  background-color: #F5F5F5;
+.growinginfo_main_body {
+  background-color: #f5f5f5;
+  .personal_center_head {
+    position: fixed;
+  }
   .user_info {
     background: url(../../../../img/grade_bg.png) no-repeat;
     background-size: cover;
@@ -266,7 +286,7 @@ export default {
         position: absolute;
         top: 45%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
         font-size: 0.8rem;
       }
     }
@@ -276,7 +296,7 @@ export default {
     background-color: #fff;
     padding-top: poTorem(15px);
     margin-bottom: poTorem(15px);
-    .tit{
+    .tit {
       color: #7a7a7a;
       font-size: poTorem(16px);
     }
@@ -284,14 +304,14 @@ export default {
       line-height: poTorem(50px);
       font-size: poTorem(16px);
       border-bottom: 1px solid #ccc;
-      &:last-child{
+      &:last-child {
         border-bottom: none;
       }
       span {
         color: #474747;
       }
       i {
-        color: #E4403F;
+        color: #e4403f;
       }
     }
   }
@@ -299,7 +319,7 @@ export default {
     padding-left: poTorem(20px);
     background-color: #fff;
     padding-top: poTorem(15px);
-    .tit{
+    .tit {
       color: #7a7a7a;
       font-size: poTorem(16px);
     }
@@ -307,18 +327,18 @@ export default {
       line-height: poTorem(50px);
       font-size: poTorem(16px);
       border-bottom: 1px solid #ccc;
-      &:last-child{
+      &:last-child {
         border-bottom: none;
       }
       span {
         display: inline-block;
         width: 32%;
         color: #474747;
-        &:nth-child(2){
+        &:nth-child(2) {
           text-align: center;
-          color: #FE7C33;
+          color: #fe7c33;
         }
-        &:last-child{
+        &:last-child {
           float: right;
           line-height: poTorem(25px);
           text-align: center;
@@ -326,20 +346,21 @@ export default {
       }
     }
   }
-  .head{
-    padding: poTorem(10px) poTorem(20px);
+  .head {
+    padding: poTorem(10px) poTorem(10px);
     margin-top: poTorem(15px);
     margin-bottom: poTorem(15px);
     background-color: #fff;
+    font-size: poTorem(16px);
     p {
       color: #7a7a7a;
-      font-size: poTorem(18px);
+      // font-size: poTorem(16px);
       line-height: poTorem(40px);
     }
     span {
       color: #525252;
       display: block;
-      font-size: poTorem(18px);
+      // font-size: poTorem(16px);
       line-height: poTorem(30px);
     }
   }
@@ -350,30 +371,30 @@ export default {
     p {
       padding-left: poTorem(20px);
       color: #7a7a7a;
-      font-size: poTorem(18px);
+      font-size: poTorem(16px);
       background-color: #fff;
       line-height: poTorem(40px);
     }
     .degree_title {
       @include around;
-      font-size: poTorem(18px);
+      font-size: poTorem(16px);
       span {
         width: 18%;
         color: #525252;
         text-align: center;
         line-height: poTorem(40px);
-        &:nth-child(2){
+        &:nth-child(2) {
           width: 28%;
         }
       }
     }
     .degree_intro {
       @include around;
-      font-size: poTorem(18px);
+      font-size: poTorem(16px);
       color: #626367;
       background-color: #fff;
       border-bottom: 1px solid #ccc;
-      &:last-child{
+      &:last-child {
         border-bottom: none;
       }
       span {
@@ -381,14 +402,17 @@ export default {
         text-align: center;
         line-height: poTorem(45px);
         color: #525252;
-        &:nth-child(2){
+        &:nth-child(2) {
           width: 28%;
         }
       }
     }
   }
   .box {
-    margin-bottom: poTorem(75px);
+    padding-top: 3rem;
+    height: 100%;
+    overflow: scroll;
+    padding-bottom: poTorem(75px);
   }
   .foot {
     position: fixed;
@@ -402,7 +426,7 @@ export default {
       width: 50%;
       display: inline-block;
       float: left;
-      &:nth-child(1){
+      &:nth-child(1) {
         border-right: 1px solid #ccc;
       }
       i {
@@ -412,19 +436,19 @@ export default {
         margin: 0 auto;
       }
       .grade_info1 {
-        background: url('../../../../img/grade_info1.png') no-repeat;
+        background: url("../../../../img/grade_info1.png") no-repeat;
         background-size: 100%;
       }
       .grade_info2 {
-        background: url('../../../../img/grade_info2.png') no-repeat;
+        background: url("../../../../img/grade_info2.png") no-repeat;
         background-size: 100%;
       }
       .grade_1 {
-        background: url('../../../../img/grade_1.png') no-repeat;
+        background: url("../../../../img/grade_1.png") no-repeat;
         background-size: 100%;
       }
       .grade_2 {
-        background: url('../../../../img/grade_2.png') no-repeat;
+        background: url("../../../../img/grade_2.png") no-repeat;
         background-size: 100%;
       }
       span {
@@ -437,7 +461,7 @@ export default {
     }
     .active {
       span {
-        color: #E4393A;
+        color: #e4393a;
       }
     }
   }

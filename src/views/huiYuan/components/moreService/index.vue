@@ -1,7 +1,7 @@
 <template>
   <div>
     <keep-alive>
-    <router-view class="personal_route"></router-view>
+      <router-view class="personal_route"></router-view>
     </keep-alive>
     <!-- <p class="next_step" v-show="nextBtnIsShow">下一步</p> -->
   </div>
@@ -11,9 +11,9 @@ export default {
   name: "moreService",
   data() {
     return {
-      nextBtnIsShow: true,
+      nextBtnIsShow: true
     };
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>

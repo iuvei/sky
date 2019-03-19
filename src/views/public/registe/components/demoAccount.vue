@@ -10,29 +10,48 @@
     <div class="demo_input">
       <yd-cell-group>
         <yd-cell-item>
-          <span slot="left">用户帐号</span>
-          <yd-input disabled slot="right" required v-model="input1" max="20" :placeholder="input1"></yd-input>
+          <span slot="left">用户账号</span>
+          <yd-input disabled
+                    slot="right"
+                    required
+                    v-model="input1"
+                    max="20"
+                    :placeholder="input1"></yd-input>
         </yd-cell-item>
         <yd-cell-item>
           <span slot="left">登录密码</span>
-          <yd-input slot="right" type="password" v-model="input2" placeholder="请输入密码"></yd-input>
+          <yd-input slot="right"
+                    type="password"
+                    v-model="input2"
+                    placeholder="请输入密码"></yd-input>
         </yd-cell-item>
         <yd-cell-item>
           <span slot="left">重复密码</span>
-          <yd-input slot="right" type="password" v-model="input3" placeholder="再次请输入密码"></yd-input>
+          <yd-input slot="right"
+                    type="password"
+                    v-model="input3"
+                    placeholder="再次请输入密码"></yd-input>
         </yd-cell-item>
         <yd-cell-item class="code">
           <span slot="left">验证码</span>
-          <yd-input slot="right" v-model="input4" demoex="^\d{5,12}$" placeholder="输入验证码"></yd-input>
+          <yd-input slot="right"
+                    v-model="input4"
+                    demoex="^\d{5,12}$"
+                    placeholder="输入验证码"></yd-input>
           <span slot="right">
-            <img :src="verifyImg" alt="" @click="getVerify(randomNum())">
+            <img :src="verifyImg"
+                 alt=""
+                 @click="getVerify(randomNum())">
           </span>
         </yd-cell-item>
         <yd-cell-item class="protocol">
-          <yd-checkbox slot="left" v-model="checkbox1" shape="circle">
+          <yd-checkbox slot="left"
+                       v-model="checkbox1"
+                       shape="circle">
             注册及表示同意
           </yd-checkbox>
-          <router-link to="/agreement" slot="left">
+          <router-link to="/agreement"
+                       slot="left">
             <span :style="{color:'#Ff3333'}">《好彩服务使用协议》</span>
           </router-link>
         </yd-cell-item>
@@ -68,7 +87,6 @@
   </div>
 </template>
 <script>
-import { demo_get } from "../../../../../api/user";
 export default {
   data() {
     return {
@@ -78,7 +96,7 @@ export default {
       input4: "",
       checkbox1: true,
       username: "",
-      verifyImg: "",
+      verifyImg: ""
     };
   },
   mounted() {
@@ -91,7 +109,7 @@ export default {
       this.$ajax("request", {
         ac: "regGuestUser",
         client_type: 1,
-        edition: "v1.0.0", //后台规定的版本号，后面需要做成可配置的
+        edition: "v1.0.0" // 后台规定的版本号，后面需要做成可配置的
       }).then(res => {
         // console.log(res);
         this.input1 = res.username;
@@ -99,7 +117,7 @@ export default {
         this.$dialog.loading.close();
       });
     },
-    getVerify(i) {
+    getVerify() {
       this.$ajax("request", {
         ac: "getVerifyImage"
       }).then(res => {
@@ -121,18 +139,18 @@ export default {
           password: this.input2,
           client_type: 1,
           vcode: this.input4,
-          vid: 2,
+          vid: 2
         }).then(res => {
           this.$router.push("/home");
           this.$store.commit("GET_USERINFO", {
             accountInfo: res,
-            isLogin: true,
+            isLogin: true
           });
           this.$dialog.alert({ mes: "注册试玩账号成功" });
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

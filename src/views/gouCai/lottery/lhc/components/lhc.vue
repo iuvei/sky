@@ -1,5 +1,5 @@
 <template>
-  <div class="shishicai">
+  <div class="lhc">
     <!-- 头部 -->
     <div class="heads">
       <div class="heads_top">
@@ -8,8 +8,8 @@
             <i>{{nextQishu && ((nextQishu * 1 - 1) +'').padStart(4,'0') || ''}}</i>期
           </span>
           <ul>
-            <li>{{balls.length ? returnShengXiao(balls[6]) : '-'}}</li>
-            <li>{{balls.length ? returnJiaYe(returnShengXiao(balls[6])) : '-'}}</li>
+            <li>{{balls.length ? returnShengXiao(balls[6], nextQs-1) : '-'}}</li>
+            <li>{{balls.length ? returnJiaYe(returnShengXiao(balls[6], nextQs-1)) : '-'}}</li>
             <li>{{balls.length ? returnDaXiao(balls[6]) : '-'}}</li>
             <li>{{balls.length ? returnDanShuang(balls[6]) : '-'}}</li>
             <li>{{balls.length ? returnColor(balls[6]) : '-'}}</li>
@@ -23,32 +23,42 @@
           <div>
             <div>
               <ul v-if="show_balls.length > 1">
-                <li v-for="(item,index) in show_balls" :key="index" v-ball>{{item}}</li>
+                <li v-for="(item,index) in show_balls"
+                    :key="index"
+                    v-ball>{{item}}</li>
               </ul>
               <ul v-else>
-                <li v-for="(item,index) in randomBalls" :key="index" v-ball>{{item}}</li>
+                <li v-for="(item,index) in randomBalls"
+                    :key="index"
+                    v-ball>{{item}}</li>
               </ul>
             </div>
             <div>
               <ul v-if="show_balls.length > 1">
-                <li v-for="(item,index) in show_balls" :key="index" v-ball>{{item==='+'?' ':returnShengXiao(item)}}</li>
+                <li v-for="(item,index) in show_balls"
+                    :key="index"
+                    v-ball>{{item==='+'?' ':returnShengXiao(item, nextQs-1)}}</li>
               </ul>
               <ul v-else>
-                <li v-for="(item,index) in randomBalls" :key="index" v-ball>{{item==='+'?' ':returnShengXiao(item)}}</li>
+                <li v-for="(item,index) in randomBalls"
+                    :key="index"
+                    v-ball>{{item==='+'?' ':returnShengXiao(item, nextQs-1)}}</li>
               </ul>
             </div>
           </div>
           <!-- <p v-show="show_balls.length == 1">正在开奖</p> -->
           <span @click="openHistory">
             <i>历史开奖</i>
-            <i class="icon" :class="{'slidedown':this.isOpen}"></i>
+            <i class="icon"
+               :class="{'slidedown':this.isOpen}"></i>
           </span>
         </div>
       </div>
       <div class="heads_bottom">
         <!-- 历史开奖 -->
         <yd-accordion>
-          <yd-accordion-item ref="accordion" :auto="false">
+          <yd-accordion-item ref="accordion"
+                             :auto="false">
             <div class="history">
               <ul>
                 <li class="title">
@@ -59,10 +69,12 @@
                   <span>单双</span>
                   <span>色波</span>
                 </li>
-                <li v-for="(item,index) in kjBalls" :key="index">
+                <li v-for="(item,index) in kjBalls"
+                    :key="index">
                   <span>{{(item.qishu + '').slice(-4)}}</span>
 
-                  <span class="kaijiang" v-if="item.balls.length > 1">
+                  <span class="kaijiang"
+                        v-if="item.balls.length > 1">
                     <div>
                       <i v-color>{{item.balls[0]}}</i>,
                       <i v-color>{{item.balls[1]}}</i>,
@@ -74,20 +86,20 @@
                       <i v-color>{{item.balls[6]}}</i>
                     </div>
                     <div style="letter-spacing:0.222em">
-                      <i>{{item.balls?returnShengXiao(item.balls[0]):'-'}}</i>
-                      <i>{{item.balls?returnShengXiao(item.balls[1]):'-'}}</i>
-                      <i>{{item.balls?returnShengXiao(item.balls[2]):'-'}}</i>
-                      <i>{{item.balls?returnShengXiao(item.balls[3]):'-'}}</i>
-                      <i>{{item.balls?returnShengXiao(item.balls[4]):'-'}}</i>
-                      <i>{{item.balls?returnShengXiao(item.balls[5]):'-'}}</i>&nbsp;
-                      <i>{{item.balls?returnShengXiao(item.balls[6]):'-'}}</i>
+                      <i>{{item.balls?returnShengXiao(item.balls[0], item.qishu):'-'}}</i>
+                      <i>{{item.balls?returnShengXiao(item.balls[1], item.qishu):'-'}}</i>
+                      <i>{{item.balls?returnShengXiao(item.balls[2], item.qishu):'-'}}</i>
+                      <i>{{item.balls?returnShengXiao(item.balls[3], item.qishu):'-'}}</i>
+                      <i>{{item.balls?returnShengXiao(item.balls[4], item.qishu):'-'}}</i>
+                      <i>{{item.balls?returnShengXiao(item.balls[5], item.qishu):'-'}}</i>&nbsp;
+                      <i>{{item.balls?returnShengXiao(item.balls[6], item.qishu):'-'}}</i>
                     </div>
                   </span>
                   <span v-else>
                     正在开奖
                   </span>
                   <!-- <span>{{item.balls?returnShengXiao(item.balls[6]):'-'}}</span> -->
-                  <span>{{item.balls?returnJiaYe(returnShengXiao(item.balls[6])):'-'}}</span>
+                  <span>{{item.balls?returnJiaYe(returnShengXiao(item.balls[6], item.qishu)):'-'}}</span>
                   <span>{{item.balls?returnDaXiao(item.balls[6]):'-'}}</span>
                   <span>{{item.balls?returnDanShuang(item.balls[6]):'-'}}</span>
                   <span>{{balls.length ? returnColor(item.balls[6]) : '-'}}</span>
@@ -103,108 +115,116 @@
             <i>{{nextQishu}}</i>期{{closeIsShow?'截止时间':'已封盘'}}:
           </div>
           <div class="haoma">
-            <app-count-down ref="openless" v-model="openless_leftTime" :time="openless" timetype="second" done-text="正在开奖" format="{%h}:{%m}:{%s}" :callback="_openCallback"></app-count-down>
+            <app-count-down ref="openless"
+                            v-model="openless_leftTime"
+                            :time="openless"
+                            timetype="second"
+                            done-text="正在开奖"
+                            format="{%h}:{%m}:{%s}"
+                            :callback="_openCallback"></app-count-down>
           </div>
-          <div class="haoma" v-html="renderStr" @click="userBalanceClick"></div>
+          <div class="haoma"
+               v-html="renderStr"
+               @click="userBalanceClick"></div>
         </div>
       </div>
     </div>
     <keep-alive>
       <!-- 投注部分 -->
-      <betting :routeList="routeLists" ref='chooseBall'></betting>
+      <betting :routeList="routeLists"
+               ref='chooseBall'></betting>
 
     </keep-alive>
     <keep-alive>
       <!-- 购物车 -->
-      <shop :quotation="closeIsShow" ref='touzhuBtn' @clearAll='transmit'></shop>
+      <shop :quotation="closeIsShow"
+            ref='touzhuBtn'
+            @clearAll='transmit'></shop>
     </keep-alive>
   </div>
 </template>
 <script>
-import betting from '../components/betting'
-import shop from '../../shop'
-import axios from 'axios'
-import { mapActions, mapState } from 'vuex'
-import { resetRouteParams } from '~/js/util'
-import { selectBalls } from '~/js/lhc.template'
-import { secondsFormat } from '~/js/touzhu/touzhu.util'
-import countDownMixin from '../../countDownMixin'
-import api from '../../../../../../api/betting'
+import betting from "../components/betting";
+import shop from "../../shop";
+import { mapActions, mapState } from "vuex";
+import { resetRouteParams } from "~/js/util";
+import { selectBalls } from "~/js/lhc.template";
+import countDownMixin from "../../countDownMixin";
 const redArr = [
-    '01',
-    '02',
-    '07',
-    '08',
-    '12',
-    '13',
-    '18',
-    '19',
-    '23',
-    '24',
-    '29',
-    '30',
-    '34',
-    '35',
-    '40',
-    '45',
-    '46'
+    "01",
+    "02",
+    "07",
+    "08",
+    "12",
+    "13",
+    "18",
+    "19",
+    "23",
+    "24",
+    "29",
+    "30",
+    "34",
+    "35",
+    "40",
+    "45",
+    "46"
   ],
   blueArr = [
-    '03',
-    '04',
-    '09',
-    '10',
-    '14',
-    '15',
-    '20',
-    '25',
-    '26',
-    '31',
-    '36',
-    '37',
-    '41',
-    '42',
-    '47',
-    '48'
+    "03",
+    "04",
+    "09",
+    "10",
+    "14",
+    "15",
+    "20",
+    "25",
+    "26",
+    "31",
+    "36",
+    "37",
+    "41",
+    "42",
+    "47",
+    "48"
   ],
   greenArr = [
-    '05',
-    '06',
-    '11',
-    '16',
-    '17',
-    '21',
-    '22',
-    '27',
-    '28',
-    '32',
-    '33',
-    '38',
-    '39',
-    '43',
-    '44',
-    '49'
-  ]
+    "05",
+    "06",
+    "11",
+    "16",
+    "17",
+    "21",
+    "22",
+    "27",
+    "28",
+    "32",
+    "33",
+    "38",
+    "39",
+    "43",
+    "44",
+    "49"
+  ];
 export default {
   directives: {
-    color: (el, val) => {
+    color: el => {
       if (redArr.includes(el.innerHTML)) {
-        el.style.color = '#eb3349'
+        el.style.color = "#eb3349";
       } else if (blueArr.includes(el.innerHTML)) {
-        el.style.color = '#00a0eb'
+        el.style.color = "#00a0eb";
       } else if (greenArr.includes(el.innerHTML)) {
-        el.style.color = '#30b16c'
+        el.style.color = "#30b16c";
       }
     },
-    ball: (el, val) => {
+    ball: el => {
       if (redArr.includes(el.innerHTML)) {
-        el.style.backgroundColor = '#eb3349'
+        el.style.backgroundColor = "#eb3349";
       } else if (blueArr.includes(el.innerHTML)) {
-        el.style.backgroundColor = '#00a0eb'
+        el.style.backgroundColor = "#00a0eb";
       } else if (greenArr.includes(el.innerHTML)) {
-        el.style.backgroundColor = '#30b16c'
+        el.style.backgroundColor = "#30b16c";
       } else {
-        el.style.color = '#535353'
+        el.style.color = "#535353";
       }
     }
   },
@@ -217,8 +237,8 @@ export default {
       nexts: {},
       closeIsShow: true,
       isOpen: false,
-      val: ''
-    }
+      val: ""
+    };
   },
   components: {
     betting,
@@ -228,7 +248,7 @@ export default {
     sumNum() {
       return (
         Number(this.balls[0]) + Number(this.balls[1]) + Number(this.balls[2])
-      )
+      );
     },
     ...mapState({
       cart: state => state.betting.cart,
@@ -236,164 +256,170 @@ export default {
     })
   },
   async activated() {
-    this.routeLists = this.$route.params
-    resetRouteParams(this, 'lhc')
-    let name_tag =
-      this.$route.params.name_tag || this.$store.state.betting.name_tag
-    if(name_tag) {
-      this.getOpened(name_tag)
-      this.getHistory(name_tag)
+    this.routeLists = this.$route.params;
+    resetRouteParams(this, "lhc");
+    const name_tag =
+      this.$route.params.name_tag || this.$store.state.betting.name_tag;
+    if (name_tag) {
+      this.getOpened(name_tag);
+      this.getHistory(name_tag);
     }
     // name_tag &&
     //   (await this.getOpened(name_tag)) &&
     //   (await this.getHistory(name_tag))
     this.randomBallTimer = setInterval(() => {
-      this.ballFromBet()
-    }, 500)
+      this.ballFromBet();
+    }, 500);
   },
   deactivated() {
     // clearInterval(this.$refs.stopless.timer)
-    clearInterval(this.$refs.openless.timer)
-    clearInterval(this.resTimer)
-    clearInterval(this.randomBallTimer)
+    clearInterval(this.$refs.openless.timer);
+    clearInterval(this.resTimer);
+    clearInterval(this.randomBallTimer);
   },
   watch: {
-    '$route.params'(newVal, oldVal) {
+    "$route.params"(newVal, oldVal) {
       if (
         newVal &&
-        newVal.js_tag === 'lhc' &&
+        newVal.js_tag === "lhc" &&
         (oldVal && oldVal.js_tag == newVal.js_tag)
       ) {
-        this.routeLists = newVal
-        this.setBetCurent(newVal)
-        resetRouteParams(this, 'lhc')
-        this.getHistory(newVal.name_tag)
-        this.getOpened(newVal.name_tag)
-        this.setBetData({})
-        this.clearCart()
+        this.routeLists = newVal;
+        this.setBetCurent(newVal);
+        resetRouteParams(this, "lhc");
+        this.getHistory(newVal.name_tag);
+        this.getOpened(newVal.name_tag);
+        this.setBetData({});
+        this.clearCart();
       }
     },
-    balls: 'setBalls'
+    balls: "setBalls"
   },
   methods: {
     setBalls(val) {
       if (val.length === 7) {
-        this.show_balls = [...val]
-        this.show_balls.splice(6, 0, '+')
+        this.show_balls = [...val];
+        this.show_balls.splice(6, 0, "+");
       } else {
-        this.show_balls = []
+        this.show_balls = [];
       }
     },
     transmit() {
       const bettingItem = this.$children.find(x =>
-        x.$vnode.tag.includes('lhc_betting')
-      )
-      bettingItem && bettingItem.clearBalls && bettingItem.clearBalls()
-      this.bus.$emit('clearBalls')
+        x.$vnode.tag.includes("lhc_betting")
+      );
+      bettingItem && bettingItem.clearBalls && bettingItem.clearBalls();
+      this.bus.$emit("clearBalls");
     },
     greet(val) {
-      this.val = val
+      this.val = val;
     },
     returnHeZhi(val) {
       if (!val) {
-        return '-'
+        return "-";
       }
-      let a = val.split(''),
-        b
-      ;(a[0] * 1 + a[1] * 1) % 2 == 0 ? (b = '双') : (b = '单')
-      return b
+      const a = val.split("");
+      let b;
+      (a[0] * 1 + a[1] * 1) % 2 == 0 ? (b = "双") : (b = "单");
+      return b;
     },
     returnDaXiao(val) {
       if (!val) {
-        return '-'
+        return "-";
       }
-      let a
-      val > 24 ? (a = '大') : (a = '小')
-      return a
+      let a;
+      val > 24 ? (a = "大") : (a = "小");
+      return a;
     },
     returnDanShuang(val) {
       if (!val) {
-        return '-'
+        return "-";
       }
-      let b
-      val % 2 == 0 ? (b = '双') : (b = '单')
-      return b
+      let b;
+      val % 2 == 0 ? (b = "双") : (b = "单");
+      return b;
     },
     returnColor(val) {
       if (redArr.includes(val)) {
-        return '红'
+        return "红";
       } else if (blueArr.includes(val)) {
-        return '蓝'
+        return "蓝";
       } else if (greenArr.includes(val)) {
-        return '绿'
+        return "绿";
       } else {
-        return '-'
+        return "-";
       }
     },
-    returnShengXiao(val) {
-      // debugger
-      const shengxiao = selectBalls(10).shengxiao
+    returnShengXiao(val, qishu) {
+      let yearid = this.$route.params.yearid;
+      if (yearid == 0) {
+        yearid = qishu > 2019014 ? yearid : 11;
+      } else {
+        yearid = qishu > 2019014 ? yearid : yearid - 1;
+      }
+      const shengxiao = selectBalls(yearid).shengxiao;
       for (const i in shengxiao) {
         if (shengxiao[i].balls.includes(val)) {
-          return shengxiao[i].name
+          return shengxiao[i].name;
         }
       }
-      return '-'
+      return "-";
     },
     returnJiaYe(val) {
-      const a = ['羊', '马', '牛', '猪', '狗', '鸡'],
-        b = ['猴', '蛇', '龙', '兔', '虎', '鼠']
+      const a = ["羊", "马", "牛", "猪", "狗", "鸡"],
+        b = ["猴", "蛇", "龙", "兔", "虎", "鼠"];
       if (a.includes(val)) {
-        return '家'
+        return "家";
       } else if (b.includes(val)) {
-        return '野'
+        return "野";
       } else {
-        return '-'
+        return "-";
       }
     },
     returnRules(val) {
-      let arr = val.slice(0, 3)
-      let sortArr = arr.sort()
-      let newArr = new Set(sortArr)
+      const arr = val.slice(0, 3);
+      const sortArr = arr.sort();
+      const newArr = new Set(sortArr);
       if (newArr.size == 3) {
-        let abc =
+        const abc =
           Number(sortArr[0]) + 1 == sortArr[1] &&
-          Number(sortArr[1] + 1 == sortArr[2])
-        let isExist1 =
-          sortArr.includes('8') &&
-          sortArr.includes('9') &&
-          sortArr.includes('0')
-        let isExist2 =
-          sortArr.includes('1') &&
-          sortArr.includes('9') &&
-          sortArr.includes('0')
+          Number(sortArr[1] + 1 == sortArr[2]);
+        const isExist1 =
+          sortArr.includes("8") &&
+          sortArr.includes("9") &&
+          sortArr.includes("0");
+        const isExist2 =
+          sortArr.includes("1") &&
+          sortArr.includes("9") &&
+          sortArr.includes("0");
         if (abc || isExist1 || isExist2) {
-          return '顺子'
+          return "顺子";
         } else {
-          return '组六'
+          return "组六";
         }
       } else if (newArr.size == 2) {
-        return '组三'
+        return "组三";
       } else if (newArr.size == 1) {
-        return '豹子'
+        return "豹子";
       }
     },
     openHistory() {
-      this.isOpen = !this.isOpen
+      this.isOpen = !this.isOpen;
       if (this.isOpen) {
-        this.$refs.accordion.openItem()
+        this.$refs.accordion.openItem();
       } else {
-        this.$refs.accordion.closeItem()
+        this.$refs.accordion.closeItem();
       }
     },
-    ...mapActions(['setBetCurent', 'setQishu', 'setBetData', 'clearCart'])
+    ...mapActions(["setBetCurent", "setQishu", "setBetData", "clearCart"])
   },
   mixins: [countDownMixin]
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../../../css/resources.scss";
-.shishicai {
+.lhc {
+  height: calc(100vh - 3rem);
   width: 100%;
   background: #fff;
   // position: absolute;

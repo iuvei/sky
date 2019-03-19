@@ -26,6 +26,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
+  <link rel="dns-prefetch preconnect" href='//upload.bxvip588.com' crossorigin>
+  <link rel="dns-prefetch preconnect" href='//at.alicdn.com' crossorigin>
+  <!-- <link rel="preload" type="font/ttf" as="font" href='//at.alicdn.com/font_1461139240_0312312.ttf' crossorigin>  -->
+
   <!-- 引入自适应类库，不建议在main.js里引入 -->
   <script src="/assets/shipeiqi.js"></script>
   <!-- <script src="http://cdn.bootcss.com/vue/2.2.6/vue.min.js"></script>
@@ -35,11 +39,17 @@
 
   <!-- <script src="http://cdn.bootcss.com/eruda/1.4.2/eruda.min.js"></script>
   <script>eruda.init();</script> -->
-
+  <!-- <style>
+    #id{width:100vw;height:100vh; background:#fff;z-index: 201;position: absolute;top:0;left:0;opacity: 1;will-change:transform;}.opacity-ease-in{opacity:.2}.spinner{width:140px;height:140px;margin:100px auto;border-radius:50%;position:relative;box-sizing:border-box;border-top:16px solid #3baeda;border-right:16px solid #f6bb43;border-bottom:16px solid #db4453;border-left:16px solid #8dc153;animation:myspin 1s ease infinite}.spinner:after{content:'';position:absolute;top:50%;left:50%;margin:-92px;border-radius:50%;width:184px;height:184px;border-top:10px solid rgba(0,0,0,0);border-right:10px solid rgba(0,0,0,0);border-bottom:10px solid rgba(0,0,0,0);border-left:10px solid #434a54;animation:myspin 1s reverse ease infinite;box-sizing:border-box}@-webkit-keyframes myspin{from{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(360deg)}}@keyframes myspin{from{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(360deg)}}
+  </style> -->
 </head>
 
 <body>
 
+  <noscript><p>本页面需要浏览器支持（启用）JavaScript</p></noscript>
+  <!-- <div id="loading" style="transition: all 3.5s ease-in;">
+     <div class="spinner"></div>
+  </div> -->
   <div id="loading" style="width:100vw;height:100vh; background:#fff;z-index: 10001;position: fixed;top:0;left:0;">
     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCIgY2xhc3M9Imxkcy1ibGFuayIgc3R5bGU9ImJhY2tncm91bmQ6MCAwIj48Zz48Zz48ZyB0cmFuc2Zvcm09InJvdGF0ZSgxNTYgNTAgNTApIj48YW5pbWF0ZVRyYW5zZm9ybSBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iIHR5cGU9InJvdGF0ZSIgdmFsdWVzPSIzNjAgNTAgNTA7MCA1MCA1MCIgZHVyPSIxLjUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+PHBhdGggZD0iTTQ0LjcxIDEwLjk1YTI3LjY4IDI3LjY4IDAgMCAxIDMyLjA3IDMuMTVsNC44NCA0LjI4LTYuNDEtMS4yNGMtOC4xLTEuNjktMTYuODgtLjExLTI0LjU0IDQuMjhTMzcuMjggMzIuNjcgMzQuNyA0MC41NWwtMi4wMyA2LjE5LTEuMjQtNi40MmEyNy42OCAyNy42OCAwIDAgMSAxMy4yOC0yOS4zN3oiPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImZpbGwiIGNhbGNNb2RlPSJsaW5lYXIiIHZhbHVlcz0iI2YzNjEwMDsjZmE5MDJmOyNmZmI4NTY7I2ZmZDU1ZDsjZjM2MTAwIiBrZXlUaW1lcz0iMDswLjI1OzAuNTswLjc1OzEiIGR1cj0iMS41IiBiZWdpbj0iLTEuMTI1cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48L3BhdGg+PHBhdGggZD0iTTMyLjMzIDYxLjI1bDYuMiAyLjE0LTQuMjgtNC44NGMtNS41Mi02LjE5LTguNTYtMTQuNTEtOC41Ni0yMy40czMuMDQtMTcuMjIgOC41Ni0yMy40MWw0LjI3LTQuODQtNi4xOSAyLjE0YTI3LjYxIDI3LjYxIDAgMCAwLTE4Ljc5IDI2LjIyYzAgMTEuNTkgNy41NCAyMi4xNyAxOC44IDI2eiI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iZmlsbCIgY2FsY01vZGU9ImxpbmVhciIgdmFsdWVzPSIjZjM2MTAwOyNmYTkwMmY7I2ZmYjg1NjsjZmZkNTVkOyNmMzYxMDAiIGtleVRpbWVzPSIwOzAuMjU7MC41OzAuNzU7MSIgZHVyPSIxLjUiIGJlZ2luPSItMC43NXMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+PC9wYXRoPjxwYXRoIGQ9Ik0zMi42NyA3Ny44YzYuNTMgMCAxMy4wNS0yLjM3IDE4LjIzLTYuODdsNC44NC00LjI4LTYuNDEgMS4yNGMtOC4xIDEuNy0xNi44OC4xMi0yNC41NC00LjI3LTcuNjUtNC40LTEzLjM5LTExLjI2LTE1Ljk4LTE5LjEzbC0yLjAyLTYuMi0xLjI0IDYuNDJBMjcuNjggMjcuNjggMCAwIDAgMzIuNjcgNzcuOHoiPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImZpbGwiIGNhbGNNb2RlPSJsaW5lYXIiIHZhbHVlcz0iI2YzNjEwMDsjZmE5MDJmOyNmZmI4NTY7I2ZmZDU1ZDsjZjM2MTAwIiBrZXlUaW1lcz0iMDswLjI1OzAuNTswLjc1OzEiIGR1cj0iMS41IiBiZWdpbj0iLTAuMzc1cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48L3BhdGg+PHBhdGggZD0iTTY4LjU3IDU5LjY4bC0xLjI0LTYuNDItMi4wMyA2LjJjLTIuNTggNy44Ny04LjMyIDE0LjYyLTE1Ljk3IDE5LjEyLTcuNjYgNC40LTE2LjQzIDUuOTctMjQuNTQgNC4yOGwtNi40MS0xLjI0IDQuODQgNC4yOGEyNy44NSAyNy44NSAwIDAgMCAxOC4yMyA2Ljg2IDI3LjY4IDI3LjY4IDAgMCAwIDI3LjEyLTMzLjA4eiI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iZmlsbCIgY2FsY01vZGU9ImxpbmVhciIgdmFsdWVzPSIjZjM2MTAwOyNmYTkwMmY7I2ZmYjg1NjsjZmZkNTVkOyNmMzYxMDAiIGtleVRpbWVzPSIwOzAuMjU7MC41OzAuNzU7MSIgZHVyPSIxLjUiIGJlZ2luPSItMS4xMjVzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvcGF0aD48cGF0aCBkPSJNNjcuNjcgMzguNzVsLTYuMi0yLjE0IDQuMjggNC44NGM1LjUyIDYuMTkgOC41NiAxNC41MSA4LjU2IDIzLjRzLTMuMDQgMTcuMjItOC41NiAyMy40MWwtNC4yNyA0Ljg0IDYuMTktMi4xNGEyNy42MSAyNy42MSAwIDAgMCAxOC43OS0yNi4yMmMwLTExLjU5LTcuNTQtMjIuMTctMTguOC0yNnoiPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImZpbGwiIGNhbGNNb2RlPSJsaW5lYXIiIHZhbHVlcz0iI2YzNjEwMDsjZmE5MDJmOyNmZmI4NTY7I2ZmZDU1ZDsjZjM2MTAwIiBrZXlUaW1lcz0iMDswLjI1OzAuNTswLjc1OzEiIGR1cj0iMS41IiBiZWdpbj0iLTAuNzVzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvcGF0aD48cGF0aCBkPSJNODEuMTcgMjUuOTJhMjcuNjggMjcuNjggMCAwIDAtMzIuMDcgMy4xNWwtNC44NCA0LjI3IDYuNDItMS4yM2M4LjEtMS43IDE2Ljg4LS4xMiAyNC41MyA0LjI3IDcuNjUgNC40IDEzLjM5IDExLjI2IDE1Ljk4IDE5LjEzbDIuMDIgNi4yIDEuMjQtNi40MmEyNy42OCAyNy42OCAwIDAgMC0xMy4yOC0yOS4zN3oiPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImZpbGwiIGNhbGNNb2RlPSJsaW5lYXIiIHZhbHVlcz0iI2YzNjEwMDsjZmE5MDJmOyNmZmI4NTY7I2ZmZDU1ZDsjZjM2MTAwIiBrZXlUaW1lcz0iMDswLjI1OzAuNTswLjc1OzEiIGR1cj0iMS41IiBiZWdpbj0iLTAuMzc1cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48L3BhdGg+PC9nPjwvZz48L2c+PC9zdmc+"
       alt="" style="width:150px;height:150px;display: block;margin:6rem auto;">

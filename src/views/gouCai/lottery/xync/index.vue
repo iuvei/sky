@@ -1,13 +1,14 @@
 <template>
   <div class="xync">
-    <heads :routes="routes" :type='1'></heads>
+    <heads :routes="routes"
+           :type='1'></heads>
     <xync></xync>
   </div>
 </template>
 <script>
 import heads from "../head";
 import xync from "./components/xync";
-import { mapActions, mapState } from "vuex";
+
 export default {
   name: "xync-index",
   data() {

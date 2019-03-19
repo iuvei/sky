@@ -1,25 +1,43 @@
 <template>
   <div class="head">
-    <div class="head_con">
-      <div @click="ifGoback" class="go_back">
+    <div :class="[{'head_con_pig':isfestival},'head_con']">
+      <div @click="ifGoback"
+           class="go_back">
         <div class="icon"></div>
       </div>
-      <div class="title" @click="showHead">
+      <div class="title"
+           @click="showHead">
         <i>{{gameName}}</i>
         <span v-show="type==1 && officialOption">_{{all_title || title}}</span>
         <!-- <span v-else v-show="type!=1 && officialOption">_{{all_title || pukeTitle}}</span> -->
-        <i v-show="type==1 && officialOption" class="trangle"></i>
+        <i v-show="type==1 && officialOption"
+           class="trangle"></i>
       </div>
-      <div class="switch" @click="showSelect">
+      <div class="switch"
+           @click="showSelect">
         <i :class="{slidedown:showSelectGame}"></i>
         <span>彩种</span>
       </div>
     </div>
-    <select-game @afterSelectGame="afterSelectGame" :gameId="$route.params.lotter_id" :show="showSelectGame" :autoSelect="false" ref="selectGame"></select-game>
-    <switchPlay :modal_show="show" v-if="['xync'].includes($store.state.betting.js_tag)"></switchPlay>
-    <headItem :modal_show="show" v-if="!['xync'].includes($store.state.betting.js_tag)" @showGamePlay="show=false"></headItem>
-    <img class="bet_guide" src="../../../img/goucai/guide.png" alt="" v-if="guide" @click="closeGuide">
-    <yd-popup v-model="tipShow" position="center" width="80%">
+    <select-game @afterSelectGame="afterSelectGame"
+                 :gameId="$route.params.lotter_id"
+                 :show="showSelectGame"
+                 :autoSelect="false"
+                 ref="selectGame"></select-game>
+    <switchPlay :modal_show="show"
+                v-if="['xync'].includes($store.state.betting.js_tag)"
+                @showGamePlay="show=false"></switchPlay>
+    <headItem :modal_show="show"
+              v-if="!['xync'].includes($store.state.betting.js_tag)"
+              @showGamePlay="show=false"></headItem>
+    <img class="bet_guide"
+         src="../../../img/goucai/guide.png"
+         alt=""
+         v-if="guide"
+         @click="closeGuide">
+    <yd-popup v-model="tipShow"
+              position="center"
+              width="80%">
       <div class="tips_rr">
         <p>温馨提示</p>
         <p>您的购物车有投注，切换彩种会清空购物车，确定切换？</p>
@@ -29,7 +47,9 @@
         </p>
       </div>
     </yd-popup>
-    <yd-popup v-model="tipShow2" position="center" width="80%">
+    <yd-popup v-model="tipShow2"
+              position="center"
+              width="80%">
       <div class="tips_rr">
         <p>温馨提示</p>
         <p>退出彩种会清空购物车，确定退出？</p>
@@ -42,12 +62,12 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
-import switchPlay from '~/views/gouCai/components/switchPlay'
-import headItem from '~/views/gouCai/components/headItem'
-import selectGame from '../../zouShi/components/selectGame'
+import { mapActions, mapState } from "vuex";
+import switchPlay from "~/views/gouCai/components/switchPlay";
+import headItem from "~/views/gouCai/components/headItem";
+import selectGame from "../../zouShi/components/selectGame";
 export default {
-  props: ['type'],
+  props: ["type"],
   components: {
     selectGame,
     headItem,
@@ -63,69 +83,81 @@ export default {
       guide1: false,
       guide2: false,
       guide: false,
-      active2: '官方玩法',
-      titleArr: ['双面玩法', '官方玩法'],
+      active2: "官方玩法",
+      titleArr: ["双面玩法", "官方玩法"],
       lotter_id: this.$route.params.lotter_id,
       selectGameData: {},
-      all_title: ''
-    }
+      all_title: ""
+    };
   },
   methods: {
     ...mapActions([
-      'playSwitch',
-      'setBetCurent',
-      'setBetOdds',
-      'setBetOdd',
-      'clearCart'
+      "playSwitch",
+      "setBetCurent",
+      "setBetOdds",
+      "setBetOdd",
+      "clearCart"
     ]),
     showSelect() {
       if (!this.modelShow) {
-        this.showSelectGame = !this.showSelectGame
+        if (this.tipShow || this.tipShow2) {
+          this.tipShow = this.tipShow2 = false;
+          return;
+        }
+        this.showSelectGame = !this.showSelectGame;
         // 如果是弹出彩种选择，取消掉其他的弹框
         if (this.showSelectGame) {
-          this.show = false
+          this.show = false;
         }
       }
     },
     closeGuide() {
-      this.guide = false
-      localStorage.setItem('betGuide', true)
+      this.guide = false;
+      localStorage.setItem("betGuide", true);
     },
     showHead() {
+      if (this.tipShow || this.tipShow2) {
+        this.tipShow = this.tipShow2 = false;
+        return;
+      }
       if (!this.modelShow) {
-        this.type == 1 && this.officialOption ? (this.show = !this.show) : ''
+        this.type == 1 && this.officialOption ? (this.show = !this.show) : "";
         if (this.show) {
-          this.showSelectGame = false
+          this.showSelectGame = false;
         }
       }
     },
-    switchs(val, i) {
-      this.active2 = val
-      this.show = false
-      this.playSwitch(val)
+    switchs(val) {
+      this.active2 = val;
+      this.show = false;
+      this.playSwitch(val);
     },
     closePop() {
-      this.tipShow = false
-      this.showSelectGame = false
-      this.$refs.selectGame.gameId = this.gameId
-      this.$refs.selectGame.lotter_id = this.gameId
+      this.tipShow = false;
+      this.showSelectGame = false;
+      this.$refs.selectGame.gameId = this.gameId;
+      this.$refs.selectGame.lotter_id = this.gameId;
     },
     ifGoback() {
+      if (this.tipShow || this.tipShow2) {
+        this.tipShow = this.tipShow2 = false;
+        return;
+      }
       if (this.cart.length) {
-        this.tipShow2 = true
+        this.tipShow2 = true;
       } else {
-        this.$router.back()
+        this.$router.back();
       }
     },
     outOfBet() {
-      this.tipShow2 = false
-      this.clearCart()
-      this.$router.push('/home')
+      this.tipShow2 = false;
+      this.clearCart();
+      this.$router.push("/home");
     },
     switchToOther() {
-      let game = this.selectGameData
-      let gameid = this.$store.state.betting.gameId,
-        name_tag = this.$store.state.betting.name_tag
+      const game = this.selectGameData;
+      const gameid = this.$store.state.betting.gameId,
+        name_tag = this.$store.state.betting.name_tag;
       if (gameid != game.game_id || name_tag != game.tag) {
         this.setBetCurent({
           lotter_id: game.game_id,
@@ -133,8 +165,9 @@ export default {
           game_name: game.game_name,
           js_tag: game.js_tag,
           speed: game.speed,
-          play_type: game.play_type
-        })
+          play_type: game.play_type,
+          yearid: game.yearid
+        });
         this.$router.replace({
           name: game.js_tag,
           params: {
@@ -144,26 +177,27 @@ export default {
             js_tag: game.js_tag,
             speed: game.speed,
             play_type: game.play_type,
+            yearid: game.yearid,
             isHome: true
           }
-        })
+        });
       }
-      this.tipShow = false
-      this.showSelectGame = false
+      this.tipShow = false;
+      this.showSelectGame = false;
     },
     afterSelectGame(games) {
-      this.selectGameData = games
+      this.selectGameData = games;
       // console.log(games)
       if (this.cart.length && games.game_id != this.gameId) {
-        this.tipShow = true
+        this.tipShow = true;
       } else {
-        this.switchToOther()
+        this.switchToOther();
       }
     },
     changeNameTag(newVal, oldVal) {
-      //如果切换了彩种，清空购物车
+      // 如果切换了彩种，清空购物车
       if (oldVal.length && newVal.length && oldVal != newVal) {
-        this.clearCart()
+        this.clearCart();
       }
     }
   },
@@ -179,16 +213,17 @@ export default {
       officialOption: state => state.betting.officialOption,
       play_type: state => state.betting.play_type
     }),
+    ...mapState(['isfestival']),
     playItems() {
-      let configs = this.$store.state.betting.playConfigs
+      const configs = this.$store.state.betting.playConfigs;
       if (configs && Array.isArray(configs)) {
-        return configs[0]
+        return configs[0];
       }
-      return []
+      return [];
     },
     // 双面还是官方
     curIndex() {
-      return !!this.play_type ? 0 : 1
+      return this.play_type ? 0 : 1;
     }
   },
   activated() {
@@ -200,34 +235,34 @@ export default {
         game_name: this.$route.params.game_name,
         speed: this.$route.params.speed,
         play_type: this.$route.params.play_type
-      })
+      });
     }
     this.$nextTick(() => {
       if (this.play_type) {
-        this.active2 = '双面玩法'
+        this.active2 = "双面玩法";
       }
-    })
-    this.bus.$on('changeTitle', title => {
-      if (title) this.all_title = title
-      else this.all_title = ''
+    });
+    this.bus.$on("changeTitle", title => {
+      if (title) this.all_title = title;
+      else this.all_title = "";
       // console.log(this.all_title)
-    })
+    });
   },
   deactivated() {
-    this.showSelectGame = false
-    this.bus.$off('changeTitle')
-    this.show = false
+    this.showSelectGame = false;
+    this.bus.$off("changeTitle");
+    this.show = false;
   },
   mounted() {
-    let guideIsShow = JSON.parse(localStorage.getItem('betGuide'))
+    const guideIsShow = JSON.parse(localStorage.getItem("betGuide"));
     if (!guideIsShow) {
-      this.guide = true
+      this.guide = true;
     }
   },
   watch: {
-    '$store.state.betting.name_tag': 'changeNameTag'
+    "$store.state.betting.name_tag": "changeNameTag"
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../../css/resources.scss";
@@ -254,6 +289,9 @@ export default {
     position: relative;
     top: 0;
     z-index: 1999;
+    &.head_con_pig {
+      @include pigbg;
+    }
     .go_back {
       position: relative;
       width: 20%;
@@ -291,8 +329,8 @@ export default {
         height: 0px;
         border-bottom: solid poTorem(6px) #ffffff;
         border-right: solid poTorem(6px) #ffffff;
-        border-top: solid poTorem(6px) #ff7c34;
-        border-left: solid poTorem(6px) #ff7c34;
+        border-top: solid poTorem(6px) $mainColor;
+        border-left: solid poTorem(6px) $mainColor;
         margin-left: poTorem(5px);
       }
     }

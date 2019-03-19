@@ -52,6 +52,10 @@ export default (obj, isShowErr = true, strings = 'request') =>
             path: '/login',
             query: { redirect: router.currentRoute.fullPath }
           })
+        } else if (res.data.msg === 40020) {
+          router.replace('/forbiddenIP')
+          store.commit(types.SET_MAINTAINED, { msg: 40020 })
+          resolve(res.data.data)
         } else if (res.data.msg === 45000) {
           // router.replace('/maintained')
           store.commit(types.SET_MAINTAINED, res.data)

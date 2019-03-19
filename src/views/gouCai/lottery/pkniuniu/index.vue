@@ -6,8 +6,7 @@
 </template>
 <script>
 import heads from "../head";
-import pkniuniu from "./components/pkniuniu";        
-import { mapActions, mapState } from "vuex";
+import pkniuniu from "./components/pkniuniu";
 export default {
   data() {
     return {

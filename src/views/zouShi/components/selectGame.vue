@@ -1,25 +1,29 @@
 <template>
   <div class="head_model">
-    <transition enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
-      <div :class="[{'ios_shadow': isnested}, 'shadow']" v-show="self_show">
-        <span v-for="(game, index) in games" :key="index" @click="selectGame(game)" :class="{active: game && game.game_id && [gameId, lotter_id].includes(game.game_id)}">{{game && game.game_name}}</span>
+    <transition enter-active-class="animated slideInDown"
+                leave-active-class="animated slideOutUp">
+      <div :class="[{'ios_shadow': isnested}, 'shadow']"
+           v-show="self_show">
+        <span v-for="(game, index) in games"
+              :key="index"
+              @click="selectGame(game, $event)"
+              :class="{active: game && game.game_id && gameId==game.game_id}">{{game && game.game_name}}</span>
       </div>
     </transition>
-    <div class="bg" v-show="self_show" @click="self_show = !self_show"></div>
+    <div class="bg"
+         v-show="self_show"
+         @click="self_show = !self_show"></div>
   </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
-import api from "../../../../api/game";
-// import { games } from "../../../../api/store.util";
+import { mapState, mapActions } from 'vuex';
+import api from '../../../../api/game';
 export default {
-  props: ["show", "autoSelect", "id"],
+  props: ['show', 'autoSelect', 'id'],
   data() {
     return {
       games: [],
       game: {},
-      lotter_id: 0,
-      gameId: -1,
       self_show: this.show
     };
   },
@@ -27,68 +31,54 @@ export default {
     show(val) {
       this.self_show = val;
     },
-    "$route.params"() {
-      this.initData()
-      if(this.$route.params.lotter_id) {
-        this.gameId = this.$route.params.lotter_id * 1
-        this.lotter_id = this.$route.params.lotter_id * 1;
-      } else {
-        this.gameId = this.lotter_id = this.id
-      }
-      if (!this.games || !this.games.length) {
-        this.games = this.getGameList(); //api.getGamesFormCache();
+    '$route.params'(newVal, oldVal) {
+      if (
+        newVal.js_tag === oldVal.js_tag &&
+        newVal.name_tag !== oldVal.name_tag
+      ) {
+        this.initData();
+        if (!this.games || !this.games.length) {
+          this.games = this.getGameList();
+        }
       }
     }
   },
   computed: {
     ...mapState({
+      store_gameId: state => state.betting.game.game_id,
       isnested: state => state.isnested
-    })
+    }),
+    gameId() {
+      return this.$route.params.lotter_id || this.game.game_id;
+    }
   },
   methods: {
+    ...mapActions(['setGame']),
     async getGameList(gameId) {
       this.games = await api.getLotteries();
+      // console.log('______________2', this.games)
       this.game = gameId
-        ? this.games.find(item => item.game_id == gameId)
+        ? this.games.find(item => item.game_id === gameId)
         : this.games[0];
+      // this.setGame(this.game);
     },
-    selectGame(game) {
-      if (game && game.game_id) {
-        this.gameId = game.game_id;
-        this.lotter_id = game.game_id;
-        this.$emit("afterSelectGame", game);
+    selectGame(game, event) {
+      if (game && game.game_id && event) {
+        console.log(event)
+        // this.setGame(game);
+        this.game = game;
+        this.$emit('afterSelectGame', game);
       }
     },
     async initData() {
-      if(this.$route.params.lotter_id) {
-        this.lotter_id = this.$route.params.lotter_id * 1;
-      }
       if (!this.games || !this.games.length) {
-        this.games = this.getGameList(); //api.getGamesFormCache();
-      }
-
-      if (this.lotter_id !== this.gameId) {
-        this.gameId = this.$route.params.lotter_id;
-        if (this.games.length) {
-          if (this.lotter_id) {
-            this.game = this.games.find(item => item.game_id == this.lotter_id);
-          } else if (this.autoSelect) {
-            this.game = this.games[0];
-          }
-          if (this.game) {
-            this.selectGame(this.game);
-          }
-        } else {
-          let flow = isNaN(this.lotter_id)
-            ? await this.getGameList()
-            : await this.getGameList(this.lotter_id);
-          this.selectGame(this.game);
-        }
+        await this.getGameList(this.gameId); // api.getGamesFormCache();
+        this.selectGame(this.game, true);
       }
     }
   },
-  mounted () {
-      this.initData()
+  async created() {
+    await this.initData();
   }
 };
 </script>

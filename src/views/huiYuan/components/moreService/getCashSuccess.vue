@@ -20,15 +20,13 @@ export default {
   methods: {
     go() {
       this.$router.replace("/member");
-    },
+    }
   },
-  mounted() {},
+  mounted() {}
 };
 </script>
 <style lang="scss" scoped>
-@function poTorem($px) {
-  @return $px / 16px * 1rem;
-}
+@import "~css/resources.scss";
 
 .main {
   padding-top: poTorem(10px);
@@ -63,7 +61,7 @@ export default {
     font-size: poTorem(16px);
     line-height: poTorem(16px);
     color: #fff;
-    background-color: #ff7c34;
+    background-color: $mainColor;
     border-radius: poTorem(5px);
     outline: none;
     border: none;

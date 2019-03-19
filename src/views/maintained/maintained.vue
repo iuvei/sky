@@ -9,23 +9,32 @@
         <span>{{maintained.data.etime}}</span></br>
       </p>
       <p>
-        <a :href="sysinfo.service_url">联系客服</a>
+        <!-- <a href="javaScript:void(0)" -->
+        <a :href="sysinfo.data.service_url">联系客服</a>
+        <!-- @click="openbigwin">联系客服</a> -->
       </p>
     </div>
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-      maintainedTime: '22:00~6:00'
-    }
+      maintainedTime: "22:00~6:00"
+    };
   },
   computed: {
-    ...mapState(['maintained', 'sysinfo'])
+    ...mapState(["maintained", "sysinfo"])
+  },
+  methods: {
+    ...mapActions(["getServiceUrl"]),
+    async openbigwin() {
+      const url = await this.getServiceUrl();
+      window.location.href = url;
+    }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 @import "../../css/resources.scss";
@@ -36,7 +45,7 @@ export default {
   .maintained_head {
     height: 3rem;
     width: 100%;
-    background-color: #ff7c34;
+    background-color: $mainColor;
     line-height: 3rem;
     font-size: 1.25rem;
     color: #fff;
@@ -46,7 +55,8 @@ export default {
   .maintained_main_content {
     width: 100%;
     flex: 1;
-    background: url(~img/maintained_clock.png) no-repeat center -1rem, url(~img/maintained_bg.jpg) no-repeat left top;
+    background: url(~img/maintained_clock.png) no-repeat center -1rem,
+      url(~img/maintained_bg.jpg) no-repeat left top;
     background-size: 100%, 100% 100%;
     @include column;
     justify-content: flex-end;
@@ -55,7 +65,7 @@ export default {
       height: 3rem;
       line-height: 3rem;
       &:nth-child(n-2) {
-        color: #ff7c34
+        color: $mainColor;
       }
       &:nth-child(2) {
         height: auto;
